@@ -278,7 +278,8 @@
 
         <!-- TikZ diagram — 3D coordinate axes + position vector -->
         <div class="diagram-card">
-            <script type="text/tikz" data-tikzjax-packages="tikz-3dplot">
+            <script type="text/tikz" data-tex-packages='{"tikz-3dplot":""}'>
+                \begin{document}
                 \begin{tikzpicture}[tdplot_main_coords, scale=1.5]
                     % Axes
                     \draw[thick,->] (0,0,0) -- (2.2,0,0) node[anchor=north east]{$x$};
@@ -299,6 +300,7 @@
                     \node[right] at (0,0.5,0) {\small$y$};
                     \node[right] at (0,0,0.5) {\small$z$};
                 \end{tikzpicture}
+                \end{document}
             </script>
             <span class="caption">Figure 1.1 — Position vector \(\vec{r}\) in \(\mathbb{R}^3\) with projected components</span>
         </div>
