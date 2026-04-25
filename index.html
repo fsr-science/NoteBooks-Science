@@ -281,32 +281,26 @@
 
         <!-- TikZ diagram — 3D coordinate axes + position vector -->
         <div class="diagram-card">
-            <script type="text/tikz" data-add-to-preamble="\usetikzlibrary{3d,arrows.meta}" data-show-console="true">
-                \begin{tikzpicture}[
-                    x={(0.866cm,-0.5cm)},
-                    y={(0cm,1cm)},
-                    z={(-0.866cm,-0.5cm)},
-                    scale=1.4
-                ]
+            <script type="text/tikz" data-add-to-preamble="\usepackage{tikz-3dplot}\tdplotsetmaincoords{70}{110}" data-show-console="true">
+                \begin{tikzpicture}[tdplot_main_coords, scale=1.5]
                     % Axes
                     \draw[thick,->] (0,0,0) -- (2.2,0,0) node[anchor=north east]{$x$};
-                    \draw[thick,->] (0,0,0) -- (0,2.2,0) node[anchor=south]{$z$};
-                    \draw[thick,->] (0,0,0) -- (0,0,2.2) node[anchor=north west]{$y$};
+                    \draw[thick,->] (0,0,0) -- (0,2.2,0) node[anchor=north west]{$y$};
+                    \draw[thick,->] (0,0,0) -- (0,0,2.2) node[anchor=south]{$z$};
 
                     % Dashed projection lines
-                    \draw[dashed, gray] (1,0,0) -- (1,0,1);
-                    \draw[dashed, gray] (0,0,1) -- (1,0,1);
-                    \draw[dashed, gray] (1,0,1) -- (1,1,1);
-                    \draw[dashed, gray] (0,1,0) -- (1,1,0);
-                    \draw[dashed, gray] (1,0,0) -- (1,1,0);
                     \draw[dashed, gray] (1,1,0) -- (1,1,1);
-                    \draw[dashed, gray] (0,1,0) -- (0,1,1);
-                    \draw[dashed, gray] (0,0,1) -- (0,1,1);
-                    \draw[dashed, gray] (0,1,1) -- (1,1,1);
+                    \draw[dashed, gray] (1,0,0) -- (1,1,0);
+                    \draw[dashed, gray] (0,1,0) -- (1,1,0);
 
                     % Position vector r
-                    \draw[-{Stealth[length=6pt]}, red, ultra thick] (0,0,0) -- (1,1,1)
-                        node[anchor=west]{$\vec{r}$};
+                    \draw[-stealth, red, ultra thick] (0,0,0) -- (1,1,1)
+                        node[anchor=west, yshift=4pt]{$\vec{r}$};
+
+                    % Component labels
+                    \node[below] at (0.5,0,0) {\small$x$};
+                    \node[right] at (0,0.5,0) {\small$y$};
+                    \node[right] at (0,0,0.5) {\small$z$};
                 \end{tikzpicture}
             </script>
             <span class="caption">Figure 1.1 — Position vector \(\vec{r}\) in \(\mathbb{R}^3\) with projected components</span>
