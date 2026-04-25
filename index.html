@@ -281,7 +281,7 @@
 
         <!-- TikZ diagram — 3D coordinate axes + position vector -->
         <div class="diagram-card">
-            <script type="text/tikz" data-add-to-preamble="\usepackage{tikz-3dplot}\tdplotsetmaincoords{70}{110}" data-show-console="true">
+            <script type="text/tikz" data-add-to-preamble="\usepackage{tikz-3dplot}\tdplotsetmaincoords{70}{110}\begin{document}" data-show-console="true">
                 \begin{tikzpicture}[tdplot_main_coords, scale=1.5]
                     % Axes
                     \draw[thick,->] (0,0,0) -- (2.2,0,0) node[anchor=north east]{$x$};
