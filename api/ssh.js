@@ -35,7 +35,7 @@ const kv = {
 async function checkRateLimit(ip, type) {
   if (!ip) return { blocked: false };
   const key = `ratelimit:${type}:${ip}`;
-  const limits = { login: { max: 5, windowSec: 900 }, register: { max: 3, windowSec: 3600 } };
+  const limits = { login: { max: 20, windowSec: 900 }, register: { max: 10, windowSec: 3600 } };
   const { max, windowSec } = limits[type] || { max: 10, windowSec: 60 };
   try {
     const count = await kv.incr(key);
@@ -85,6 +85,14 @@ export default async function handler(req, res) {
           role, permissions, userId, limit } = body;
 
   try {
+
+    // ── clearRateLimit (dev/admin tool) ──────────────────────────────────────
+    if (action === 'clearRateLimit') {
+      if (!ip) return res.status(400).json({ error: 'Cannot determine IP' });
+      await redis('DEL', `ratelimit:login:${ip}`);
+      await redis('DEL', `ratelimit:register:${ip}`);
+      return res.json({ ok: true, message: 'Rate limits cleared for your IP' });
+    }
 
     if (action === 'checkUsername') {
       if (!username) return res.status(400).json({ error: 'Missing username' });
