@@ -190,13 +190,67 @@ function attemptLogin() {
 
 // ===== ADMIN PANEL =====
 function showAdminPanel() {
-  if (!isAdmin()) return;
+  // Support both legacy and SSH auth
+  const hasAccess = (typeof SSHAuth !== 'undefined' && SSHAuth.isAdmin()) || isAdmin();
+  if (!hasAccess) return;
+  
   document.getElementById('superAdminSection').style.display = isSuperAdmin() ? '' : 'none';
   if (isSuperAdmin()) renderAdminCodesList();
   loadPendingUploads();
+  renderSSHUsersList();
+  
   const o = document.getElementById('adminOverlay');
   o.style.display = 'flex';
   requestAnimationFrame(() => o.classList.add('active'));
+}
+
+function renderSSHUsersList() {
+  const list = document.getElementById('sshUsersList');
+  if (!list || typeof SSHAuth === 'undefined') return;
+  
+  const users = SSHAuth.getUsers();
+  const admins = SSHAuth.getAdmins();
+  
+  if (users.length === 0 && admins.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;opacity:.5;padding:6px 0">No SSH users registered.</div>';
+    return;
+  }
+  
+  let html = '';
+  
+  // Show admins first
+  admins.forEach(a => {
+    html += `
+      <div class="admin-code-row">
+        <span style="font-size:11px;background:var(--accent);color:white;padding:2px 8px;border-radius:4px">ADMIN</span>
+        <span style="font-size:13px;font-weight:600">${a.username}</span>
+        <code style="font-size:10px;opacity:.6">${a.fingerprint?.slice(0,24) || 'N/A'}...</code>
+        <div style="margin-left:auto">
+          ${(a.permissions||[]).map(p=>`<span class="perm-pill">${p}</span>`).join('')}
+        </div>
+      </div>`;
+  });
+  
+  // Show regular users
+  users.forEach(u => {
+    html += `
+      <div class="admin-code-row">
+        <span style="font-size:11px;background:var(--btn-bg);color:var(--fg);padding:2px 8px;border-radius:4px">USER</span>
+        <span style="font-size:13px">${u.username}</span>
+        <code style="font-size:10px;opacity:.6">${u.fingerprint?.slice(0,24) || 'N/A'}...</code>
+        <button onclick="revokeSSHUserFromPanel('${u.id}')" style="margin-left:auto;font-size:11px;padding:3px 9px;border-radius:6px;border:none;background:#ffe0e0;color:#c62828;cursor:pointer">Revoke</button>
+      </div>`;
+  });
+  
+  list.innerHTML = html;
+}
+
+function revokeSSHUserFromPanel(userId) {
+  if (typeof SSHAuth !== 'undefined') {
+    SSHAuth.revokeUser(userId);
+    renderSSHUsersList();
+    showStatus('User revoked');
+  }
 }
 
 function hideAdminPanel() {

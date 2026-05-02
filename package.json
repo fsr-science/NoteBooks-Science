@@ -1,0 +1,12 @@
+{
+  "name": "notebooks-test",
+  "version": "1.0.0",
+  "description": "NoteBooks XI - A structured knowledge system for students and educators",
+  "scripts": {
+    "dev": "npx serve -l 3000",
+    "start": "npx serve -l 3000"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0"
+  }
+}
