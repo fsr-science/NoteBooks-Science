@@ -278,9 +278,8 @@
 
   function ruleMathBlock(md) {
     md.block.ruler.before('fence', 'obs_math_block', function (state, startLine, endLine, silent) {
-      var pos  = state.bMarks[startLine] + state.tShift[startLine];
       var max  = state.eMarks[startLine];
-      var line = state.src.slice(pos, max).trim();
+      var line = state.src.slice(state.bMarks[startLine], max).trim();
       if (line.slice(0, 2) !== '$$') return false;
 
       /* Single-line  $$...$$ */

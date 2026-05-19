@@ -19,17 +19,17 @@
   <!-- MathJax 3 — LaTeX math rendering ($inline$ and $$block$$) -->
   <script>
   MathJax = {
-  tex: {
-    inlineMath:  [['\\(', '\\)'], ['$', '$']],
-    displayMath: [['\\[', '\\]'], ['$$', '$$']],
-    packages: {'[+]': ['ams', 'boldsymbol']}
-  },
-  svg: { fontCache: 'global' },
-  startup: { typeset: false },
-  options: {
-    ignoreHtmlClass: 'tikz-source'
-  }
-}
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      packages: {'[+]': ['ams', 'boldsymbol']}
+    },
+    svg: { fontCache: 'global' },
+    startup: { typeset: false },
+    options: {
+      ignoreHtmlClass: 'tikz-source'  /* never process .tikz-source divs */
+    }
+  };
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
   <!-- TikZJax — TikZ/PGF diagram rendering (```tikz blocks) -->
