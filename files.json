@@ -3,6 +3,11 @@
   "name": "NoteBooks-Renderer",
   "children": [
     {
+      "type": "folder",
+      "name": "GH Fix",
+      "children": []
+    },
+    {
       "type": "file",
       "name": "LICENSE",
       "path": "LICENSE"
@@ -2624,6 +2629,54 @@
               ]
             }
           ]
+        },
+        {
+          "type": "folder",
+          "name": "REFERENCE-BOOKS",
+          "children": [
+            {
+              "type": "folder",
+              "name": "CONCEPTS_OF_PHYSCS-HC_VERMA",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CONCEPTS_OF_PHYSICS-HC_VERMA-VOL_I.pdf",
+                  "path": "SCIENCE/REFERENCE-BOOKS/CONCEPTS_OF_PHYSCS-HC_VERMA/CONCEPTS_OF_PHYSICS-HC_VERMA-VOL_I.pdf"
+                },
+                {
+                  "type": "file",
+                  "name": "CONCEPTS_OF_PHYSICS-HC_VERMA-VOL_II.pdf",
+                  "path": "SCIENCE/REFERENCE-BOOKS/CONCEPTS_OF_PHYSCS-HC_VERMA/CONCEPTS_OF_PHYSICS-HC_VERMA-VOL_II.pdf"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS-RD_SHARMA",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS-RD_SHARMA-VOL_I.pdf",
+                  "path": "SCIENCE/REFERENCE-BOOKS/MATHEMATICS-RD_SHARMA/MATHEMATICS-RD_SHARMA-VOL_I.pdf"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS-RD_SHARMA-VOL_II.pdf",
+                  "path": "SCIENCE/REFERENCE-BOOKS/MATHEMATICS-RD_SHARMA/MATHEMATICS-RD_SHARMA-VOL_II.pdf"
+                }
+              ]
+            },
+            {
+              "type": "file",
+              "name": "PROBLEMS_IN_GENERAL_PHYSICS-IRODOV.pdf",
+              "path": "SCIENCE/REFERENCE-BOOKS/PROBLEMS_IN_GENERAL_PHYSICS-IRODOV.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PROBLEMS_IN_PHYSICAL_CHEMISTRY-NARENDRA_AWASTHI.pdf",
+              "path": "SCIENCE/REFERENCE-BOOKS/PROBLEMS_IN_PHYSICAL_CHEMISTRY-NARENDRA_AWASTHI.pdf"
+            }
+          ]
         }
       ]
     },
@@ -2662,16 +2715,6 @@
           "path": "TEST/test-desmos.md"
         }
       ]
-    },
-    {
-      "type": "file",
-      "name": "package-lock.json",
-      "path": "package-lock.json"
-    },
-    {
-      "type": "file",
-      "name": "tree.txt",
-      "path": "tree.txt"
     }
   ]
 }

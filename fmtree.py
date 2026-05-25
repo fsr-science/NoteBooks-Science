@@ -17,7 +17,7 @@ EXCLUDED_ROOT_FILES = {
     "autopush.sh",
     "installer.html",
     "package.json",
-    "package-lock.json"
+    "package-lock.json",
     "tree.txt"
 }
 

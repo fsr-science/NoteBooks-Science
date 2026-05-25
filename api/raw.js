@@ -6,7 +6,7 @@
 // The Office viewer calls:
 //   https://view.officeapps.live.com/op/embed.aspx?src=https://your-app.vercel.app/api/raw?path=...
 
-const REPO = 'pratyushchanda/ada';
+const REPO = 'PratyushChanda/ada';
 
 const MIME_TYPES = {
   doc:  'application/msword',

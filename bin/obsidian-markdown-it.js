@@ -256,6 +256,59 @@
     });
   }
 
+  /* ── Rule: raw LaTeX delimiters \(...\) and \[...\] ──────────────────────── */
+  /* Handles math pasted from other editors / AI outputs that use backslash      */
+  /* delimiter style rather than dollar-sign style. Must run BEFORE dollar rules  */
+  /* so it consumes these tokens first.                                           */
+
+  function ruleMathRawDelimiters(md) {
+    /* Inline: \( ... \) */
+    md.core.ruler.push('obs_math_raw_inline', function (state) {
+      var i, bt;
+      for (i = 0; i < state.tokens.length; i++) {
+        bt = state.tokens[i];
+        if (bt.type !== 'inline' || !bt.children) continue;
+        bt.children = processInline(bt.children, state, function (child) {
+          return splitInlineText(child, state, /\\\((.+?)\\\)/gs, function (inner) {
+            return '<span class="math math-inline" data-math="' + esc(inner) + '">\\(' + esc(inner) + '\\)</span>';
+          });
+        });
+      }
+    });
+    /* Block: \[ ... \] */
+    md.core.ruler.push('obs_math_raw_block', function (state) {
+      var i, bt;
+      for (i = 0; i < state.tokens.length; i++) {
+        bt = state.tokens[i];
+        if (bt.type !== 'inline' || !bt.children) continue;
+        bt.children = processInline(bt.children, state, function (child) {
+          return splitInlineText(child, state, /\\\[(.+?)\\\]/gs, function (inner) {
+            return '<span class="math math-block math-inline-display" data-math="' + esc(inner) + '">\\[' + esc(inner) + '\\]</span>';
+          });
+        });
+      }
+    });
+  }
+
+  /* ── Rule: inline display math  $$...$$  (inline within a paragraph) ────── */
+  /* The block rule only fires when $$ starts a line. This catches $$...$$ that  */
+  /* appears mid-paragraph, e.g. "Heat capacity: $$S=\frac{…}{}$$ Unit: J K⁻¹" */
+
+  function ruleMathInlineDisplay(md) {
+    md.core.ruler.push('obs_math_inline_display', function (state) {
+      var i, bt;
+      for (i = 0; i < state.tokens.length; i++) {
+        bt = state.tokens[i];
+        if (bt.type !== 'inline' || !bt.children) continue;
+        bt.children = processInline(bt.children, state, function (child, st) {
+          return splitInlineText(child, st, /\$\$((?:[^$]|\$(?!\$))+?)\$\$/g, function (inner) {
+            return '<span class="math math-block math-inline-display" data-math="' + esc(inner) + '">\\[' + esc(inner) + '\\]</span>';
+          });
+        });
+      }
+    });
+  }
+
   /* ── Rule: inline math  $...$  (not $$) ────────────────────────────────── */
 
   function ruleMathInline(md) {
@@ -583,7 +636,7 @@
       /* Emit a placeholder div — script tags injected via innerHTML are inert.
          obsidianInitTikz() will swap these for real <script type="text/tikz">
          elements created via document.createElement, which TikZJax picks up. */
-      return '<div class="tikz-source" style="display:none">' + esc(token.content.trim()) + '</div>\n';
+      return '<div class="tikz-wrapper"><div class="tikz-loading">&#8987; Rendering diagram…</div><div class="tikz-source" style="display:none">' + esc(token.content.trim()) + '</div></div>\n';
     };
   }
 
@@ -674,23 +727,26 @@
   function initMath(root) {
     var el = root || document;
 
-    /* Mark nodes so MathJax doesn't double-process on re-calls */
-    el.querySelectorAll('.math.math-inline[data-math]:not([data-mj-rendered])').forEach(function (span) {
-      span.setAttribute('data-mj-rendered', 'true');
-    });
-    el.querySelectorAll('.math.math-block[data-math]:not([data-mj-rendered])').forEach(function (div) {
-      div.setAttribute('data-mj-rendered', 'true');
+    /* Mark unprocessed math nodes so MathJax doesn't double-process on re-calls */
+    el.querySelectorAll('.math[data-math]:not([data-mj-rendered])').forEach(function (node) {
+      node.setAttribute('data-mj-rendered', 'true');
     });
 
-    /* Wait for MathJax startup to complete (it loads async), then typeset */
+    /* Skip if MathJax not loaded yet — caller can retry */
     if (typeof MathJax === 'undefined') return Promise.resolve();
+
     var ready = (MathJax.startup && MathJax.startup.promise)
       ? MathJax.startup.promise
       : Promise.resolve();
+
     return ready.then(function () {
-      if (typeof MathJax.typesetPromise === 'function') {
-        return MathJax.typesetPromise([el]);
-      }
+      if (typeof MathJax.typesetPromise !== 'function') return;
+      /* Collect only unfinished math nodes to minimise re-layout cost */
+      var pending = Array.from(el.querySelectorAll('.math[data-math]'));
+      if (!pending.length) return;
+      return MathJax.typesetPromise(pending.length < 50 ? pending : [el]);
+    }).catch(function (e) {
+      console.warn('[obsidian-markdown-it] MathJax typeset error:', e);
     });
   }
 
@@ -698,6 +754,156 @@
   /*                                                                           */
   /* Call after inserting rendered HTML into the DOM.                          */
   /* Requires mermaid.min.js to be loaded (mermaid CDN).                      */
+
+  /* ── Pan/zoom engine for Mermaid diagrams ───────────────────────────────── */
+
+  function _mermaidPanZoom(wrap, canvas, svg) {
+    var scale = 1, tx = 0, ty = 0;
+    var dragging = false, startX, startY, startTx, startTy;
+    var lastTouchDist = null;
+
+    function applyTransform() {
+      canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
+    }
+
+    function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+    function zoomAt(factor, cx, cy) {
+      var rect = wrap.getBoundingClientRect();
+      var ox = cx - rect.left, oy = cy - rect.top;
+      var ns = clamp(scale * factor, 0.08, 12);
+      var r  = ns / scale;
+      tx = ox - r * (ox - tx);
+      ty = oy - r * (oy - ty);
+      scale = ns;
+      applyTransform();
+    }
+
+    function fitToView() {
+      /* Use getAttribute first — Mermaid always writes explicit w/h */
+      var svgW = parseFloat(svg.getAttribute('width'))  || svg.getBBox().width  || 600;
+      var svgH = parseFloat(svg.getAttribute('height')) || svg.getBBox().height || 400;
+      var wrapW = wrap.clientWidth  || 600;
+      var wrapH = wrap.clientHeight || 400;
+      var pad   = 48;
+      var ns = Math.min((wrapW - pad) / svgW, (wrapH - pad) / svgH, 1.8);
+      ns = Math.max(ns, 0.08);
+      scale = ns;
+      tx = (wrapW - svgW * scale) / 2;
+      ty = (wrapH - svgH * scale) / 2;
+      applyTransform();
+    }
+
+    /* Wheel zoom */
+    canvas.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      zoomAt(e.deltaY < 0 ? 1.14 : 1 / 1.14, e.clientX, e.clientY);
+    }, { passive: false });
+
+    /* Mouse drag */
+    canvas.addEventListener('mousedown', function (e) {
+      if (e.button !== 0) return;
+      dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+      canvas.classList.add('is-dragging');
+      e.preventDefault();
+    });
+    window.addEventListener('mousemove', function (e) {
+      if (!dragging) return;
+      tx = startTx + e.clientX - startX;
+      ty = startTy + e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', function () {
+      if (!dragging) return;
+      dragging = false; canvas.classList.remove('is-dragging');
+    });
+
+    /* Touch pan + pinch-zoom */
+    canvas.addEventListener('touchstart', function (e) {
+      if (e.touches.length === 1) {
+        dragging = true;
+        startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+        startTx = tx; startTy = ty;
+      } else if (e.touches.length === 2) {
+        dragging = false;
+        lastTouchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY);
+      }
+    }, { passive: true });
+    canvas.addEventListener('touchmove', function (e) {
+      if (e.touches.length === 1 && dragging) {
+        tx = startTx + e.touches[0].clientX - startX;
+        ty = startTy + e.touches[0].clientY - startY;
+        applyTransform();
+      } else if (e.touches.length === 2 && lastTouchDist) {
+        var d = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY);
+        var cx = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        var cy = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        zoomAt(d / lastTouchDist, cx, cy);
+        lastTouchDist = d;
+      }
+    }, { passive: true });
+    canvas.addEventListener('touchend', function () {
+      dragging = false; lastTouchDist = null;
+    }, { passive: true });
+
+    /* Toolbar buttons */
+    function tbClick(action) {
+      var cx = wrap.getBoundingClientRect().left + wrap.clientWidth  / 2;
+      var cy = wrap.getBoundingClientRect().top  + wrap.clientHeight / 2;
+      if (action === 'zin')   zoomAt(1.35, cx, cy);
+      if (action === 'zout')  zoomAt(1 / 1.35, cx, cy);
+      if (action === 'fit')   fitToView();
+      if (action === 'reset') { scale = 1; tx = 0; ty = 0; applyTransform(); }
+    }
+    wrap.querySelectorAll('.mermaid-tb-btn[data-a]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); tbClick(btn.dataset.a); });
+    });
+
+    /* Initial fit */
+    requestAnimationFrame(fitToView);
+  }
+
+  function _wrapMermaidDiagram(el) {
+    var svg = el.querySelector('svg');
+    if (!svg || el.querySelector('.mermaid-viewer-wrap')) return;
+
+    /* Set a sensible fixed height so the viewer doesn't collapse */
+    var svgH = parseFloat(svg.getAttribute('height')) || svg.getBoundingClientRect().height || 320;
+    var viewH = Math.min(Math.max(svgH + 80, 220), window.innerHeight * 0.78);
+
+    var wrap = document.createElement('div');
+    wrap.className = 'mermaid-viewer-wrap';
+    wrap.style.height = viewH + 'px';
+
+    var toolbar = document.createElement('div');
+    toolbar.className = 'mermaid-toolbar';
+    toolbar.innerHTML =
+      '<button class="mermaid-tb-btn" data-a="zin"  title="Zoom in">+</button>' +
+      '<button class="mermaid-tb-btn" data-a="zout" title="Zoom out">−</button>' +
+      '<button class="mermaid-tb-btn" data-a="fit"  title="Fit to view" style="font-size:12px">⊡</button>' +
+      '<button class="mermaid-tb-btn" data-a="reset" title="Reset" style="font-size:11px">↺</button>';
+
+    var canvas = document.createElement('div');
+    canvas.className = 'mermaid-canvas';
+
+    var hint = document.createElement('div');
+    hint.className = 'mermaid-hint';
+    hint.textContent = 'Scroll to zoom · Drag to pan';
+
+    /* Move all SVG content into the canvas */
+    while (el.firstChild) canvas.appendChild(el.firstChild);
+
+    wrap.appendChild(toolbar);
+    wrap.appendChild(canvas);
+    wrap.appendChild(hint);
+    el.appendChild(wrap);
+
+    _mermaidPanZoom(wrap, canvas, svg);
+  }
 
   function initMermaid(root) {
     if (typeof mermaid === 'undefined') return;
@@ -708,11 +914,25 @@
     els.forEach(function (el) { el.setAttribute('data-mermaid-processed', 'true'); });
     try {
       if (typeof mermaid.run === 'function') {
-        /* Mermaid v10+ */
-        mermaid.run({ nodes: els });
+        /* Mermaid v10+: run() returns a Promise */
+        mermaid.run({ nodes: els }).then(function () {
+          els.forEach(_wrapMermaidDiagram);
+        }).catch(function (e) {
+          console.warn('[obsidian-markdown-it] Mermaid render error:', e);
+          /* Still try to wrap whatever rendered */
+          els.forEach(_wrapMermaidDiagram);
+        });
       } else if (typeof mermaid.init === 'function') {
-        /* Mermaid v9 */
-        mermaid.init(undefined, els);
+        /* Mermaid v9: no Promise; use a short observer per element */
+        els.forEach(function (el) {
+          mermaid.init(undefined, [el]);
+          var obs = new MutationObserver(function (_, o) {
+            if (el.querySelector('svg')) { o.disconnect(); _wrapMermaidDiagram(el); }
+          });
+          obs.observe(el, { childList: true, subtree: true });
+          /* Fallback: disconnect after 8s to avoid leaks */
+          setTimeout(function () { obs.disconnect(); _wrapMermaidDiagram(el); }, 8000);
+        });
       }
     } catch (e) {
       console.warn('[obsidian-markdown-it] Mermaid render error:', e);
@@ -762,16 +982,161 @@
 
   /* ── Post-render init: highlight.js code blocks ─────────────────────────── */
   /*                                                                           */
-  /* Call after inserting rendered HTML into the DOM.                          */
-  /* Requires highlight.js to be loaded.                                       */
+  /* Wraps every <pre><code> in a styled shell with:                          */
+  /*   • Language badge (top-right)                                            */
+  /*   • Copy-to-clipboard button                                              */
+  /*   • Per-language accent colour on the top border                          */
+  /*   • Terminal-style chrome for shell/bash/console/output blocks            */
+
+  /* Language → { accent colour, label, terminal? } */
+  var LANG_META = {
+    python:     { color: '#3b82f6', label: 'Python'     },
+    py:         { color: '#3b82f6', label: 'Python'     },
+    javascript: { color: '#f59e0b', label: 'JavaScript' },
+    js:         { color: '#f59e0b', label: 'JavaScript' },
+    typescript: { color: '#3b82f6', label: 'TypeScript' },
+    ts:         { color: '#3b82f6', label: 'TypeScript' },
+    rust:       { color: '#f97316', label: 'Rust'       },
+    cpp:        { color: '#6366f1', label: 'C++'        },
+    c:          { color: '#6366f1', label: 'C'          },
+    java:       { color: '#ef4444', label: 'Java'       },
+    go:         { color: '#06b6d4', label: 'Go'         },
+    ruby:       { color: '#ef4444', label: 'Ruby'       },
+    rb:         { color: '#ef4444', label: 'Ruby'       },
+    php:        { color: '#8b5cf6', label: 'PHP'        },
+    swift:      { color: '#f97316', label: 'Swift'      },
+    kotlin:     { color: '#a855f7', label: 'Kotlin'     },
+    css:        { color: '#06b6d4', label: 'CSS'        },
+    html:       { color: '#f97316', label: 'HTML'       },
+    xml:        { color: '#f97316', label: 'XML'        },
+    json:       { color: '#22c55e', label: 'JSON'       },
+    yaml:       { color: '#22c55e', label: 'YAML'       },
+    yml:        { color: '#22c55e', label: 'YAML'       },
+    toml:       { color: '#22c55e', label: 'TOML'       },
+    sql:        { color: '#06b6d4', label: 'SQL'        },
+    bash:       { color: '#22c55e', label: 'bash', terminal: true  },
+    sh:         { color: '#22c55e', label: 'shell', terminal: true },
+    shell:      { color: '#22c55e', label: 'shell', terminal: true },
+    zsh:        { color: '#22c55e', label: 'zsh',   terminal: true },
+    console:    { color: '#22c55e', label: 'terminal', terminal: true },
+    terminal:   { color: '#22c55e', label: 'terminal', terminal: true },
+    output:     { color: '#94a3b8', label: 'output', terminal: true  },
+    text:       { color: '#94a3b8', label: 'text'       },
+    plain:      { color: '#94a3b8', label: 'text'       },
+    latex:      { color: '#10b981', label: 'LaTeX'      },
+    tex:        { color: '#10b981', label: 'LaTeX'      },
+    tikz:       { color: '#10b981', label: 'TikZ'       },
+    r:          { color: '#3b82f6', label: 'R'          },
+    matlab:     { color: '#f59e0b', label: 'MATLAB'     },
+    haskell:    { color: '#8b5cf6', label: 'Haskell'    },
+    lua:        { color: '#6366f1', label: 'Lua'        },
+    markdown:   { color: '#94a3b8', label: 'Markdown'   },
+    md:         { color: '#94a3b8', label: 'Markdown'   },
+    diff:       { color: '#f59e0b', label: 'diff'       },
+    makefile:   { color: '#ef4444', label: 'Makefile'   },
+    dockerfile: { color: '#06b6d4', label: 'Dockerfile' },
+    nginx:      { color: '#22c55e', label: 'nginx'      },
+    graphql:    { color: '#e879f9', label: 'GraphQL'    },
+  };
+
+  function _wrapCodeBlock(pre) {
+    /* Don't double-wrap */
+    if (pre.parentNode && pre.parentNode.classList &&
+        pre.parentNode.classList.contains('code-block-shell')) return;
+
+    var code   = pre.querySelector('code');
+    if (!code) return;
+
+    /* Detect language from class="language-xxx" */
+    var lang = '';
+    code.classList.forEach(function (c) {
+      var m = c.match(/^language-(.+)$/);
+      if (m) lang = m[1].toLowerCase();
+    });
+    /* Also try hljs detected class */
+    if (!lang && code.dataset.highlighted) {
+      code.classList.forEach(function (c) {
+        if (c !== 'hljs' && c !== 'language-plaintext') lang = lang || c;
+      });
+    }
+
+    var meta      = LANG_META[lang] || { color: '#64748b', label: lang || 'code' };
+    var isTerminal = !!meta.terminal;
+
+    /* Outer shell */
+    var shell = document.createElement('div');
+    shell.className = isTerminal ? 'code-block-shell code-block-terminal' : 'code-block-shell';
+    shell.style.setProperty('--lang-accent', meta.color);
+
+    /* Header bar */
+    var header = document.createElement('div');
+    header.className = 'code-block-header';
+
+    if (isTerminal) {
+      /* macOS-style traffic lights */
+      var dots = document.createElement('div');
+      dots.className = 'code-block-dots';
+      dots.innerHTML =
+        '<span class="dot dot-red"></span>' +
+        '<span class="dot dot-yellow"></span>' +
+        '<span class="dot dot-green"></span>';
+      header.appendChild(dots);
+    }
+
+    /* Language badge */
+    var badge = document.createElement('span');
+    badge.className = 'code-block-badge';
+    badge.textContent = meta.label;
+    header.appendChild(badge);
+
+    /* Copy button */
+    var btn = document.createElement('button');
+    btn.className  = 'code-block-copy';
+    btn.title      = 'Copy';
+    btn.innerHTML  = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+    btn.addEventListener('click', function () {
+      var text = code.innerText || code.textContent || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+          btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          btn.classList.add('copied');
+          setTimeout(function () {
+            btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      } else {
+        /* Fallback for non-HTTPS */
+        var ta = document.createElement('textarea');
+        ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.classList.add('copied');
+        setTimeout(function () { btn.classList.remove('copied'); }, 2000);
+      }
+    });
+    header.appendChild(btn);
+
+    /* Wrap pre in shell */
+    pre.parentNode.insertBefore(shell, pre);
+    shell.appendChild(header);
+    shell.appendChild(pre);
+  }
 
   function initHighlight(root) {
-    if (typeof hljs === 'undefined') return;
-    (root || document)
-      .querySelectorAll('pre code:not([data-highlighted])')
-      .forEach(function (block) {
+    var el = root || document;
+    /* First apply highlight.js syntax colouring */
+    if (typeof hljs !== 'undefined') {
+      el.querySelectorAll('pre code:not([data-highlighted])').forEach(function (block) {
         hljs.highlightElement(block);
       });
+    }
+    /* Then wrap every pre in the language-aware shell */
+    el.querySelectorAll('pre:not([data-code-wrapped])').forEach(function (pre) {
+      pre.setAttribute('data-code-wrapped', 'true');
+      _wrapCodeBlock(pre);
+    });
   }
 
   /* ── Default CSS ────────────────────────────────────────────────────────── */
@@ -812,18 +1177,67 @@
     /* ── Math ──────────────────────────────────────────────────────────────── */
     '.math-block{display:block;overflow-x:auto;padding:.5em 0;text-align:center}',
     '.math-inline{font-style:italic}',
+    '.math-inline-display{display:inline-block;vertical-align:middle;font-style:normal}',
     /* ── Embeds ─────────────────────────────────────────────────────────────── */
     '.obsidian-image{max-width:100%;height:auto;border-radius:4px;display:block;margin:.5em auto}',
     '.obsidian-audio,.obsidian-video{display:block;max-width:100%;margin:.5em 0}',
     '.obsidian-pdf{width:100%;min-height:500px;border:1px solid #ccc;border-radius:4px}',
     '.obsidian-transclusion{border-left:3px solid #ccc;padding:.5em .8em;background:rgba(0,0,0,.03);border-radius:0 4px 4px 0;margin:.5em 0}',
     '.obsidian-block-id{display:none}',
-    /* ── Mermaid ─────────────────────────────────────────────────────────────── */
-    '.obsidian-mermaid{overflow-x:auto;text-align:center;margin:1em 0;background:transparent}',
+    /* ── Mermaid viewer (pan/zoom) ──────────────────────────────────────────── */
+    '.obsidian-mermaid{margin:1.5em 0}',
+    '.mermaid-viewer-wrap{position:relative;border-radius:10px;background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.07);overflow:hidden;user-select:none;touch-action:none;min-height:180px}',
+    '.mermaid-canvas{display:flex;justify-content:center;align-items:flex-start;padding:1.5em;cursor:grab;transform-origin:0 0;will-change:transform}',
+    '.mermaid-canvas.is-dragging{cursor:grabbing}',
+    '.mermaid-canvas svg{max-width:none!important;display:block}',
+    '.mermaid-toolbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:10;opacity:0;transition:opacity .2s;pointer-events:none}',
+    '.mermaid-viewer-wrap:hover .mermaid-toolbar{opacity:1;pointer-events:auto}',
+    '.mermaid-tb-btn{background:rgba(15,15,25,0.78);color:rgba(255,255,255,0.9);border:1px solid rgba(255,255,255,0.18);border-radius:5px;width:30px;height:30px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}',
+    '.mermaid-tb-btn:hover{background:rgba(80,80,140,0.75)}',
+    '.mermaid-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:.72em;color:rgba(255,255,255,0.35);pointer-events:none;white-space:nowrap}',
+    /* ── TikZ diagram wrapper ────────────────────────────────────────────────── */
+    '.tikz-wrapper{position:relative;margin:1.5em 0;background:rgba(0,0,0,0.30);border:1px solid rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;user-select:none}',
+    /* Dark-mode invert: TikZJax emits black-on-white SVGs; flip them for dark themes */
+    '@media (prefers-color-scheme:dark){.tikz-wrapper svg{filter:invert(1) hue-rotate(180deg)}}',
+    '.tikz-loading{color:rgba(255,255,255,0.45);font-size:.85em;padding:2.5em 0;text-align:center}',
+    /* Pan/zoom canvas — same model as Mermaid viewer */
+    '.tikz-panzoom-wrap{position:relative;overflow:hidden;min-height:200px;touch-action:none}',
+    '.tikz-canvas{display:flex;justify-content:center;align-items:flex-start;padding:1.6em;transform-origin:0 0;will-change:transform;cursor:grab}',
+    '.tikz-canvas.is-dragging{cursor:grabbing}',
+    '.tikz-canvas svg{display:block}',
+    /* SVG sizing classes set by _tikzSizeSVG */
+    '.tikz-canvas svg.tikz-tall{width:min(520px,90%);height:auto}',
+    '.tikz-canvas svg.tikz-wide{width:min(860px,100%);height:auto}',
+    '.tikz-canvas svg.tikz-square{width:min(680px,94%);height:auto}',
+    /* Toolbar (appears on hover) */
+    '.tikz-toolbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:10;opacity:0;transition:opacity .2s;pointer-events:none}',
+    '.tikz-wrapper:hover .tikz-toolbar{opacity:1;pointer-events:auto}',
+    '.tikz-tb-btn{background:rgba(15,15,25,0.78);color:rgba(255,255,255,0.88);border:1px solid rgba(255,255,255,0.18);border-radius:5px;width:28px;height:28px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);padding:0}',
+    '.tikz-tb-btn:hover{background:rgba(80,80,140,0.75)}',
+    '.tikz-tb-btn svg{pointer-events:none}',
+    /* Scroll hint */
+    '.tikz-hint{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);font-size:.7em;color:rgba(255,255,255,0.32);pointer-events:none;white-space:nowrap;transition:opacity .4s}',
+    '.tikz-hint.tikz-hint-gone{opacity:0}',
     /* -- TikZ error block -- */
-    '.tikz-error{display:flex;align-items:center;gap:.5em;margin:1em 0;padding:.6em .9em;border-left:4px solid #ef5350;border-radius:4px;background:rgba(239,83,80,.07);color:#ef5350;font-size:.9em;font-family:monospace}',
-    '.tikz-error-icon{font-size:1.1em;flex-shrink:0}',
-    '.tikz-error-msg{opacity:.9}',
+    '.tikz-error{display:flex;align-items:flex-start;gap:.6em;margin:.5em;padding:.7em 1em;border-left:4px solid #ef5350;border-radius:4px;background:rgba(239,83,80,.07);color:#ef5350;font-size:.85em;font-family:monospace}',
+    '.tikz-error-icon{font-size:1.1em;flex-shrink:0;margin-top:.05em}',
+    '.tikz-error-body{display:flex;flex-direction:column;gap:.35em}',
+    '.tikz-error-msg{opacity:.9;font-weight:600}',
+    '.tikz-error-src{opacity:.6;white-space:pre-wrap;font-size:.92em;max-height:6em;overflow-y:auto;border-top:1px solid rgba(239,83,80,.2);padding-top:.35em;margin-top:.1em}',
+    /* ── Language-aware code blocks ──────────────────────────────────────────── */
+    '.code-block-shell{border-radius:9px;overflow:hidden;margin:1em 0;border:1px solid rgba(255,255,255,0.07);background:rgba(0,0,0,0.35)}',
+    '.code-block-terminal{background:#0d1117}',
+    '.code-block-header{display:flex;align-items:center;gap:.5em;padding:.45em .75em;background:rgba(255,255,255,0.04);border-bottom:2px solid var(--lang-accent,#64748b)}',
+    '.code-block-terminal .code-block-header{background:#161b22;border-bottom-color:var(--lang-accent,#22c55e)}',
+    '.code-block-dots{display:flex;gap:5px;margin-right:.25em}',
+    '.dot{width:11px;height:11px;border-radius:50%}',
+    '.dot-red{background:#ff5f56}.dot-yellow{background:#ffbd2e}.dot-green{background:#27c93f}',
+    '.code-block-badge{font-size:.72em;font-weight:600;letter-spacing:.04em;color:var(--lang-accent,#94a3b8);text-transform:uppercase;margin-right:auto;opacity:.9}',
+    '.code-block-copy{background:transparent;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);border-radius:4px;padding:3px 6px;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:.75em;transition:color .15s,background .15s}',
+    '.code-block-copy:hover{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.85)}',
+    '.code-block-copy.copied{color:#22c55e;border-color:rgba(34,197,94,.35)}',
+    '.code-block-shell pre{margin:0!important;border-radius:0!important;border:none!important;background:transparent!important}',
+    '.code-block-shell pre code{background:transparent!important;font-size:.82em!important;line-height:1.65!important}',
     /* ── Task lists ──────────────────────────────────────────────────────────── */
     'ul.task-list{list-style:none;padding-left:1.2em}',
     'li.task-list-item{display:flex;align-items:baseline;gap:.45em;padding:.1em 0}',
@@ -887,7 +1301,7 @@
     }
 
     if (opts.enableComments)       ruleComments(md);
-    if (opts.enableMath)           { ruleMathBlock(md); ruleMathInline(md); }
+    if (opts.enableMath)           { ruleMathRawDelimiters(md); ruleMathBlock(md); ruleMathInlineDisplay(md); ruleMathInline(md); }
     if (opts.enableHighlight)      ruleHighlight(md);
     if (opts.enableStrikethrough)  ruleStrikethrough(md);
     if (opts.enableBlockIds)       ruleBlockIds(md);
@@ -928,137 +1342,180 @@
   };
   global.obsidianInitMath           = initMath;
   global.obsidianInitTikz           = function (root) {
-    /* The local bin/tikzjax/output/tikzjax.js observes document.body with
-       { childList: true, subtree: true }, so <script type="text/tikz"> elements
-       inserted anywhere in the DOM are picked up automatically.
-       Strategy: replace each .tikz-source div directly with the script element;
-       tikzjax handles the spinner -> SVG replacement in-place.
+    /* ── Smart SVG sizer ─────────────────────────────────────────────────── */
+    function _tikzSizeSVG(svg) {
+      if (!svg.getAttribute('viewBox')) {
+        var w0 = parseFloat(svg.getAttribute('width'))  || 0;
+        var h0 = parseFloat(svg.getAttribute('height')) || 0;
+        if (w0 > 0 && h0 > 0) svg.setAttribute('viewBox', '0 0 ' + w0 + ' ' + h0);
+      }
+      var vb = svg.getAttribute('viewBox'), svgW = 0, svgH = 0;
+      if (vb) { var pts = vb.trim().split(/[\s,]+/); svgW = parseFloat(pts[2])||0; svgH = parseFloat(pts[3])||0; }
+      if (!svgW) svgW = parseFloat(svg.getAttribute('width'))  || 300;
+      if (!svgH) svgH = parseFloat(svg.getAttribute('height')) || 300;
+      /* Store intrinsic dims for pan-zoom fitToView */
+      svg.setAttribute('data-intrinsic-w', svgW);
+      svg.setAttribute('data-intrinsic-h', svgH);
+      svg.removeAttribute('width'); svg.removeAttribute('height');
+      var ratio = svgW / (svgH || 1);
+      svg.classList.remove('tikz-tall','tikz-wide','tikz-square');
+      if      (ratio < 0.8)  svg.classList.add('tikz-tall');
+      else if (ratio > 1.25) svg.classList.add('tikz-wide');
+      else                   svg.classList.add('tikz-square');
+    }
 
-       Preamble injection (required by this tikzjax build):
-       ─────────────────────────────────────────────────────
-       The tikzjax engine uses a frozen LaTeX core dump that has already passed
-       the preamble stage. This means \usepackage and \usetikzlibrary cannot
-       appear inside the script body — they must be injected via the
-       data-add-to-preamble attribute BEFORE \begin{document}.
+    /* ── Pan / zoom engine ───────────────────────────────────────────────── */
+    function _tikzPanZoom(pz, canvas, svg) {
+      var scale = 1, tx = 0, ty = 0;
+      var dragging = false, startX, startY, startTx, startTy, lastTouchDist = null;
+      function applyT() { canvas.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+scale+')'; }
+      function clamp(v,lo,hi){ return Math.min(hi,Math.max(lo,v)); }
+      function zoomAt(f,cx,cy) {
+        var r = pz.getBoundingClientRect();
+        var ox = cx-r.left, oy = cy-r.top;
+        var ns = clamp(scale*f, 0.06, 16); var ratio2 = ns/scale;
+        tx = ox - ratio2*(ox-tx); ty = oy - ratio2*(oy-ty); scale = ns; applyT();
+      }
+      function fit() {
+        var iW = parseFloat(svg.getAttribute('data-intrinsic-w')) || 600;
+        var iH = parseFloat(svg.getAttribute('data-intrinsic-h')) || 400;
+        var wW = pz.clientWidth||600, wH = pz.clientHeight||400, pad = 48;
+        var ns = Math.max(Math.min((wW-pad)/iW, (wH-pad)/iH, 2), 0.06);
+        scale = ns; tx = (wW - iW*scale)/2; ty = (wH - iH*scale)/2; applyT();
+      }
+      canvas.addEventListener('wheel', function(e){ e.preventDefault(); zoomAt(e.deltaY<0?1.14:1/1.14,e.clientX,e.clientY); },{passive:false});
+      canvas.addEventListener('mousedown', function(e){ if(e.button!==0)return; dragging=true; startX=e.clientX; startY=e.clientY; startTx=tx; startTy=ty; canvas.classList.add('is-dragging'); e.preventDefault(); });
+      window.addEventListener('mousemove', function(e){ if(!dragging)return; tx=startTx+e.clientX-startX; ty=startTy+e.clientY-startY; applyT(); });
+      window.addEventListener('mouseup',   function(){ if(!dragging)return; dragging=false; canvas.classList.remove('is-dragging'); });
+      canvas.addEventListener('touchstart', function(e){ if(e.touches.length===1){dragging=true;startX=e.touches[0].clientX;startY=e.touches[0].clientY;startTx=tx;startTy=ty;}else if(e.touches.length===2){dragging=false;lastTouchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);} },{passive:true});
+      canvas.addEventListener('touchmove', function(e){ if(e.touches.length===1&&dragging){tx=startTx+e.touches[0].clientX-startX;ty=startTy+e.touches[0].clientY-startY;applyT();}else if(e.touches.length===2&&lastTouchDist){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoomAt(d/lastTouchDist,(e.touches[0].clientX+e.touches[1].clientX)/2,(e.touches[0].clientY+e.touches[1].clientY)/2);lastTouchDist=d;} },{passive:true});
+      canvas.addEventListener('touchend', function(){ dragging=false; lastTouchDist=null; },{passive:true});
+      /* Toolbar */
+      pz.querySelectorAll('.tikz-tb-btn[data-a]').forEach(function(btn){
+        btn.addEventListener('click', function(e){
+          e.stopPropagation();
+          var cx = pz.getBoundingClientRect().left + pz.clientWidth/2;
+          var cy = pz.getBoundingClientRect().top  + pz.clientHeight/2;
+          var a  = btn.dataset.a;
+          if(a==='zin')   zoomAt(1.35,cx,cy);
+          if(a==='zout')  zoomAt(1/1.35,cx,cy);
+          if(a==='fit')   fit();
+          if(a==='reset') { scale=1;tx=0;ty=0;applyT(); }
+          if(a==='dl') {
+            var blob = new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'});
+            var url  = URL.createObjectURL(blob);
+            var dl   = document.createElement('a'); dl.href=url; dl.download='diagram.svg';
+            document.body.appendChild(dl); dl.click(); document.body.removeChild(dl);
+            setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+          }
+        });
+      });
+      /* Fade hint on first interact */
+      var hint = pz.querySelector('.tikz-hint');
+      function fadeHint(){ if(hint) hint.classList.add('tikz-hint-gone'); }
+      ['wheel','mousedown','touchstart'].forEach(function(ev){ canvas.addEventListener(ev,fadeHint,{once:true}); });
+      requestAnimationFrame(fit);
+    }
 
-       This function automatically:
-         1. Scans the tikz block for \usepackage / \usetikzlibrary lines and
-            any setup macros (e.g. \tdplotsetmaincoords) that precede
-            \begin{tikzpicture}.
-         2. Moves them into data-add-to-preamble (appending \begin{document}).
-         3. Appends \end{document} after \end{tikzpicture} in the body.
-
-       Users write natural LaTeX in ```tikz blocks — no special syntax needed:
-
-         ```tikz
-         \usepackage{tikz-3dplot}
-         \tdplotsetmaincoords{70}{110}
-         \begin{tikzpicture}[tdplot_main_coords, scale=1.5]
-             ...
-         \end{tikzpicture}
-         ```
-
-       Error handling: when TeX compilation fails tikzjax sets
-         spinner.outerHTML = "<img src='//invalid.site/img-not-found.png'/>"
-       leaving a broken-image icon in the document.  A MutationObserver on the
-       parent catches that IMG insertion and replaces it with a styled error
-       block.  On success, tikzjax dispatches "tikzjax-load-finished" (bubbles)
-       on the rendered SVG; we use that to disconnect the observer cleanly.      */
+    /* ── Build pan/zoom viewer around the SVG ────────────────────────────── */
+    function _wrapTikZ(wrapper, svg) {
+      if(wrapper.querySelector('.tikz-panzoom-wrap')) return;
+      var iH  = parseFloat(svg.getAttribute('data-intrinsic-h')) || 320;
+      var vH  = Math.min(Math.max(iH + 100, 240), window.innerHeight * 0.78);
+      var pz  = document.createElement('div');
+      pz.className = 'tikz-panzoom-wrap'; pz.style.height = vH + 'px';
+      var tb  = document.createElement('div');
+      tb.className = 'tikz-toolbar';
+      var icon = function(paths){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+paths+'</svg>'; };
+      tb.innerHTML =
+        '<button class="tikz-tb-btn" data-a="zin"  title="Zoom in">'  +icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>')+'</button>'+
+        '<button class="tikz-tb-btn" data-a="zout" title="Zoom out">' +icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>')+'</button>'+
+        '<button class="tikz-tb-btn" data-a="fit"  title="Fit">'      +icon('<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>')+'</button>'+
+        '<button class="tikz-tb-btn" data-a="reset" title="Reset">'   +icon('<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/>')+'</button>'+
+        '<button class="tikz-tb-btn" data-a="dl"   title="Download SVG">'+icon('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>')+'</button>';
+      var canvas = document.createElement('div'); canvas.className = 'tikz-canvas';
+      var hint   = document.createElement('div'); hint.className = 'tikz-hint'; hint.textContent = 'Scroll to zoom · Drag to pan';
+      canvas.appendChild(svg);
+      pz.appendChild(tb); pz.appendChild(canvas); pz.appendChild(hint);
+      wrapper.appendChild(pz);
+      _tikzPanZoom(pz, canvas, svg);
+    }
 
     /* ── Preamble extractor ──────────────────────────────────────────────── */
     function extractPreamble(raw) {
-      var lines      = raw.split('\n');
-      var preamble   = [];
-      var bodyLines  = [];
-      var inBody     = false;
-
+      var lines = raw.split('\n'), preamble = [], bodyLines = [], inBody = false;
       for (var i = 0; i < lines.length; i++) {
-        var line = lines[i];
-        var trimmed = line.trim();
-
-        if (inBody) {
-          bodyLines.push(line);
-          continue;
-        }
-
-        /* Lines before \begin{tikzpicture} that are preamble commands */
-        if (
-          /^\\usepackage\b/.test(trimmed)   ||
-          /^\\usetikzlibrary\b/.test(trimmed)
-        ) {
-          preamble.push(trimmed);
-          continue;
-        }
-
-        /* Any other command before \begin{tikzpicture} is a setup macro
-           e.g. \tdplotsetmaincoords{70}{110} */
-        if (/^\\[a-zA-Z]/.test(trimmed) && !/^\\begin\b/.test(trimmed)) {
-          preamble.push(trimmed);
-          continue;
-        }
-
-        /* Once we hit \begin{tikzpicture} (or any \begin), enter body mode */
-        inBody = true;
-        bodyLines.push(line);
+        var line = lines[i], trimmed = line.trim();
+        if (inBody) { bodyLines.push(line); continue; }
+        if (/^\\usepackage\b/.test(trimmed) || /^\\usetikzlibrary\b/.test(trimmed)) { preamble.push(trimmed); continue; }
+        if (/^\\[a-zA-Z]/.test(trimmed) && !/^\\begin\b/.test(trimmed)) { preamble.push(trimmed); continue; }
+        inBody = true; bodyLines.push(line);
       }
-
-      /* Build the data-add-to-preamble value:
-         all extracted commands + \begin{document} */
-      var preambleAttr = preamble.join('') + (preamble.length ? '\\begin{document}' : '\\begin{document}');
-
-      /* Body: the tikzpicture content + \end{document} */
       var body = bodyLines.join('\n').trimRight();
-      /* Append \end{document} if not already present */
-      if (body.indexOf('\\end{document}') === -1) {
-        body = body + '\n\\end{document}';
-      }
-
-      return { preamble: preambleAttr, body: body };
+      if (body.indexOf('\\end{document}') === -1) body += '\n\\end{document}';
+      return { preamble: preamble.join('') + '\\begin{document}', body: body };
     }
 
     var el = root || document;
     el.querySelectorAll('.tikz-source:not([data-tikz-rendered])').forEach(function (div) {
       div.setAttribute('data-tikz-rendered', 'true');
+      var wrapper   = div.closest('.tikz-wrapper') || div.parentNode;
+      var rawSource = div.textContent;
+      var parsed    = extractPreamble(rawSource);
 
-      /* Extract preamble commands and clean body */
-      var parsed = extractPreamble(div.textContent);
-
-      var s  = document.createElement('script');
+      var s = document.createElement('script');
       s.type = 'text/tikz';
       s.setAttribute('data-add-to-preamble', parsed.preamble);
-      s.setAttribute('data-show-console', 'true');  /* temporary debug */
       s.textContent = parsed.body;
 
-      var parent = div.parentNode;
-
-      /* Watch for tikzjax inserting <img src="//invalid.site/..."> on error. */
       var obs = new MutationObserver(function (mutations) {
         for (var m = 0; m < mutations.length; m++) {
           var added = mutations[m].addedNodes;
           for (var n = 0; n < added.length; n++) {
-            if (added[n].nodeName === 'IMG') {
+            var node = added[n];
+            /* Error: tikzjax inserts a broken IMG */
+            if (node.nodeName === 'IMG') {
               obs.disconnect();
+              var ld = wrapper.querySelector('.tikz-loading');
+              if (ld) ld.parentNode.removeChild(ld);
               var err = document.createElement('div');
               err.className = 'tikz-error';
+              var srcSafe = rawSource.trim().replace(/&/g,'&amp;').replace(/</g,'&lt;');
               err.innerHTML =
                 '<span class="tikz-error-icon">⚠️</span>' +
-                '<span class="tikz-error-msg">TikZ render failed — see console for details.</span>';
-              if (added[n].parentNode) added[n].parentNode.replaceChild(err, added[n]);
+                '<div class="tikz-error-body">' +
+                  '<span class="tikz-error-msg">TikZ render failed — check diagram syntax.</span>' +
+                  '<pre class="tikz-error-src">' + srcSafe + '</pre>' +
+                '</div>';
+              if (node.parentNode) node.parentNode.replaceChild(err, node);
+              else wrapper.appendChild(err);
               return;
+            }
+            /* Success: SVG appeared */
+            if (node.nodeName === 'svg' || (node.querySelector && node.querySelector('svg'))) {
+              var svg2 = node.nodeName === 'svg' ? node : node.querySelector('svg');
+              if (svg2) _tikzSizeSVG(svg2);
+              var ld2 = wrapper.querySelector('.tikz-loading');
+              if (ld2) ld2.parentNode.removeChild(ld2);
             }
           }
         }
       });
-      obs.observe(parent, { childList: true });
+      obs.observe(wrapper, { childList: true, subtree: true });
 
-      /* Disconnect cleanly on success. */
-      parent.addEventListener('tikzjax-load-finished', function cleanup() {
-        parent.removeEventListener('tikzjax-load-finished', cleanup);
+      wrapper.addEventListener('tikzjax-load-finished', function cleanup() {
+        wrapper.removeEventListener('tikzjax-load-finished', cleanup);
         obs.disconnect();
+        var svg = wrapper.querySelector('svg');
+        if (svg) {
+          _tikzSizeSVG(svg);
+          var ld3 = wrapper.querySelector('.tikz-loading');
+          if (ld3) ld3.parentNode.removeChild(ld3);
+          _wrapTikZ(wrapper, svg);
+        }
       });
 
-      /* Insert directly — tikzjax finds it via its subtree:true observer. */
-      parent.replaceChild(s, div);
+      div.parentNode.replaceChild(s, div);
     });
   };
   global.obsidianInitMermaid        = initMermaid;
