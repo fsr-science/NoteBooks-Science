@@ -757,7 +757,7 @@
 
   /* ── Pan/zoom engine for Mermaid diagrams ───────────────────────────────── */
 
-  function _mermaidPanZoom(wrap, canvas, svg) {
+  function _mermaidPanZoom(wrap, canvas, svg, isMindmap) {
     var scale = 1, tx = 0, ty = 0;
     var dragging = false, startX, startY, startTx, startTy;
     var lastTouchDist = null;
@@ -773,8 +773,15 @@
       var ox = cx - rect.left, oy = cy - rect.top;
       var ns = clamp(scale * factor, 0.08, 12);
       var r  = ns / scale;
-      tx = ox - r * (ox - tx);
-      ty = oy - r * (oy - ty);
+      var svgW = parseFloat(svg.getAttribute('width'))  || 600;
+      var svgH = parseFloat(svg.getAttribute('height')) || 400;
+      
+      /* Adjust center of zoom to be viewport-center relative */
+      var centerX = wrap.clientWidth / 2;
+      var centerY = wrap.clientHeight / 2;
+      
+      tx = centerX - r * (ox - tx + centerX);
+      ty = centerY - r * (oy - ty + centerY);
       scale = ns;
       applyTransform();
     }
@@ -789,8 +796,10 @@
       var ns = Math.min((wrapW - pad) / svgW, (wrapH - pad) / svgH, 1.8);
       ns = Math.max(ns, 0.08);
       scale = ns;
-      tx = (wrapW - svgW * scale) / 2;
-      ty = (wrapH - svgH * scale) / 2;
+      
+      /* With absolute positioning at top:50%, left:50%, we need to offset by half the scaled size */
+      tx = -(svgW * scale) / 2;
+      ty = -(svgH * scale) / 2;
       applyTransform();
     }
 
@@ -871,12 +880,22 @@
     var svg = el.querySelector('svg');
     if (!svg || el.querySelector('.mermaid-viewer-wrap')) return;
 
+    /* Detect mindmap: look for rotate transforms which are unique to mindmaps */
+    var isMindmap = false;
+    var groups = svg.querySelectorAll('g');
+    for (var g = 0; g < groups.length && !isMindmap; g++) {
+      var transform = groups[g].getAttribute('transform') || '';
+      if (transform.indexOf('rotate(') !== -1) {
+        isMindmap = true;
+      }
+    }
+
     /* Set a sensible fixed height so the viewer doesn't collapse */
     var svgH = parseFloat(svg.getAttribute('height')) || svg.getBoundingClientRect().height || 320;
     var viewH = Math.min(Math.max(svgH + 80, 220), window.innerHeight * 0.78);
 
     var wrap = document.createElement('div');
-    wrap.className = 'mermaid-viewer-wrap';
+    wrap.className = 'mermaid-viewer-wrap' + (isMindmap ? ' mermaid-mindmap' : '');
     wrap.style.height = viewH + 'px';
 
     var toolbar = document.createElement('div');
@@ -888,7 +907,7 @@
       '<button class="mermaid-tb-btn" data-a="reset" title="Reset" style="font-size:11px">↺</button>';
 
     var canvas = document.createElement('div');
-    canvas.className = 'mermaid-canvas';
+    canvas.className = 'mermaid-canvas' + (isMindmap ? ' mermaid-canvas-centered' : '');
 
     var hint = document.createElement('div');
     hint.className = 'mermaid-hint';
@@ -902,7 +921,7 @@
     wrap.appendChild(hint);
     el.appendChild(wrap);
 
-    _mermaidPanZoom(wrap, canvas, svg);
+    _mermaidPanZoom(wrap, canvas, svg, isMindmap);
   }
 
   function initMermaid(root) {
@@ -1187,7 +1206,7 @@
     /* ── Mermaid viewer (pan/zoom) ──────────────────────────────────────────── */
     '.obsidian-mermaid{margin:1.5em 0}',
     '.mermaid-viewer-wrap{position:relative;border-radius:10px;background:rgba(0,0,0,0.22);border:1px solid rgba(255,255,255,0.07);overflow:hidden;user-select:none;touch-action:none;min-height:180px}',
-    '.mermaid-canvas{display:flex;justify-content:center;align-items:flex-start;padding:1.5em;cursor:grab;transform-origin:0 0;will-change:transform}',
+    '.mermaid-canvas{position:absolute;top:50%;left:50%;cursor:grab;transform-origin:0 0;will-change:transform;margin:0}',
     '.mermaid-canvas.is-dragging{cursor:grabbing}',
     '.mermaid-canvas svg{max-width:none!important;display:block}',
     '.mermaid-toolbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:10;opacity:0;transition:opacity .2s;pointer-events:none}',
@@ -1202,13 +1221,15 @@
     '.tikz-loading{color:rgba(255,255,255,0.45);font-size:.85em;padding:2.5em 0;text-align:center}',
     /* Pan/zoom canvas — same model as Mermaid viewer */
     '.tikz-panzoom-wrap{position:relative;overflow:hidden;min-height:200px;touch-action:none}',
-    '.tikz-canvas{display:flex;justify-content:center;align-items:flex-start;padding:1.6em;transform-origin:0 0;will-change:transform;cursor:grab}',
+    '.tikz-canvas{display:block;transform-origin:0 0;will-change:transform;cursor:grab;padding:0;margin:0}',
     '.tikz-canvas.is-dragging{cursor:grabbing}',
+    /* SVG base sizes: width-driven, height is always auto from aspect ratio.
+       Large enough to be readable at fit() scale, but fit() will scale them
+       down to fill the viewer so the actual rendered size adjusts automatically. */
     '.tikz-canvas svg{display:block}',
-    /* SVG sizing classes set by _tikzSizeSVG */
-    '.tikz-canvas svg.tikz-tall{width:min(520px,90%);height:auto}',
-    '.tikz-canvas svg.tikz-wide{width:min(860px,100%);height:auto}',
-    '.tikz-canvas svg.tikz-square{width:min(680px,94%);height:auto}',
+    '.tikz-canvas svg.tikz-tall{width:700px;height:auto}',
+    '.tikz-canvas svg.tikz-wide{width:1100px;height:auto}',
+    '.tikz-canvas svg.tikz-square{width:860px;height:auto}',
     /* Toolbar (appears on hover) */
     '.tikz-toolbar{position:absolute;top:8px;right:8px;display:flex;gap:4px;z-index:10;opacity:0;transition:opacity .2s;pointer-events:none}',
     '.tikz-wrapper:hover .tikz-toolbar{opacity:1;pointer-events:auto}',
@@ -1344,101 +1365,278 @@
   global.obsidianInitTikz           = function (root) {
     /* ── Smart SVG sizer ─────────────────────────────────────────────────── */
     function _tikzSizeSVG(svg) {
-      if (!svg.getAttribute('viewBox')) {
+      /* Ensure viewBox exists */
+      var vb = svg.getAttribute('viewBox');
+      if (!vb) {
         var w0 = parseFloat(svg.getAttribute('width'))  || 0;
         var h0 = parseFloat(svg.getAttribute('height')) || 0;
-        if (w0 > 0 && h0 > 0) svg.setAttribute('viewBox', '0 0 ' + w0 + ' ' + h0);
+        if (w0 > 0 && h0 > 0) {
+          svg.setAttribute('viewBox', '0 0 ' + w0 + ' ' + h0);
+          vb = '0 0 ' + w0 + ' ' + h0;
+        }
       }
-      var vb = svg.getAttribute('viewBox'), svgW = 0, svgH = 0;
-      if (vb) { var pts = vb.trim().split(/[\s,]+/); svgW = parseFloat(pts[2])||0; svgH = parseFloat(pts[3])||0; }
+
+      /* Read aspect ratio from viewBox */
+      var svgW = 0, svgH = 0;
+      if (vb) {
+        var pts = vb.trim().split(/[\s,]+/);
+        svgW = parseFloat(pts[2]) || 0;
+        svgH = parseFloat(pts[3]) || 0;
+      }
       if (!svgW) svgW = parseFloat(svg.getAttribute('width'))  || 300;
       if (!svgH) svgH = parseFloat(svg.getAttribute('height')) || 300;
-      /* Store intrinsic dims for pan-zoom fitToView */
-      svg.setAttribute('data-intrinsic-w', svgW);
-      svg.setAttribute('data-intrinsic-h', svgH);
-      svg.removeAttribute('width'); svg.removeAttribute('height');
+
       var ratio = svgW / (svgH || 1);
-      svg.classList.remove('tikz-tall','tikz-wide','tikz-square');
-      if      (ratio < 0.8)  svg.classList.add('tikz-tall');
-      else if (ratio > 1.25) svg.classList.add('tikz-wide');
-      else                   svg.classList.add('tikz-square');
+
+      /* Intelligent sizing: Scale based on viewport width and aspect ratio.
+         Aim for readable size while staying within reasonable bounds.
+         The baseW values are now max widths; they'll scale down if needed. */
+      var viewportW = window.innerWidth * 0.92;  /* Account for scrollbar & margins */
+      var maxW, baseW;
+      
+      if      (ratio < 0.8)  maxW = 750;   /* tall/portrait  — less wide */
+      else if (ratio > 1.25) maxW = 1200;  /* wide/landscape — more wide */
+      else                   maxW = 900;   /* squarish — balanced */
+
+      /* Scale down if viewport is too narrow */
+      baseW = Math.min(maxW, Math.max(viewportW, 400));
+      /* For very small viewports, use a more conservative approach */
+      if (viewportW < 600) {
+        baseW = Math.min(maxW, viewportW - 30);
+      }
+
+      var baseH = Math.round(baseW / ratio);
+
+      /* Write explicit pixel width/height so fitToView can read them with
+         getAttribute — same pattern Mermaid uses, avoids CSS sizing conflicts */
+      svg.setAttribute('width',  baseW);
+      svg.setAttribute('height', baseH);
+      /* Remove CSS classes that would override these attrs */
+      svg.classList.remove('tikz-tall', 'tikz-wide', 'tikz-square');
     }
 
     /* ── Pan / zoom engine ───────────────────────────────────────────────── */
-    function _tikzPanZoom(pz, canvas, svg) {
+    function _tikzPanZoom(wrap, canvas, svg) {
       var scale = 1, tx = 0, ty = 0;
-      var dragging = false, startX, startY, startTx, startTy, lastTouchDist = null;
-      function applyT() { canvas.style.transform = 'translate('+tx+'px,'+ty+'px) scale('+scale+')'; }
-      function clamp(v,lo,hi){ return Math.min(hi,Math.max(lo,v)); }
-      function zoomAt(f,cx,cy) {
-        var r = pz.getBoundingClientRect();
-        var ox = cx-r.left, oy = cy-r.top;
-        var ns = clamp(scale*f, 0.06, 16); var ratio2 = ns/scale;
-        tx = ox - ratio2*(ox-tx); ty = oy - ratio2*(oy-ty); scale = ns; applyT();
+      var dragging = false, startX, startY, startTx, startTy;
+      var lastTouchDist = null;
+      var SNAP_MS  = 240;
+      var ELASTIC  = 0.28;
+      var LEASH    = 80;
+
+      function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+      function applyT(animated) {
+        if (animated) {
+          canvas.style.transition = 'transform ' + SNAP_MS + 'ms cubic-bezier(0.25,0.46,0.45,0.94)';
+          setTimeout(function () { canvas.style.transition = 'none'; }, SNAP_MS + 16);
+        } else {
+          canvas.style.transition = 'none';
+        }
+        canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
       }
-      function fit() {
-        var iW = parseFloat(svg.getAttribute('data-intrinsic-w')) || 600;
-        var iH = parseFloat(svg.getAttribute('data-intrinsic-h')) || 400;
-        var wW = pz.clientWidth||600, wH = pz.clientHeight||400, pad = 48;
-        var ns = Math.max(Math.min((wW-pad)/iW, (wH-pad)/iH, 2), 0.06);
-        scale = ns; tx = (wW - iW*scale)/2; ty = (wH - iH*scale)/2; applyT();
+
+      /* Read SVG pixel size the same way Mermaid does — from the attribute */
+      function svgSize() {
+        var w = parseFloat(svg.getAttribute('width'))  || 860;
+        var h = parseFloat(svg.getAttribute('height')) || 400;
+        return { w: w, h: h };
       }
-      canvas.addEventListener('wheel', function(e){ e.preventDefault(); zoomAt(e.deltaY<0?1.14:1/1.14,e.clientX,e.clientY); },{passive:false});
-      canvas.addEventListener('mousedown', function(e){ if(e.button!==0)return; dragging=true; startX=e.clientX; startY=e.clientY; startTx=tx; startTy=ty; canvas.classList.add('is-dragging'); e.preventDefault(); });
-      window.addEventListener('mousemove', function(e){ if(!dragging)return; tx=startTx+e.clientX-startX; ty=startTy+e.clientY-startY; applyT(); });
-      window.addEventListener('mouseup',   function(){ if(!dragging)return; dragging=false; canvas.classList.remove('is-dragging'); });
-      canvas.addEventListener('touchstart', function(e){ if(e.touches.length===1){dragging=true;startX=e.touches[0].clientX;startY=e.touches[0].clientY;startTx=tx;startTy=ty;}else if(e.touches.length===2){dragging=false;lastTouchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);} },{passive:true});
-      canvas.addEventListener('touchmove', function(e){ if(e.touches.length===1&&dragging){tx=startTx+e.touches[0].clientX-startX;ty=startTy+e.touches[0].clientY-startY;applyT();}else if(e.touches.length===2&&lastTouchDist){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);zoomAt(d/lastTouchDist,(e.touches[0].clientX+e.touches[1].clientX)/2,(e.touches[0].clientY+e.touches[1].clientY)/2);lastTouchDist=d;} },{passive:true});
-      canvas.addEventListener('touchend', function(){ dragging=false; lastTouchDist=null; },{passive:true});
+
+      function bounds() {
+        var s  = svgSize();
+        var dW = s.w * scale, dH = s.h * scale;
+        var vW = wrap.clientWidth  || 800;
+        var vH = wrap.clientHeight || 400;
+        var txMin, txMax, tyMin, tyMax;
+        if (dW <= vW) { var cx = (vW-dW)/2; txMin = cx-LEASH; txMax = cx+LEASH; }
+        else          { txMin = vW-dW-LEASH; txMax = LEASH; }
+        if (dH <= vH) { var cy = (vH-dH)/2; tyMin = cy-LEASH; tyMax = cy+LEASH; }
+        else          { tyMin = vH-dH-LEASH; tyMax = LEASH; }
+        return { txMin: txMin, txMax: txMax, tyMin: tyMin, tyMax: tyMax };
+      }
+
+      function snapBack() {
+        var b = bounds();
+        var nx = clamp(tx, b.txMin, b.txMax);
+        var ny = clamp(ty, b.tyMin, b.tyMax);
+        if (nx === tx && ny === ty) return;
+        tx = nx; ty = ny; applyT(true);
+      }
+
+      function elasticClamp(v, lo, hi) {
+        if (v < lo) return lo + (v - lo) * ELASTIC;
+        if (v > hi) return hi + (v - hi) * ELASTIC;
+        return v;
+      }
+
+      function zoomAt(factor, cx, cy) {
+        var rect = wrap.getBoundingClientRect();
+        var ox = cx - rect.left, oy = cy - rect.top;
+        var ns = clamp(scale * factor, 0.06, 12);
+        var r  = ns / scale;
+        tx = ox - r * (ox - tx);
+        ty = oy - r * (oy - ty);
+        scale = ns;
+        applyT(false);
+        snapBack();
+      }
+
+      /* Exact same math as Mermaid fitToView — getAttribute gives px values */
+      function fitToView() {
+        var s     = svgSize();
+        var wrapW = wrap.clientWidth  || 800;
+        var wrapH = wrap.clientHeight || 400;
+        if (!wrapW || !wrapH) { requestAnimationFrame(fitToView); return; }
+        var pad   = 48;
+        var ns    = Math.min((wrapW - pad) / s.w, (wrapH - pad) / s.h, 2.5);
+        ns        = Math.max(ns, 0.06);
+        scale     = ns;
+        tx        = (wrapW - s.w * scale) / 2;
+        ty        = (wrapH - s.h * scale) / 2;
+        applyT(true);
+      }
+
+      /* Wheel zoom */
+      canvas.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        zoomAt(e.deltaY < 0 ? 1.14 : 1 / 1.14, e.clientX, e.clientY);
+      }, { passive: false });
+
+      /* Mouse drag */
+      canvas.addEventListener('mousedown', function (e) {
+        if (e.button !== 0) return;
+        dragging = true;
+        startX = e.clientX; startY = e.clientY;
+        startTx = tx; startTy = ty;
+        canvas.classList.add('is-dragging');
+        e.preventDefault();
+      });
+      window.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        var b = bounds();
+        tx = elasticClamp(startTx + (e.clientX - startX), b.txMin, b.txMax);
+        ty = elasticClamp(startTy + (e.clientY - startY), b.tyMin, b.tyMax);
+        applyT(false);
+      });
+      window.addEventListener('mouseup', function () {
+        if (!dragging) return;
+        dragging = false;
+        canvas.classList.remove('is-dragging');
+        snapBack();
+      });
+
+      /* Touch pan + pinch-zoom */
+      canvas.addEventListener('touchstart', function (e) {
+        if (e.touches.length === 1) {
+          dragging = true;
+          startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+          startTx = tx; startTy = ty;
+        } else if (e.touches.length === 2) {
+          dragging = false;
+          lastTouchDist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY);
+        }
+      }, { passive: true });
+      canvas.addEventListener('touchmove', function (e) {
+        if (e.touches.length === 1 && dragging) {
+          var b = bounds();
+          tx = elasticClamp(startTx + (e.touches[0].clientX - startX), b.txMin, b.txMax);
+          ty = elasticClamp(startTy + (e.touches[0].clientY - startY), b.tyMin, b.tyMax);
+          applyT(false);
+        } else if (e.touches.length === 2 && lastTouchDist) {
+          var d = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY);
+          zoomAt(d / lastTouchDist,
+            (e.touches[0].clientX + e.touches[1].clientX) / 2,
+            (e.touches[0].clientY + e.touches[1].clientY) / 2);
+          lastTouchDist = d;
+        }
+      }, { passive: true });
+      canvas.addEventListener('touchend', function () {
+        dragging = false; lastTouchDist = null; snapBack();
+      }, { passive: true });
+
       /* Toolbar */
-      pz.querySelectorAll('.tikz-tb-btn[data-a]').forEach(function(btn){
-        btn.addEventListener('click', function(e){
+      wrap.querySelectorAll('.tikz-tb-btn[data-a]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
           e.stopPropagation();
-          var cx = pz.getBoundingClientRect().left + pz.clientWidth/2;
-          var cy = pz.getBoundingClientRect().top  + pz.clientHeight/2;
+          var cx = wrap.getBoundingClientRect().left + wrap.clientWidth  / 2;
+          var cy = wrap.getBoundingClientRect().top  + wrap.clientHeight / 2;
           var a  = btn.dataset.a;
-          if(a==='zin')   zoomAt(1.35,cx,cy);
-          if(a==='zout')  zoomAt(1/1.35,cx,cy);
-          if(a==='fit')   fit();
-          if(a==='reset') { scale=1;tx=0;ty=0;applyT(); }
-          if(a==='dl') {
-            var blob = new Blob([new XMLSerializer().serializeToString(svg)],{type:'image/svg+xml'});
+          if (a === 'zin')              zoomAt(1.35, cx, cy);
+          if (a === 'zout')             zoomAt(1 / 1.35, cx, cy);
+          if (a === 'fit' || a === 'reset') fitToView();
+          if (a === 'dl') {
+            var blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' });
             var url  = URL.createObjectURL(blob);
-            var dl   = document.createElement('a'); dl.href=url; dl.download='diagram.svg';
+            var dl   = document.createElement('a');
+            dl.href = url; dl.download = 'diagram.svg';
             document.body.appendChild(dl); dl.click(); document.body.removeChild(dl);
-            setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+            setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
           }
         });
       });
-      /* Fade hint on first interact */
-      var hint = pz.querySelector('.tikz-hint');
-      function fadeHint(){ if(hint) hint.classList.add('tikz-hint-gone'); }
-      ['wheel','mousedown','touchstart'].forEach(function(ev){ canvas.addEventListener(ev,fadeHint,{once:true}); });
-      requestAnimationFrame(fit);
+
+      /* Hint fade */
+      var hint = wrap.querySelector('.tikz-hint');
+      function fadeHint() { if (hint) hint.classList.add('tikz-hint-gone'); }
+      ['wheel', 'mousedown', 'touchstart'].forEach(function (ev) {
+        canvas.addEventListener(ev, fadeHint, { once: true });
+      });
+
+      /* Initial fit — single rAF is enough since getAttribute doesn't need layout */
+      requestAnimationFrame(fitToView);
     }
 
-    /* ── Build pan/zoom viewer around the SVG ────────────────────────────── */
     function _wrapTikZ(wrapper, svg) {
-      if(wrapper.querySelector('.tikz-panzoom-wrap')) return;
-      var iH  = parseFloat(svg.getAttribute('data-intrinsic-h')) || 320;
-      var vH  = Math.min(Math.max(iH + 100, 240), window.innerHeight * 0.78);
-      var pz  = document.createElement('div');
-      pz.className = 'tikz-panzoom-wrap'; pz.style.height = vH + 'px';
-      var tb  = document.createElement('div');
+      if (wrapper.querySelector('.tikz-panzoom-wrap')) return;
+
+      /* _tikzSizeSVG already wrote explicit px width/height attrs on the SVG */
+      var rawW  = parseFloat(svg.getAttribute('width'))  || 860;
+      var rawH  = parseFloat(svg.getAttribute('height')) || 400;
+      var wW    = wrapper.clientWidth || window.innerWidth;
+      var pad   = 56;
+      var maxH  = Math.floor(window.innerHeight * 0.82);
+      var minH  = 220;
+
+      /* Compute the scale fit() will use, then size the container to match */
+      var fitScale = Math.min((wW - pad) / rawW, maxH / rawH, 2.5);
+      fitScale     = Math.max(fitScale, 0.06);
+      var vH = Math.min(Math.max(Math.ceil(rawH * fitScale) + pad, minH), maxH);
+
+      var wrap = document.createElement('div');
+      wrap.className    = 'tikz-panzoom-wrap';
+      wrap.style.height = vH + 'px';
+
+      var icon = function (paths) {
+        return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>';
+      };
+      var tb = document.createElement('div');
       tb.className = 'tikz-toolbar';
-      var icon = function(paths){ return '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">'+paths+'</svg>'; };
       tb.innerHTML =
-        '<button class="tikz-tb-btn" data-a="zin"  title="Zoom in">'  +icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>')+'</button>'+
-        '<button class="tikz-tb-btn" data-a="zout" title="Zoom out">' +icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>')+'</button>'+
-        '<button class="tikz-tb-btn" data-a="fit"  title="Fit">'      +icon('<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>')+'</button>'+
-        '<button class="tikz-tb-btn" data-a="reset" title="Reset">'   +icon('<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/>')+'</button>'+
-        '<button class="tikz-tb-btn" data-a="dl"   title="Download SVG">'+icon('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>')+'</button>';
-      var canvas = document.createElement('div'); canvas.className = 'tikz-canvas';
-      var hint   = document.createElement('div'); hint.className = 'tikz-hint'; hint.textContent = 'Scroll to zoom · Drag to pan';
+        '<button class="tikz-tb-btn" data-a="zin"   title="Zoom in">'     + icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>') + '</button>' +
+        '<button class="tikz-tb-btn" data-a="zout"  title="Zoom out">'    + icon('<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>') + '</button>' +
+        '<button class="tikz-tb-btn" data-a="fit"   title="Fit to view">' + icon('<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>') + '</button>' +
+        '<button class="tikz-tb-btn" data-a="reset" title="Reset">'       + icon('<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/>') + '</button>' +
+        '<button class="tikz-tb-btn" data-a="dl"    title="Download SVG">'+ icon('<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>') + '</button>';
+
+      var canvas = document.createElement('div');
+      canvas.className = 'tikz-canvas';
+
+      var hint = document.createElement('div');
+      hint.className   = 'tikz-hint';
+      hint.textContent = 'Scroll to zoom · Drag to pan';
+
       canvas.appendChild(svg);
-      pz.appendChild(tb); pz.appendChild(canvas); pz.appendChild(hint);
-      wrapper.appendChild(pz);
-      _tikzPanZoom(pz, canvas, svg);
+      wrap.appendChild(tb);
+      wrap.appendChild(canvas);
+      wrap.appendChild(hint);
+      wrapper.appendChild(wrap);
+
+      _tikzPanZoom(wrap, canvas, svg);
     }
 
     /* ── Preamble extractor ──────────────────────────────────────────────── */
