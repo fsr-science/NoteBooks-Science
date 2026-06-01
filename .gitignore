@@ -4,3 +4,4 @@ TEST/
 REFERENCE-BOOKS-SOURCE/
 compression.sh
 report.sh
+zip.sh

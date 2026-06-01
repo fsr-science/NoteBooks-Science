@@ -18,7 +18,8 @@ EXCLUDED_ROOT_FILES = {
     "installer.html",
     "package.json",
     "package-lock.json",
-    "tree.txt"
+    "tree.txt",
+    "zip.sh"
 }
 
 EXCLUDED_ROOT_DIRS = {
