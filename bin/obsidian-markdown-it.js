@@ -761,6 +761,7 @@
     var scale = 1, tx = 0, ty = 0;
     var dragging = false, startX, startY, startTx, startTy;
     var lastTouchDist = null;
+    var DRAG_RESISTANCE = 0.75;  /* 0-1: lower = more resistance */
 
     function applyTransform() {
       canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + scale + ')';
@@ -801,8 +802,8 @@
     });
     window.addEventListener('mousemove', function (e) {
       if (!dragging) return;
-      tx = startTx + e.clientX - startX;
-      ty = startTy + e.clientY - startY;
+      tx = startTx + (e.clientX - startX) * DRAG_RESISTANCE;
+      ty = startTy + (e.clientY - startY) * DRAG_RESISTANCE;
       applyTransform();
     });
     window.addEventListener('mouseup', function () {
@@ -825,8 +826,8 @@
     }, { passive: true });
     canvas.addEventListener('touchmove', function (e) {
       if (e.touches.length === 1 && dragging) {
-        tx = startTx + e.touches[0].clientX - startX;
-        ty = startTy + e.touches[0].clientY - startY;
+        tx = startTx + (e.touches[0].clientX - startX) * DRAG_RESISTANCE;
+        ty = startTy + (e.touches[0].clientY - startY) * DRAG_RESISTANCE;
         applyTransform();
       } else if (e.touches.length === 2 && lastTouchDist) {
         var d = Math.hypot(
@@ -1477,6 +1478,7 @@
       var SNAP_MS  = 240;
       var ELASTIC  = 0.28;
       var LEASH    = 80;
+      var DRAG_RESISTANCE = 0.75;  /* 0-1: lower = more resistance */
 
       function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
 
@@ -1569,8 +1571,8 @@
       window.addEventListener('mousemove', function (e) {
         if (!dragging) return;
         var b = bounds();
-        tx = elasticClamp(startTx + (e.clientX - startX), b.txMin, b.txMax);
-        ty = elasticClamp(startTy + (e.clientY - startY), b.tyMin, b.tyMax);
+        tx = elasticClamp(startTx + (e.clientX - startX) * DRAG_RESISTANCE, b.txMin, b.txMax);
+        ty = elasticClamp(startTy + (e.clientY - startY) * DRAG_RESISTANCE, b.tyMin, b.tyMax);
         applyT(false);
       });
       window.addEventListener('mouseup', function () {
@@ -1596,8 +1598,8 @@
       canvas.addEventListener('touchmove', function (e) {
         if (e.touches.length === 1 && dragging) {
           var b = bounds();
-          tx = elasticClamp(startTx + (e.touches[0].clientX - startX), b.txMin, b.txMax);
-          ty = elasticClamp(startTy + (e.touches[0].clientY - startY), b.tyMin, b.tyMax);
+          tx = elasticClamp(startTx + (e.touches[0].clientX - startX) * DRAG_RESISTANCE, b.txMin, b.txMax);
+          ty = elasticClamp(startTy + (e.touches[0].clientY - startY) * DRAG_RESISTANCE, b.tyMin, b.tyMax);
           applyT(false);
         } else if (e.touches.length === 2 && lastTouchDist) {
           var d = Math.hypot(
