@@ -12,6 +12,13 @@ document.addEventListener('DOMContentLoaded', function() {
   restoreModernSession();
 });
 
+// ===== CONFIG LOADER =====
+// Placeholder for future config needs (currently unused with email-based auth)
+async function loadWmConfig() {
+  // Config loading handled by ModernAuthInstance
+  // This function is kept for backward compatibility
+}
+
 // ===== AUTH UI FUNCTIONS =====
 
 function showLoginScreen() {

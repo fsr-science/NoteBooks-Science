@@ -3,12 +3,8 @@
 //
 // Required Vercel environment variables:
 //   GITHUB_PAT      — GitHub PAT (classic `repo` scope, or fine-grained Contents: read+write)
-//   WM_SATOKEN  — 6-character Super Admin code
 //
 // Supported POST actions:
-//   { action: "config" }
-//     → { satoken }
-//
 //   { action: "getFile", path }
 //     → { sha }  (null if file doesn't exist)
 //
@@ -34,13 +30,7 @@ export default async function handler(req, res) {
 
   const { action, path: filePath, content, sha, message } = req.body || {};
 
-  // ── CONFIG ────────────────────────────────────────────────────────────────
-  if (action === 'config') {
-    const satoken = (process.env.WM_SATOKEN || '').trim().toUpperCase();
-    return res.status(200).json({ satoken });
-  }
-
-  // ── All other actions require the PAT ─────────────────────────────────────
+  // ── All actions require the PAT ──────────────────────────────────────────
   const pat = (process.env.GITHUB_PAT || '').trim();
   if (!pat) {
     return res.status(503).json({ error: 'GITHUB_PAT is not configured in Vercel environment variables.' });

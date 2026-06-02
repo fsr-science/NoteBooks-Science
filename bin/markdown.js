@@ -51,20 +51,18 @@ let initialLoadComplete = false;
 
 async function fetchLatestCommit() {
   try {
-    // Ensure S is initialized before calling ghProxy
-    if (typeof window !== 'undefined' && !window.S) {
-      window.S = {
-        repo: {
-          owner: 'fsr-science',
-          repo: 'NoteBooks-Science'
-        },
-        pat: null
-      };
-    }
+    // Call the secure server-side API (PAT stored in Vercel env vars)
+    const response = await fetch('/api/gh.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'latestCommit' })
+    });
 
-    const res = await ghProxy('latestCommit');
-    if (!res.ok) throw new Error(res.error || 'Proxy error');
-    return res.data?.sha || null;
+    const data = await response.json();
+    if (!response.ok || !data.sha) {
+      throw new Error(data.error || 'Failed to fetch latest commit');
+    }
+    return data.sha;
   } catch (err) {
     console.warn("[fetchLatestCommit] Could not fetch latest commit:", err.message);
     return null;

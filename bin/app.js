@@ -9,17 +9,6 @@ const mobilePreviewTitle = document.getElementById("mobilePreviewTitle");
 const taskbar = document.getElementById("taskbar");
 const statusEl = document.getElementById("status");
 
-// Initialize global settings object early - needed by ghProxy and other modules
-if (!window.S) {
-  window.S = {
-    repo: {
-      owner: 'fsr-science',
-      repo: 'NoteBooks-Science'
-    },
-    pat: null  // Will be set from auth/config if available
-  };
-}
-
 let currentNode = null;
 let pathHistory = [];
 let selected = null;
