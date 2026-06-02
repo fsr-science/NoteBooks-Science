@@ -1,6 +1,6 @@
 # NoteBooks-Science
 
-> A modern, structured knowledge management system for the Science Administration Department  
+> A modern, structured knowledge management system for the Science Administration Department
 > Designed by the **Federation of Socialist Republics (FSR)** to centralize, organize, and democratize academic study materials
 
 ---
@@ -14,7 +14,7 @@
 5. [Authentication System](#authentication-system)
 6. [Project Structure](#project-structure)
 7. [Getting Started](#getting-started)
-8. [Team & Credits](#team--credits)
+8. [Team &amp; Credits](#team--credits)
 
 ---
 
@@ -30,6 +30,7 @@
 ### The Problem We Solve
 
 Science students face a critical challenge: study materials are scattered across personal collections, messaging apps, and informal shares. This leads to:
+
 - Inconsistent material quality
 - Difficulty finding reliable sources
 - No official reference point for curriculum-aligned content
@@ -52,6 +53,7 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
 ### Key Capabilities
 
 #### Structured Note Publishing
+
 - **Curriculum-Aligned Organization** — NCERT-based hierarchy (Biology, Chemistry, Physics, Geology)
 - **Multi-Format Support** — Markdown (.md), PDF, spreadsheets, presentations
 - **Rich Categorization** — Each chapter organized into:
@@ -61,18 +63,21 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
   - **REVISION_MINDMAPS** — Visual revision aids
 
 #### Anonymous Upload System
+
 - Users submit materials without revealing their identity
 - All submissions appear in an admin review queue
 - Admins evaluate for accuracy, relevance, and quality
 - Approved materials become publicly available
 
 #### Moderated Content Delivery
+
 - Only vetted materials appear on the platform
 - Maintains high academic standards
 - Prevents misinformation and low-quality content
 - Ensures all resources align with curriculum
 
 #### Integrated Discussion Layers (NotePad Forums)
+
 - Topic-based discussion threads tied to specific materials
 - Doubt resolution workflows with moderator support
 - Collaborative answer building from community
@@ -83,12 +88,14 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
 ## Core Features
 
 ### Document Management
+
 - Browse by subject, chapter, and content type
 - Search functionality across all materials
 - Download multiple formats
 - Material version history and updates
 
 ### User Experience
+
 - Clean, intuitive interface using Markdown rendering
 - Fast navigation and retrieval
 - LaTeX/MathJax support for scientific notation
@@ -96,6 +103,7 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
 - Syntax-highlighted code blocks
 
 ### Content Support
+
 - **Markdown Support** — Full markdown + scientific extensions
 - **Mathematical Notation** — MathJax with LaTeX/AMS support
 - **Diagrams** — TikZ and Mermaid diagram rendering
@@ -103,6 +111,7 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
 - **Graphing** — Desmos graphing calculator integration
 
 ### Admin Panel
+
 - Submission review interface
 - Content approval/rejection workflows
 - User role management
@@ -115,6 +124,7 @@ NoteBooks-Science is a **domain-specific knowledge platform** that functions as:
 NoteBooks-Science is built with modern web technologies designed for performance and reliability.
 
 ### Frontend Stack
+
 - **HTML5** — Semantic markup
 - **CSS** — Custom styling with design tokens and CSS variables
 - **Vanilla JavaScript** — No framework overhead, full control
@@ -126,11 +136,13 @@ NoteBooks-Science is built with modern web technologies designed for performance
 - **Desmos API** — Interactive graphing calculator
 
 ### Backend Infrastructure
+
 - **Upstash Redis** — Distributed session and data storage
 - **Resend** — Email service for password reset notifications
 - **Google reCAPTCHA v3** — Bot protection on authentication forms
 
 ### Security Features
+
 - **JWT Tokens** — Secure session management
 - **bcrypt Hashing** — Industry-standard password hashing (10-round salting)
 - **CAPTCHA Protection** — Google reCAPTCHA v3 on all forms
@@ -138,6 +150,7 @@ NoteBooks-Science is built with modern web technologies designed for performance
 - **Redis Storage** — Distributed session management with fallback to in-memory storage
 
 ### Data Flow
+
 1. User submits form (with reCAPTCHA token)
 2. CAPTCHA validated server-side before processing
 3. Credentials hashed and stored in Redis
@@ -155,18 +168,21 @@ NoteBooks-Science is built with modern web technologies designed for performance
 **New System** — Email + password with industry-standard security:
 
 #### Login
+
 - Email and password input
 - reCAPTCHA v3 bot detection
 - JWT token issued on success
 - Session persists for 30 days
 
 #### Registration
+
 - Email validation
 - Password requirements (minimum 8 characters)
 - reCAPTCHA v3 bot detection
 - Automatic account creation
 
 #### Forgot Password
+
 - Email-based password recovery
 - reCAPTCHA protection
 - 15-minute cooldown between requests (prevents abuse)
@@ -174,6 +190,7 @@ NoteBooks-Science is built with modern web technologies designed for performance
 - Password reset via email link
 
 ### Security Specifications
+
 - **Password Hashing** — bcrypt with 10 salt rounds
 - **Session Tokens** — JWT with 30-day expiration
 - **CAPTCHA** — Google reCAPTCHA v3 (invisible, doesn't interfere with UX)
@@ -248,6 +265,7 @@ BIOLOGY
 ```
 
 Each chapter contains 4 standard sections:
+
 - **NOTES** — Main study material
 - **GLOSSARY** — Key terms and concepts
 - **PQs** — Previous exam questions with detailed solutions
@@ -258,6 +276,7 @@ Each chapter contains 4 standard sections:
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+
 - npm or yarn
 - Environment variables configured (see below)
@@ -265,19 +284,20 @@ Each chapter contains 4 standard sections:
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/fsr-science/NoteBooks-Science.git
    cd NoteBooks-Science
    ```
-
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
-
 3. **Configure environment variables**
-   
+
    Create a `.env.local` file in the project root:
+
    ```
    RECAPTCHA_SITE_KEY=your_google_recaptcha_v3_site_key
    RECAPTCHA_SECRET_KEY=your_google_recaptcha_v3_secret_key
@@ -289,16 +309,17 @@ Each chapter contains 4 standard sections:
    ```
 
    **Getting the Keys:**
+
    - **reCAPTCHA Keys** — [Google reCAPTCHA Console](https://www.google.com/recaptcha/admin)
    - **Resend API Key** — [Resend Dashboard](https://resend.com)
    - **JWT Secret** — Generate with `openssl rand -base64 32`
    - **Upstash Redis** — [Upstash Console](https://console.upstash.com/)
-
 4. **Start development server**
+
    ```bash
    npm run dev
    ```
-   
+
    The application will be available at `http://localhost:3000`
 
 ### Building for Production
@@ -313,21 +334,24 @@ npm run start
 ## Team & Credits
 
 ### Project Leadership
-- **Harshit Saha** — Founder (FSR), Project Creator and Maintainer
+
+- **Harshit Saha** — Founder of NoteBooks-X (UBSR), Project Creator and Maintainer
+
+  - *Science Administration Department (Head)*
+  - Just your average fella
+- **Rishiraj Adhikari** — President (FSR)
+
+  - President of whole Operation
+  - Federation-wide Coordination
+- **Pratyush Chanda** — Project Founder of NoteBooks-Project (FSR)
+
   - *Science Administration Department*
-  - Vision, architecture, and core implementation
-
-- **Rishiraj Adhikari** — Head (FSR)
-  - Strategic direction and oversight
-  - Federation coordination
-
-- **Pratyush Chanda** — Project Maintainer (NoteBooks and NotePad)
-  - *Commerce Administration Department*
-  - Content coordination and day-to-day management
+  - Main Upgrader and Project Maintainer
 
 ### Technology Acknowledgments
 
 **Frontend Technologies**
+
 - Markdown-it team for markdown parsing
 - MathJax community for LaTeX rendering
 - TikZJax developers for diagram support
@@ -336,24 +360,27 @@ npm run start
 - Desmos team for graphing calculator
 
 **Security & Infrastructure**
+
 - Google reCAPTCHA team
 - Upstash team for Redis hosting
 - Resend team for email service
 - Vercel for deployment platform
 
 ### Contributors
+
 We welcome contributions from the FSR community. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ---
 
 ## Project Status
 
-- **Version** — 2.0 (Modern Authentication System)
+- **Version** — 1.0 (Modern Authentication System)
 - **Status** — Active Development
 - **Last Updated** — June 2026
 - **Maintenance** — Science Administration Department
 
-### Recent Changes (v2.0)
+### Recent Changes (v1.0)
+
 - ✅ Replaced SSH authentication with modern email + password system
 - ✅ Integrated Google reCAPTCHA v3 for bot protection
 - ✅ Added password reset via email (Resend)
@@ -363,6 +390,7 @@ We welcome contributions from the FSR community. See [CONTRIBUTING.md](CONTRIBUT
 - ✅ Removed legacy SSH auth files
 
 ### Roadmap
+
 - [ ] Discussion forums (NotePad integration)
 - [ ] Content moderation dashboard
 - [ ] Advanced search and filtering
@@ -376,7 +404,7 @@ We welcome contributions from the FSR community. See [CONTRIBUTING.md](CONTRIBUT
 
 NoteBooks-Science is developed by the **Federation of Socialist Republics (FSR)** for the Science Administration Department. All materials are curated for educational use within the institution.
 
-For questions or contributions, contact: **science-admin@fsr.local**
+For questions or contributions, contact: **fsr-science@gmail.com**
 
 ---
 
