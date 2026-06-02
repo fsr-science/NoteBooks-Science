@@ -9,6 +9,17 @@ const mobilePreviewTitle = document.getElementById("mobilePreviewTitle");
 const taskbar = document.getElementById("taskbar");
 const statusEl = document.getElementById("status");
 
+// Initialize global settings object early - needed by ghProxy and other modules
+if (!window.S) {
+  window.S = {
+    repo: {
+      owner: 'fsr-science',
+      repo: 'NoteBooks-Science'
+    },
+    pat: null  // Will be set from auth/config if available
+  };
+}
+
 let currentNode = null;
 let pathHistory = [];
 let selected = null;
@@ -650,7 +661,7 @@ async function fetchFileContent(path, filename, container) {
       container.innerHTML = `<video controls src="${path}" style="max-width:100%;max-height:100%;display:block;margin:auto"></video>`;
 
     } else if (/\.(docx?|xlsx?|pptx?)$/i.test(filename.includes('.') ? filename : path)) {
-      // Office Online viewer fetches externally — must go through /api/raw with WM_PAT
+      // Office Online viewer fetches externally — must go through /api/raw with GITHUB_PAT
       const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(rawUrl)}`;
       container.style.cssText = 'padding:0;overflow:hidden;display:flex;flex-direction:column;flex-grow:1;min-height:0;';
       container.innerHTML = `<iframe src="${viewerUrl}" style="flex:1;min-height:0;width:100%;border:none;display:block;" allowfullscreen></iframe>`;

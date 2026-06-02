@@ -1,5 +1,5 @@
 // api/raw.js — Vercel serverless function
-// Fetches a file from the private GitHub repo using WM_PAT and pipes it back
+// Fetches a file from the private GitHub repo using GITHUB_PAT and pipes it back
 // with the correct Content-Type so the Microsoft Office Online viewer can reach it.
 //
 // Usage:  GET /api/raw?path=some/folder/file.docx
@@ -50,9 +50,9 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing path query parameter' });
   }
 
-  const pat = (process.env.WM_PAT || '').trim();
+  const pat = (process.env.GITHUB_PAT || '').trim();
   if (!pat) {
-    return res.status(503).json({ error: 'WM_PAT is not configured.' });
+    return res.status(503).json({ error: 'GITHUB_PAT is not configured.' });
   }
 
   // Normalise path — files.json may store full raw.githubusercontent.com URLs.

@@ -1,14 +1,26 @@
 // bin/gh-proxy.js — GitHub API abstraction
 // Reads credentials from the global S (settings) object.
 // S must expose: S.pat, S.repo.owner, S.repo.repo
+// Falls back to calling /api/gh.js serverless function if direct API fails.
+
+// Initialize global S object with defaults if not already defined
+if (typeof window !== 'undefined' && !window.S) {
+  window.S = {
+    repo: {
+      owner: 'fsr-science',
+      repo: 'NoteBooks-Science'
+    },
+    pat: null  // Will be set from localStorage or auth system if available
+  };
+}
 
 async function ghProxy(action, params = {}) {
-  const owner = S?.repo?.owner;
-  const repo  = S?.repo?.repo;
-  const pat   = S?.pat;
+  const owner = window.S?.repo?.owner || 'fsr-science';
+  const repo  = window.S?.repo?.repo || 'NoteBooks-Science';
+  const pat   = window.S?.pat;
 
   if (!owner || !repo) {
-    console.error('[ghProxy] S.repo.owner / S.repo.repo not set');
+    console.error('[ghProxy] owner/repo not configured');
     return { ok: false, error: 'repo not configured' };
   }
 

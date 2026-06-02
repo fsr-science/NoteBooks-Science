@@ -48,13 +48,25 @@
 let lastCommit = null;	
 let lastHash = null;
 let initialLoadComplete = false;
+
 async function fetchLatestCommit() {
   try {
+    // Ensure S is initialized before calling ghProxy
+    if (typeof window !== 'undefined' && !window.S) {
+      window.S = {
+        repo: {
+          owner: 'fsr-science',
+          repo: 'NoteBooks-Science'
+        },
+        pat: null
+      };
+    }
+
     const res = await ghProxy('latestCommit');
     if (!res.ok) throw new Error(res.error || 'Proxy error');
-    return res.data.sha || null;
+    return res.data?.sha || null;
   } catch (err) {
-    console.error("Could not fetch latest commit:", err);
+    console.warn("[fetchLatestCommit] Could not fetch latest commit:", err.message);
     return null;
   }
 }
