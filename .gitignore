@@ -5,3 +5,4 @@ REFERENCE-BOOKS-SOURCE/
 compression.sh
 report.sh
 zip.sh
+node_modules/
