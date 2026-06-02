@@ -4,13 +4,83 @@ import jwt from 'jsonwebtoken';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Mock in-memory storage (replace with Redis/database in production)
+// Initialize Redis client if available
+let redis = null;
+if (process.env.KV_REST_API_URL && process.env.KV_REST_API_TOKEN) {
+  const { createClient } = await import('@upstash/redis');
+  redis = createClient({
+    url: process.env.KV_REST_API_URL,
+    token: process.env.KV_REST_API_TOKEN,
+  });
+}
+
+// Fallback to in-memory storage if Redis is not available
 const users = new Map();
 const resetTokens = new Map();
-const captchaAttempts = new Map();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY;
+const APP_URL = process.env.APP_URL || 'http://localhost:3000';
+
+// Helper to get user from Redis or memory
+async function getUser(email) {
+  if (redis) {
+    return await redis.get(`user:${email}`);
+  }
+  return users.get(email);
+}
+
+// Helper to set user in Redis or memory
+async function setUser(email, userData) {
+  if (redis) {
+    await redis.set(`user:${email}`, userData, { ex: 60 * 60 * 24 * 365 }); // 1 year
+  } else {
+    users.set(email, userData);
+  }
+}
+
+// Helper to get reset token
+async function getResetToken(token) {
+  if (redis) {
+    return await redis.get(`reset:${token}`);
+  }
+  return resetTokens.get(token);
+}
+
+// Helper to set reset token
+async function setResetToken(token, email, expiryMinutes = 15) {
+  if (redis) {
+    await redis.set(`reset:${token}`, email, { ex: expiryMinutes * 60 });
+  } else {
+    resetTokens.set(token, { email, expiresAt: Date.now() + expiryMinutes * 60 * 1000 });
+  }
+}
+
+// Helper to delete reset token
+async function deleteResetToken(token) {
+  if (redis) {
+    await redis.del(`reset:${token}`);
+  } else {
+    resetTokens.delete(token);
+  }
+}
+
+// Helper to check password reset cooldown
+async function checkResetCooldown(email) {
+  if (redis) {
+    const cooldown = await redis.get(`reset_cooldown:${email}`);
+    return !cooldown;
+  }
+  // For in-memory, just allow (would need better tracking)
+  return true;
+}
+
+// Helper to set password reset cooldown
+async function setResetCooldown(email) {
+  if (redis) {
+    await redis.set(`reset_cooldown:${email}`, '1', { ex: 15 * 60 }); // 15 minutes
+  }
+}
 
 // Verify reCAPTCHA token
 async function verifyCaptcha(token) {
@@ -23,13 +93,17 @@ async function verifyCaptcha(token) {
     const data = await response.json();
     return data.success && data.score > 0.5;
   } catch (error) {
-    console.error('reCAPTCHA verification error:', error);
+    console.error('[v0] reCAPTCHA verification error:', error);
     return false;
   }
 }
 
 // Register a new user
 export async function handleRegister(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { email, password, confirmPassword, captchaToken } = req.body;
 
@@ -46,41 +120,55 @@ export async function handleRegister(req, res) {
       return res.status(400).json({ error: 'Password must be at least 8 characters' });
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
     // Verify CAPTCHA
     const captchaValid = await verifyCaptcha(captchaToken);
     if (!captchaValid) {
       return res.status(400).json({ error: 'CAPTCHA verification failed' });
     }
 
-    // Check if user exists
-    if (users.has(email)) {
-      return res.status(400).json({ error: 'Email already registered' });
+    // Check if user already exists
+    const existingUser = await getUser(email);
+    if (existingUser) {
+      return res.status(409).json({ error: 'Email already registered' });
     }
 
-    // Hash password and create user
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
-    users.set(email, {
+
+    // Create user
+    const user = {
       email,
       password: hashedPassword,
-      createdAt: new Date()
-    });
+      createdAt: new Date().toISOString()
+    };
+
+    await setUser(email, user);
 
     // Generate JWT token
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '30d' });
 
     return res.status(201).json({
-      message: 'Registration successful',
+      success: true,
       token,
-      email
+      email,
+      message: 'Account created successfully'
     });
   } catch (error) {
-    console.error('Registration error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('[v0] Registration error:', error);
+    return res.status(500).json({ error: 'Registration failed' });
   }
 }
 
 // Login user
 export async function handleLogin(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { email, password, captchaToken } = req.body;
 
@@ -95,34 +183,39 @@ export async function handleLogin(req, res) {
       return res.status(400).json({ error: 'CAPTCHA verification failed' });
     }
 
-    // Find user
-    const user = users.get(email);
+    // Get user
+    const user = await getUser(email);
     if (!user) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
-    // Compare passwords
-    const passwordValid = await bcrypt.compare(password, user.password);
-    if (!passwordValid) {
+    // Compare password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
 
     // Generate JWT token
-    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '7d' });
+    const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '30d' });
 
     return res.status(200).json({
-      message: 'Login successful',
+      success: true,
       token,
-      email
+      email,
+      message: 'Login successful'
     });
   } catch (error) {
-    console.error('Login error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('[v0] Login error:', error);
+    return res.status(500).json({ error: 'Login failed' });
   }
 }
 
 // Request password reset
 export async function handleForgotPassword(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { email, captchaToken } = req.body;
 
@@ -136,59 +229,70 @@ export async function handleForgotPassword(req, res) {
       return res.status(400).json({ error: 'CAPTCHA verification failed' });
     }
 
-    // Check if user exists
-    const user = users.get(email);
-    if (!user) {
-      // Don't reveal if user exists for security
-      return res.status(200).json({ message: 'If email exists, a reset link will be sent' });
+    // Check cooldown
+    const canReset = await checkResetCooldown(email);
+    if (!canReset) {
+      return res.status(429).json({ error: 'Please wait 15 minutes before requesting another reset' });
     }
 
-    // Check cooldown (15 minutes)
-    const lastReset = resetTokens.get(email);
-    if (lastReset && new Date() - lastReset.timestamp < 15 * 60 * 1000) {
-      const remaining = Math.ceil((15 * 60 * 1000 - (new Date() - lastReset.timestamp)) / 1000 / 60);
-      return res.status(429).json({
-        error: `Please wait ${remaining} minutes before requesting another reset`
-      });
+    // Check if user exists
+    const user = await getUser(email);
+    if (!user) {
+      // Don't reveal if email exists, just pretend it worked
+      return res.status(200).json({ success: true, message: 'If email exists, a reset link will be sent' });
     }
 
     // Generate reset token
-    const resetToken = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
-    resetTokens.set(email, { token: resetToken, timestamp: new Date() });
+    const resetToken = jwt.sign({ email, type: 'reset' }, JWT_SECRET, { expiresIn: '15m' });
 
-    // Send email
+    // Store reset token
+    await setResetToken(resetToken, email, 15);
+
+    // Set cooldown
+    await setResetCooldown(email);
+
+    // Send reset email
+    const resetLink = `${APP_URL}/reset-password?token=${resetToken}`;
+
     try {
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'noreply@resend.dev',
         to: email,
-        subject: 'Password Reset - NoteBooks',
+        subject: 'Reset your NoteBooks password',
         html: `
-          <h1>Password Reset Request</h1>
-          <p>Click the link below to reset your password. This link expires in 1 hour.</p>
-          <p>
-            <a href="${process.env.APP_URL}/reset-password?token=${resetToken}">
-              Reset Password
-            </a>
-          </p>
-          <p>If you didn't request this, please ignore this email.</p>
+          <div style="font-family: Arial, sans-serif; max-width: 600px;">
+            <h2>Password Reset Request</h2>
+            <p>We received a request to reset the password for your NoteBooks account.</p>
+            <p>Click the link below to reset your password (valid for 15 minutes):</p>
+            <a href="${resetLink}" style="display: inline-block; padding: 12px 24px; background-color: #3b82f6; color: white; text-decoration: none; border-radius: 6px; margin: 20px 0;">Reset Password</a>
+            <p>Or copy this link: ${resetLink}</p>
+            <p>If you didn't request this, you can safely ignore this email.</p>
+            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+            <p style="color: #6b7280; font-size: 12px;">This link expires in 15 minutes.</p>
+          </div>
         `
       });
     } catch (emailError) {
-      console.error('Email send error:', emailError);
+      console.error('[v0] Email send error:', emailError);
       return res.status(500).json({ error: 'Failed to send reset email' });
     }
 
     return res.status(200).json({
+      success: true,
       message: 'If email exists, a reset link will be sent'
     });
   } catch (error) {
-    console.error('Forgot password error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('[v0] Forgot password error:', error);
+    return res.status(500).json({ error: 'Failed to process password reset request' });
   }
 }
 
 // Reset password with token
 export async function handleResetPassword(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
   try {
     const { token, newPassword, confirmPassword, captchaToken } = req.body;
 
@@ -210,7 +314,7 @@ export async function handleResetPassword(req, res) {
       return res.status(400).json({ error: 'CAPTCHA verification failed' });
     }
 
-    // Verify token
+    // Verify and decode token
     let decoded;
     try {
       decoded = jwt.verify(token, JWT_SECRET);
@@ -218,67 +322,45 @@ export async function handleResetPassword(req, res) {
       return res.status(400).json({ error: 'Invalid or expired reset token' });
     }
 
-    const email = decoded.email;
-    const user = users.get(email);
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+    if (decoded.type !== 'reset') {
+      return res.status(400).json({ error: 'Invalid token type' });
     }
 
-    // Update password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    users.set(email, { ...user, password: hashedPassword });
+    // Check if token exists in storage
+    const storedEmail = await getResetToken(token);
+    if (!storedEmail) {
+      return res.status(400).json({ error: 'Reset token has expired' });
+    }
 
-    // Clear reset token
-    resetTokens.delete(email);
+    // Get user
+    const user = await getUser(decoded.email);
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user password
+    user.password = hashedPassword;
+    user.passwordResetAt = new Date().toISOString();
+    await setUser(decoded.email, user);
+
+    // Delete reset token
+    await deleteResetToken(token);
 
     return res.status(200).json({
-      message: 'Password reset successful'
+      success: true,
+      message: 'Password reset successfully'
     });
   } catch (error) {
-    console.error('Reset password error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('[v0] Reset password error:', error);
+    return res.status(500).json({ error: 'Failed to reset password' });
   }
 }
 
-// Verify JWT token
-export async function handleVerifyToken(req, res) {
-  try {
-    const { token } = req.body;
-
-    if (!token) {
-      return res.status(400).json({ error: 'Token is required' });
-    }
-
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET);
-      return res.status(200).json({
-        valid: true,
-        email: decoded.email
-      });
-    } catch (error) {
-      return res.status(401).json({
-        valid: false,
-        error: 'Invalid or expired token'
-      });
-    }
-  } catch (error) {
-    console.error('Token verification error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-}
-
-// Main handler for Vercel function
+// Export handler for API route
 export default async function handler(req, res) {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
   const { action } = req.query;
 
   switch (action) {
@@ -290,8 +372,6 @@ export default async function handler(req, res) {
       return handleForgotPassword(req, res);
     case 'reset-password':
       return handleResetPassword(req, res);
-    case 'verify-token':
-      return handleVerifyToken(req, res);
     default:
       return res.status(404).json({ error: 'Action not found' });
   }
