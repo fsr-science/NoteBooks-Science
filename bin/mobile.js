@@ -200,10 +200,6 @@ function updateTaskbar() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
-  await loadWmConfig();   // fetch SAToken from Vercel env vars via /api/gh
-  restoreSession();
-  await loadAdmins();
-  updateAuthUI();
-  await updatePendingBadge();
-  showGuidanceIfNeeded();
+  // Note: Other scripts (auth.js, upload.js) handle initialization
+  // Mobile-specific initialization would go here if needed
 });
