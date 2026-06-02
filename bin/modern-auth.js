@@ -1,201 +1,176 @@
 // ===== MODERN EMAIL + PASSWORD AUTH SYSTEM =====
+// v2 — fixed reCAPTCHA key binding, async race guard, and error propagation
 
 class ModernAuth {
-  constructor() {
-    this.token = null;
-    this.email = null;
-    this.isAuthenticated = false;
-    this.apiUrl = '/api/auth';
-    this.recaptchaSiteKey = null;
-    this.loadStoredToken();
+  constructor(config = {}) {
+    this.token            = null;
+    this.email            = null;
+    this.isAuthenticated  = false;
+    this.apiUrl           = config.apiUrl          || '/api/auth';
+    this.recaptchaSiteKey = config.recaptchaSiteKey || null;
+    this._loadStoredToken();
   }
+
+  // ─── Token Storage ────────────────────────────────────────────────────────
+
+  _loadStoredToken() {
+    try {
+      const token = localStorage.getItem('auth_token');
+      const email = localStorage.getItem('auth_email');
+      if (token && email) {
+        this.token           = token;
+        this.email           = email;
+        this.isAuthenticated = true;
+      }
+    } catch (e) {
+      console.error('[auth] Failed to load stored token:', e);
+    }
+  }
+
+  _saveToken(token, email) {
+    try {
+      localStorage.setItem('auth_token', token);
+      localStorage.setItem('auth_email', email);
+      this.token           = token;
+      this.email           = email;
+      this.isAuthenticated = true;
+    } catch (e) {
+      console.error('[auth] Failed to save token:', e);
+    }
+  }
+
+  _clearToken() {
+    try {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('auth_email');
+    } catch (e) {
+      console.error('[auth] Failed to clear token:', e);
+    } finally {
+      this.token           = null;
+      this.email           = null;
+      this.isAuthenticated = false;
+    }
+  }
+
+  // ─── reCAPTCHA ────────────────────────────────────────────────────────────
 
   setRecaptchaKey(key) {
     this.recaptchaSiteKey = key;
   }
 
-  loadStoredToken() {
-    try {
-      const stored = localStorage.getItem('auth_token');
-      const storedEmail = localStorage.getItem('auth_email');
-      if (stored && storedEmail) {
-        this.token = stored;
-        this.email = storedEmail;
-        this.isAuthenticated = true;
-      }
-    } catch (e) {
-      console.error('[v0] Failed to load stored token:', e);
+  /**
+   * Returns a reCAPTCHA v3 token, or null if reCAPTCHA is not configured.
+   * Rejects if the key is set but grecaptcha fails to produce a token.
+   */
+  _getCaptchaToken() {
+    // No key configured — skip reCAPTCHA entirely (dev / test environments).
+    if (!this.recaptchaSiteKey) {
+      return Promise.resolve(null);
     }
-  }
 
-  saveToken(token, email) {
-    try {
-      localStorage.setItem('auth_token', token);
-      localStorage.setItem('auth_email', email);
-      this.token = token;
-      this.email = email;
-      this.isAuthenticated = true;
-    } catch (e) {
-      console.error('[v0] Failed to save token:', e);
+    // grecaptcha script hasn't loaded yet — fail fast rather than sending null.
+    if (!window.grecaptcha) {
+      return Promise.reject(new Error('reCAPTCHA has not loaded yet. Please wait and try again.'));
     }
-  }
 
-  clearToken() {
-    try {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('auth_email');
-      this.token = null;
-      this.email = null;
-      this.isAuthenticated = false;
-    } catch (e) {
-      console.error('[v0] Failed to clear token:', e);
-    }
-  }
-
-  async getCaptchaToken() {
-    return new Promise((resolve) => {
-      if (window.grecaptcha) {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(this.recaptchaSiteKey, { action: 'submit' }).then(token => {
-            resolve(token);
-          });
-        });
-      } else {
-        resolve(null);
-      }
+    return new Promise((resolve, reject) => {
+      window.grecaptcha.ready(() => {
+        window.grecaptcha
+          .execute(this.recaptchaSiteKey, { action: 'submit' })
+          .then(resolve)
+          .catch(() => reject(new Error('reCAPTCHA challenge failed. Please refresh and try again.')));
+      });
     });
   }
 
+  // ─── HTTP Helper ──────────────────────────────────────────────────────────
+
+  async _post(action, body) {
+    const response = await fetch(`${this.apiUrl}?action=${action}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(body),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return { ok: false, error: data.error || `Request failed (${response.status})` };
+    }
+
+    return { ok: true, data };
+  }
+
+  // ─── Auth Methods ─────────────────────────────────────────────────────────
+
   async register(email, password, confirmPassword) {
     try {
-      const captchaToken = await this.getCaptchaToken();
-      
-      const response = await fetch(`${this.apiUrl}?action=register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-          confirmPassword,
-          captchaToken
-        })
-      });
+      const captchaToken = await this._getCaptchaToken();
+      const result = await this._post('register', { email, password, confirmPassword, captchaToken });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        return { ok: false, error: data.error || 'Registration failed' };
+      if (result.ok) {
+        this._saveToken(result.data.token, result.data.email);
       }
 
-      this.saveToken(data.token, data.email);
-      return { ok: true, data };
+      return result;
     } catch (error) {
-      console.error('[v0] Registration error:', error);
+      console.error('[auth] Registration error:', error);
       return { ok: false, error: error.message };
     }
   }
 
   async login(email, password) {
     try {
-      const captchaToken = await this.getCaptchaToken();
-      
-      const response = await fetch(`${this.apiUrl}?action=login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-          captchaToken
-        })
-      });
+      const captchaToken = await this._getCaptchaToken();
+      const result = await this._post('login', { email, password, captchaToken });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        return { ok: false, error: data.error || 'Login failed' };
+      if (result.ok) {
+        this._saveToken(result.data.token, result.data.email);
       }
 
-      this.saveToken(data.token, data.email);
-      return { ok: true, data };
+      return result;
     } catch (error) {
-      console.error('[v0] Login error:', error);
+      console.error('[auth] Login error:', error);
       return { ok: false, error: error.message };
     }
   }
 
   async forgotPassword(email) {
     try {
-      const captchaToken = await this.getCaptchaToken();
-      
-      const response = await fetch(`${this.apiUrl}?action=forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          captchaToken
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return { ok: false, error: data.error || 'Request failed' };
-      }
-
-      return { ok: true, data };
+      const captchaToken = await this._getCaptchaToken();
+      return await this._post('forgot-password', { email, captchaToken });
     } catch (error) {
-      console.error('[v0] Forgot password error:', error);
+      console.error('[auth] Forgot-password error:', error);
       return { ok: false, error: error.message };
     }
   }
 
   async resetPassword(token, newPassword, confirmPassword) {
     try {
-      const captchaToken = await this.getCaptchaToken();
-      
-      const response = await fetch(`${this.apiUrl}?action=reset-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          newPassword,
-          confirmPassword,
-          captchaToken
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        return { ok: false, error: data.error || 'Reset failed' };
-      }
-
-      return { ok: true, data };
+      const captchaToken = await this._getCaptchaToken();
+      return await this._post('reset-password', { token, newPassword, confirmPassword, captchaToken });
     } catch (error) {
-      console.error('[v0] Reset password error:', error);
+      console.error('[auth] Reset-password error:', error);
       return { ok: false, error: error.message };
     }
   }
 
   logout() {
-    this.clearToken();
+    this._clearToken();
   }
 
-  getToken() {
-    return this.token;
-  }
+  // ─── Accessors ────────────────────────────────────────────────────────────
 
-  getEmail() {
-    return this.email;
-  }
-
-  isLoggedIn() {
-    return this.isAuthenticated && !!this.token;
-  }
+  getToken()    { return this.token; }
+  getEmail()    { return this.email; }
+  isLoggedIn()  { return this.isAuthenticated && !!this.token; }
 }
 
-// Initialize global auth instance
-const ModernAuthInstance = new ModernAuth();
+// ─── Global Instance ─────────────────────────────────────────────────────────
 
-// Export for use in HTML
+const ModernAuthInstance = new ModernAuth({
+  apiUrl:           '/api/auth',
+  recaptchaSiteKey: 'YOUR_RECAPTCHA_V3_SITE_KEY', // ← paste your key here
+});
+
 window.ModernAuthInstance = ModernAuthInstance;
