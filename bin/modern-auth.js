@@ -170,7 +170,7 @@ class ModernAuth {
 
 const ModernAuthInstance = new ModernAuth({
   apiUrl:           '/api/auth',
-  recaptchaSiteKey: 'YOUR_RECAPTCHA_V3_SITE_KEY', // ← paste your key here
+  recaptchaSiteKey: '6LeI4QgtAAAAAIHR7fZ2uCoPNqNe3LBFLCuCBBZH', // ← paste your key here
 });
 
 window.ModernAuthInstance = ModernAuthInstance;
