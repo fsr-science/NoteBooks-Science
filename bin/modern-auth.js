@@ -92,7 +92,15 @@ class ModernAuth {
       body:    JSON.stringify(body),
     });
 
-    const data = await response.json();
+    let data;
+    const ct = response.headers.get('content-type') || '';
+    if (ct.includes('application/json')) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      data = { error: `Server error (${response.status}) — check Vercel logs` };
+      console.error('[auth] Non-JSON response body:', text.substring(0, 300));
+    }
 
     if (!response.ok) {
       return { ok: false, error: data.error || `Request failed (${response.status})` };
