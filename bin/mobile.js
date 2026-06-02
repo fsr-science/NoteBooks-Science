@@ -200,7 +200,6 @@ function updateTaskbar() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
-  await loadWmConfig();   // fetch SAToken from Vercel env vars via /api/gh
   restoreSession();
   await loadAdmins();
   updateAuthUI();
