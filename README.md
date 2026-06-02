@@ -209,12 +209,12 @@ NoteBooks-Science/
 ├── README.md                 # This file
 ├── files.json                # Content hierarchy definition
 ├── api/
-│   ├── auth.js              # Authentication backend (login, register, forgot password)
+│   ├── auth.mjs              # Authentication backend (login, register, forgot password)
 │   ├── desmos.js            # Desmos graphing calculator API proxy
 │   └── [admin-endpoints]    # Admin submission review handlers
 ├── bin/
-│   ├── auth.js              # Frontend session/user management
-│   ├── modern-auth.js       # Modern email+password UI controllers
+│   ├── auth.mjs              # Frontend session/user management
+│   ├── modern-auth.mjs       # Modern email+password UI controllers
 │   ├── md-init.js           # Markdown rendering initialization
 │   ├── obsidian-markdown-it.js  # Obsidian syntax compatibility
 │   ├── style.css            # Design tokens and styling
