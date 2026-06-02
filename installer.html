@@ -1044,19 +1044,19 @@ async function startPatchingVercel() {
       `installer: set Vercel URL → ${S.vercelUrl} in bin/app.js`);
     logAdd('✓ bin/app.js — Vercel URL and origin patched', 'success');
 
-    // 2. bin/auth.mjs — /api/* fetch calls (loadWmConfig + ghProxy)
-    logAdd('Fetching bin/auth.mjs…');
-    const authFile = await ghGetFile(S.pat, S.repo.repo, 'bin/auth.mjs');
-    if (!authFile) throw new Error('bin/auth.mjs not found');
+    // 2. bin/auth.js — /api/* fetch calls (loadWmConfig + ghProxy)
+    logAdd('Fetching bin/auth.js…');
+    const authFile = await ghGetFile(S.pat, S.repo.repo, 'bin/auth.js');
+    if (!authFile) throw new Error('bin/auth.js not found');
     let authJs = authFile.content;
 
     logAdd('Patching /api/* fetch calls…');
     authJs = authJs.replace(/fetch\s*\(\s*'\/api\//g, `fetch('${S.vercelUrl}/api/`);
     authJs = authJs.replace(/fetch\s*\(\s*"\/api\//g, `fetch("${S.vercelUrl}/api/`);
 
-    await ghPutFile(S.pat, S.repo.repo, 'bin/auth.mjs', authJs, authFile.sha,
-      `installer: set Vercel URL → ${S.vercelUrl} in bin/auth.mjs`);
-    logAdd('✓ bin/auth.mjs — API fetch paths updated', 'success');
+    await ghPutFile(S.pat, S.repo.repo, 'bin/auth.js', authJs, authFile.sha,
+      `installer: set Vercel URL → ${S.vercelUrl} in bin/auth.js`);
+    logAdd('✓ bin/auth.js — API fetch paths updated', 'success');
 
     logAdd('');
     logAdd('All done! 🎉', 'success');

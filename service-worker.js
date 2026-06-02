@@ -16,7 +16,7 @@ const APP_SHELL = [
   'favicon.png',
   'bin/style.css',
   'bin/app.js',
-  'bin/auth.mjs',
+  'bin/auth.js',
   'bin/upload.js',
   'bin/mobile.js',
   'bin/markdown.js',
