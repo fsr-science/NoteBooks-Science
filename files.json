@@ -1,6 +1,6 @@
 {
   "type": "folder",
-  "name": "NoteBooks-Science",
+  "name": "NoteBooks-TEST",
   "children": [
     {
       "type": "folder",
@@ -3326,62 +3326,6 @@
           "path": "REFERENCE-BOOKS-SOURCE/modern_approach_to_chemical_calculations_r_c_mukherjee_.pdf"
         }
       ]
-    },
-    {
-      "type": "folder",
-      "name": "TEST",
-      "children": [
-        {
-          "type": "file",
-          "name": "MARKDOWN-1.md",
-          "path": "TEST/MARKDOWN-1.md"
-        },
-        {
-          "type": "file",
-          "name": "file-sample_100kB.docx",
-          "path": "TEST/file-sample_100kB.docx"
-        },
-        {
-          "type": "file",
-          "name": "file-sample_150kB.pdf",
-          "path": "TEST/file-sample_150kB.pdf"
-        },
-        {
-          "type": "file",
-          "name": "file_example_PPT_250kB.ppt",
-          "path": "TEST/file_example_PPT_250kB.ppt"
-        },
-        {
-          "type": "file",
-          "name": "file_example_XLSX_10.xlsx",
-          "path": "TEST/file_example_XLSX_10.xlsx"
-        },
-        {
-          "type": "file",
-          "name": "test-desmos.md",
-          "path": "TEST/test-desmos.md"
-        },
-        {
-          "type": "file",
-          "name": "test-sizing-fixes.md",
-          "path": "TEST/test-sizing-fixes.md"
-        }
-      ]
-    },
-    {
-      "type": "file",
-      "name": "compression.sh",
-      "path": "compression.sh"
-    },
-    {
-      "type": "file",
-      "name": "report.sh",
-      "path": "report.sh"
-    },
-    {
-      "type": "file",
-      "name": "zip.sh",
-      "path": "zip.sh"
     }
   ]
 }
