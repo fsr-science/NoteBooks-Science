@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>NoteBooks-Test</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="recaptcha-sitekey" content="6LeI4QgtAAAAAIHR7fZ2uCoPNqNe3LBFLCuCBBZH" />
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   <link rel="icon" href="favicon.png" />
@@ -48,6 +49,10 @@
   <script src="/api/desmos?apiKey=f1a5b11141a44e1b93a5dc025f35d3dd"></script>
   <!-- Obsidian-syntax compatibility layer (replaces obsidian-md.js) -->
   <script src="bin/obsidian-markdown-it.js"></script>
+  <!-- Google reCAPTCHA v3 -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <!-- Modern Email + Password Auth System -->
+  <script src="bin/modern-auth.js"></script>
   <link rel="stylesheet" href="bin/style.css">
   <script src="bin/md-init.js"></script>
 </head>
@@ -85,80 +90,101 @@
     </div>
   </div>
 
-  <!-- ===== SSH LOGIN SCREEN ===== -->
+  <!-- ===== MODERN EMAIL + PASSWORD LOGIN SCREEN ===== -->
   <div id="loginOverlay" class="full-overlay">
     <div class="overlay-card">
-      <button class="overlay-close" onclick="hideSSHLoginScreen()">×</button>
+      <button class="overlay-close" onclick="hideLoginScreen()">×</button>
       
       <!-- Tab selector -->
-      <div id="sshAuthTabs" class="guide-tabs" style="margin-bottom:20px">
-        <button class="guide-tab active" onclick="switchSSHTab('login')">Login</button>
-        <button class="guide-tab" onclick="switchSSHTab('register')">Register</button>
+      <div id="authTabs" class="guide-tabs" style="margin-bottom:20px">
+        <button class="guide-tab active" onclick="switchAuthTab('login')">Login</button>
+        <button class="guide-tab" onclick="switchAuthTab('register')">Register</button>
       </div>
       
       <!-- Login View -->
-      <div id="sshLoginView">
-        <div class="overlay-icon-lg" style="font-size:42px">&#x1F511;</div>
-        <div class="overlay-heading">SSH Key Login</div>
-        <div class="overlay-subtext">Paste your private key to authenticate</div>
-        <textarea id="sshPrivateKeyInput" class="text-input" rows="6" placeholder="-----BEGIN PRIVATE KEY-----
-...your private key...
------END PRIVATE KEY-----" style="font-family:var(--font-mono);font-size:12px;resize:vertical"></textarea>
-        <div id="sshLoginMsg" class="login-msg"></div>
-        <button class="overlay-btn-primary" onclick="attemptSSHLogin()">Authenticate</button>
-        <div style="text-align:center;margin-top:16px;font-size:13px;opacity:0.6">
-          Your private key is never sent to the server.<br>Authentication uses challenge-response signing.
+      <div id="loginView">
+        <div class="overlay-icon-lg" style="font-size:42px">🔐</div>
+        <div class="overlay-heading">Welcome Back</div>
+        <div class="overlay-subtext">Sign in to your account</div>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Email</label>
+          <input type="email" id="loginEmail" class="text-input" placeholder="your@email.com" style="margin:0">
+        </div>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Password</label>
+          <input type="password" id="loginPassword" class="text-input" placeholder="••••••••" style="margin:0">
+        </div>
+        
+        <div id="loginMsg" class="login-msg"></div>
+        
+        <button class="overlay-btn-primary" onclick="attemptModernLogin()" style="margin-top:16px">Sign In</button>
+        
+        <div style="text-align:center;margin-top:16px">
+          <button class="overlay-btn-ghost" onclick="switchAuthTab('forgot')" style="font-size:13px">Forgot password?</button>
         </div>
       </div>
       
       <!-- Register View -->
-      <div id="sshRegisterView" style="display:none">
-        <div class="overlay-icon-lg" style="font-size:42px">&#x1F4DD;</div>
-        <div class="overlay-heading">Generate SSH Key</div>
-        <div class="overlay-subtext">Create a new key pair for authentication</div>
-        <div class="field" style="margin-bottom:16px">
-          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Username</label>
-          <input type="text" id="sshUsernameInput" class="text-input" placeholder="Enter your username (min 3 characters)" style="margin:0">
+      <div id="registerView" style="display:none">
+        <div class="overlay-icon-lg" style="font-size:42px">📝</div>
+        <div class="overlay-heading">Create Account</div>
+        <div class="overlay-subtext">Join NoteBooks today</div>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Email</label>
+          <input type="email" id="registerEmail" class="text-input" placeholder="your@email.com" style="margin:0">
         </div>
-        <div id="sshRegisterMsg" class="login-msg"></div>
-        <button class="overlay-btn-primary" onclick="generateSSHKey()">Generate Key Pair</button>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Password</label>
+          <input type="password" id="registerPassword" class="text-input" placeholder="••••••••" style="margin:0">
+          <div style="font-size:12px;opacity:0.6;margin-top:4px">Minimum 8 characters</div>
+        </div>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Confirm Password</label>
+          <input type="password" id="registerConfirmPassword" class="text-input" placeholder="••••••••" style="margin:0">
+        </div>
+        
+        <div id="registerMsg" class="login-msg"></div>
+        
+        <button class="overlay-btn-primary" onclick="attemptModernRegister()" style="margin-top:16px">Create Account</button>
       </div>
       
-      <!-- Key Generated View -->
-      <div id="sshKeyGenerated" style="display:none">
-        <div class="overlay-icon-lg" style="font-size:42px">&#x2705;</div>
-        <div class="overlay-heading">Key Generated!</div>
-        <div class="overlay-subtext" style="color:#ef4444;font-weight:600">SAVE YOUR PRIVATE KEY NOW - This is the only time it will be shown!</div>
-        <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px;margin:16px 0">
-          <div style="font-size:12px;font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
-            <span>Private Key (SAVE THIS)</span>
-            <button onclick="copySSHKey()" style="font-size:11px;padding:4px 10px;border-radius:6px;border:none;background:var(--accent);color:white;cursor:pointer">Copy</button>
-          </div>
-          <textarea id="sshGeneratedKey" class="text-input" rows="8" readonly style="font-family:var(--font-mono);font-size:10px;margin:0;resize:none;background:var(--item)"></textarea>
+      <!-- Forgot Password View -->
+      <div id="forgotView" style="display:none">
+        <div class="overlay-icon-lg" style="font-size:42px">🔑</div>
+        <div class="overlay-heading">Reset Password</div>
+        <div class="overlay-subtext">Enter your email to receive a reset link</div>
+        
+        <div style="margin: 20px 0">
+          <label style="font-size:13px;font-weight:500;margin-bottom:6px;display:block">Email</label>
+          <input type="email" id="forgotEmail" class="text-input" placeholder="your@email.com" style="margin:0">
         </div>
-        <div style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:10px;padding:12px;margin-bottom:16px;font-size:13px">
-          <strong style="color:#f59e0b">Fingerprint:</strong> <code id="sshKeyFingerprint" style="font-size:11px"></code>
+        
+        <div id="forgotMsg" class="login-msg"></div>
+        
+        <button class="overlay-btn-primary" onclick="attemptModernForgotPassword()" style="margin-top:16px">Send Reset Link</button>
+        
+        <div style="text-align:center;margin-top:16px">
+          <button class="overlay-btn-ghost" onclick="switchAuthTab('login')" style="font-size:13px">Back to Login</button>
         </div>
-        <button class="overlay-btn-primary" onclick="confirmKeyBackup()">I have saved my key</button>
       </div>
       
       <!-- Logged In View -->
-      <div id="sshLoggedInView" style="display:none">
-        <div class="overlay-icon-lg" id="sshUserIcon" style="font-size:42px">&#x2705;</div>
-        <div class="overlay-heading" id="sshUserName">Welcome!</div>
-        <div class="overlay-subtext" id="sshUserRole">You are authenticated</div>
+      <div id="loggedInView" style="display:none">
+        <div class="overlay-icon-lg" style="font-size:42px">✅</div>
+        <div class="overlay-heading">Welcome!</div>
+        <div class="overlay-subtext" id="loggedInEmail"></div>
         <div style="background:var(--bg);border-radius:10px;padding:14px;margin:16px 0;font-size:13px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-            <span style="opacity:0.6">Fingerprint:</span>
-            <code id="sshSessionFingerprint" style="font-size:11px"></code>
-          </div>
           <div style="display:flex;justify-content:space-between">
-            <span style="opacity:0.6">Role:</span>
-            <span id="sshSessionRole" style="font-weight:600"></span>
+            <span style="opacity:0.6">Status:</span>
+            <span id="loggedInStatus" style="font-weight:600;color:var(--accent)">Authenticated</span>
           </div>
         </div>
-        <button id="sshAdminBtn" class="overlay-btn-secondary" onclick="hideSSHLoginScreen(); showAdminPanel()" style="display:none">Open Admin Panel</button>
-        <button class="overlay-btn-ghost" onclick="logoutSSHUser()">Log out</button>
+        <button class="overlay-btn-ghost" onclick="attemptModernLogout()" style="margin-top:16px">Log Out</button>
       </div>
     </div>
   </div>
