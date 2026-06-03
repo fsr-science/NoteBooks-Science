@@ -200,9 +200,6 @@ function updateTaskbar() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', async () => {
-  restoreSession();
-  await loadAdmins();
-  updateAuthUI();
+  restoreModernSession();
   await updatePendingBadge();
-  showGuidanceIfNeeded();
 });

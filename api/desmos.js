@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const apiKey = req.query.apiKey || '';
+  const apiKey = process.env.DESMOS_API_KEY || '';
   const upstream = `https://www.desmos.com/api/v1.9/calculator.js?apiKey=${apiKey}`;
 
   try {

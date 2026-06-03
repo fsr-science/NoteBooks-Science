@@ -1,3 +1,6 @@
+// Main JavaScript for the NoteBooks file explorer app
+// This file handles the UI interactions, file fetching, previewing, and all client-side logic.
+
 const listView = document.getElementById("listView");
 const pathNav = document.getElementById("pathNav");
 const splash = document.getElementById("splash");
@@ -16,6 +19,27 @@ let previewId = 0;
 const windows = {};
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 let updateDismissed = false;
+
+// Runtime config loaded from /api/config (populated from Vercel env vars).
+// Fallbacks keep the app functional when running outside Vercel (e.g. local dev).
+let appConfig = {
+  GITHUB_REPO:   '',
+  GITHUB_BRANCH: 'main',
+  APP_URL:       '',
+  GITPAGE_URL:   '',
+};
+
+async function fetchConfig() {
+  try {
+    const res = await fetch('/api/config');
+    if (res.ok) {
+      const data = await res.json();
+      appConfig = { ...appConfig, ...data };
+    }
+  } catch (e) {
+    console.warn('fetchConfig failed — using defaults:', e);
+  }
+}
 
 const EXCLUDED_ROOT_FILES = [
   "fmtree.py", "files.json", "index.html", "favicon.png", "tree.py", "autocommit.ps1"
@@ -634,37 +658,40 @@ async function fetchFileContent(path, filename, container) {
 
   container.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;"><span class="loader"></span> Loading...</div>';
 
-  // For private repos, Vercel serves all deployed files as public static assets at their
-  // relative paths — no proxy needed. Only Office documents need /api/raw because the
-  // Office Online viewer fetches from Microsoft's servers, not from the Vercel deployment.
-  const rawUrl = `${window.location.origin}/api/raw?path=${encodeURIComponent(path)}`;
+  // On Vercel, static repo files are not served directly — route through /api/raw (GitHub PAT proxy).
+  // On GitHub Pages, files are served as static assets so fetch(path) works directly.
+  const isGitHubPages = window.location.hostname.endsWith('github.io');
+  const fetchUrl = (p) => isGitHubPages
+    ? `https://raw.githubusercontent.com/${appConfig.GITHUB_REPO}/${appConfig.GITHUB_BRANCH}/${p}`
+    : `${window.location.origin}/api/raw?path=${encodeURIComponent(p)}`;
+  const rawUrl = `${window.location.origin}/api/raw?path=${path}`;
 
   try {
     if (/\.(png|jpe?g|gif|bmp|webp|svg)$/i.test(filename)) {
-      container.innerHTML = `<img src="${path}" style="max-width:100%;height:auto;display:block;margin:auto;" alt="${filename}" />`;
+      container.innerHTML = `<img src="${fetchUrl(path)}" style="max-width:100%;height:auto;display:block;margin:auto;" alt="${filename}" />`;
 
     } else if (/\.(mp3|wav|ogg|flac)$/i.test(filename)) {
-      container.innerHTML = `<audio controls src="${path}" style="width:100%;display:block;margin-top:20px"></audio>`;
+      container.innerHTML = `<audio controls src="${fetchUrl(path)}" style="width:100%;display:block;margin-top:20px"></audio>`;
 
     } else if (/\.(mp4|webm)$/i.test(filename)) {
-      container.innerHTML = `<video controls src="${path}" style="max-width:100%;max-height:100%;display:block;margin:auto"></video>`;
+      container.innerHTML = `<video controls src="${fetchUrl(path)}" style="max-width:100%;max-height:100%;display:block;margin:auto"></video>`;
 
     } else if (/\.(docx?|xlsx?|pptx?)$/i.test(filename.includes('.') ? filename : path)) {
-      // Office Online viewer fetches externally — must go through /api/raw with GITHUB_PAT
-      const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(rawUrl)}`;
+      // Google Docs viewer — works with any publicly accessible URL, no domain whitelist
+      const viewerUrl = `https://docs.google.com/gviewer?embedded=true&url=${encodeURIComponent(rawUrl)}`;
       container.style.cssText = 'padding:0;overflow:hidden;display:flex;flex-direction:column;flex-grow:1;min-height:0;';
       container.innerHTML = `<iframe src="${viewerUrl}" style="flex:1;min-height:0;width:100%;border:none;display:block;" allowfullscreen></iframe>`;
 
     } else if (ext === 'html' || ext === 'htm') {
       container.style.cssText = 'padding:0;overflow:hidden;display:flex;flex-direction:column;flex-grow:1;min-height:0;';
-      container.innerHTML = `<iframe src="${path}" style="flex:1;min-height:0;width:100%;border:none;display:block;"></iframe>`;
+      container.innerHTML = `<iframe src="${fetchUrl(path)}" style="flex:1;min-height:0;width:100%;border:none;display:block;"></iframe>`;
 
     } else if (ext === 'pdf') {
       container.style.cssText = 'padding:0;overflow:hidden;display:flex;flex-direction:column;flex-grow:1;min-height:0;';
-      container.innerHTML = `<iframe src="${path}" style="flex:1;min-height:0;width:100%;border:none;display:block;"></iframe>`;
+      container.innerHTML = `<iframe src="${fetchUrl(path)}" style="flex:1;min-height:0;width:100%;border:none;display:block;"></iframe>`;
 
     } else if (ext === 'md' || ext === 'markdown') {
-      const response = await fetch(path);
+      const response = await fetch(fetchUrl(path));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
       const wrapper = document.createElement('div');
@@ -677,7 +704,7 @@ async function fetchFileContent(path, filename, container) {
     } else {
       // All other file types: display as plain text
       try {
-        const response = await fetch(path);
+        const response = await fetch(fetchUrl(path));
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const text = await response.text();
         container.innerHTML = `<pre style="margin:0;white-space:pre-wrap;font-family:Consolas,monospace;font-size:13px;line-height:1.5">${escapeHTML(text)}</pre>`;
@@ -730,7 +757,7 @@ function hasVercelDismissCookie() {
 
 function goToVercel() {
   document.cookie = 'vercel_redirect_dismissed=1; max-age=31536000; path=/; SameSite=Lax';
-  window.location.href = 'https://ada-one-rho.vercel.app';
+  window.location.href = appConfig.APP_URL;
 }
 
 function dismissVercelPopup() {
@@ -742,7 +769,7 @@ function dismissVercelPopup() {
 
 function maybeShowVercelPopup() {
   if (hasVercelDismissCookie()) return;
-  if (window.location.hostname === 'pratyushchanda.github.io') {
+  if (appConfig.GITPAGE_URL && window.location.hostname === new URL(appConfig.GITPAGE_URL).hostname) {
     setTimeout(() => {
       document.getElementById('vercelPopup').classList.add('visible');
     }, 1800);
@@ -759,8 +786,12 @@ function openCommunity() {
   }
 }
 
-window.addEventListener("DOMContentLoaded", fetchTree);
-window.addEventListener("DOMContentLoaded", maybeShowVercelPopup);
+window.addEventListener("DOMContentLoaded", async () => {
+  await fetchConfig();
+  fetchTree();
+  maybeShowVercelPopup();
+});
 
 
-				     
+// --- API proxy for fetching raw file contents with GitHub PAT authentication on Vercel ---
+// This is used in production to securely fetch files from private repos, since GitHub Pages cannot use a PAT and can only serve public assets directly.

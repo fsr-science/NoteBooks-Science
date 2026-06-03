@@ -141,7 +141,7 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     fetch(request)
       .then(res => {
-        if (res.ok) {
+        if (res.ok && request.method === 'GET') {
           const clone = res.clone(); // clone synchronously before body is consumed
           caches.open(CACHE_VERSION).then(c => c.put(request, clone));
         }
