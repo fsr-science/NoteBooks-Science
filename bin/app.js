@@ -626,13 +626,19 @@ function openPreview(path, filename) {
   win.dataset.id = id;
   
   const ext = filename.split('.').pop().toLowerCase();
-  const isFullScreen = ext === 'md' || ext === 'markdown' || ext === 'pdf' || ext === 'html' || ext === 'htm'
+  const isMarkdown = ext === 'md' || ext === 'markdown';
+  const isFullScreen = isMarkdown || ext === 'pdf' || ext === 'html' || ext === 'htm'
     || ext === 'doc' || ext === 'docx' || ext === 'xls' || ext === 'xlsx' || ext === 'ppt' || ext === 'pptx';
+
+  const editButtonHTML = isMarkdown 
+    ? `<button onclick="toggleMarkdownEditMode('${id}')" title="Edit markdown">✎ Edit</button>`
+    : '';
 
   win.innerHTML = `
     <div class="title-bar" onmousedown="startDrag(event, '${id}')">
       <div class="title">${filename}</div>
       <div class="buttons">
+        ${editButtonHTML}
         <button onclick="minimizeWindow('${id}')">🗕</button>
         <button onclick="toggleFullscreen('${id}')">🗖</button>
         <button onclick="closeWindow('${id}')">✖</button>
@@ -642,6 +648,13 @@ function openPreview(path, filename) {
   `;
   previewContainer.appendChild(win);
   windows[id] = win;
+
+  // Store metadata on the window for editor mode
+  win._filePath = path;
+  win._filename = filename;
+  win._isMarkdown = isMarkdown;
+  win._originalContent = null;
+  win._editMode = false;
 
   const container = document.getElementById(id + "-body");
   fetchFileContent(path, filename, container);
@@ -694,6 +707,13 @@ async function fetchFileContent(path, filename, container) {
       const response = await fetch(fetchUrl(path));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
+      
+      // Store original content on the window for editor mode
+      const winElement = document.querySelector(`[data-id="preview-${previewId}"]`);
+      if (winElement) {
+        winElement._originalContent = text;
+      }
+      
       const wrapper = document.createElement('div');
       wrapper.className = 'markdown-content';
       wrapper.innerHTML = markdownToHTML(text, path);
@@ -783,6 +803,67 @@ function openCommunity() {
     openMobilePreview(path, 'Community 💬');
   } else {
     openPreview(path, 'Community 💬');
+  }
+}
+
+/**
+ * Toggle between view and edit modes for markdown files
+ */
+function toggleMarkdownEditMode(windowId) {
+  const winElement = document.querySelector(`[data-id="${windowId}"]`);
+  if (!winElement || !winElement._isMarkdown) return;
+
+  const container = document.getElementById(windowId + "-body");
+  const editBtn = winElement.querySelector('.title-bar button[title="Edit markdown"]');
+  
+  if (winElement._editMode) {
+    // Switch back to view mode
+    winElement._editMode = false;
+    editBtn.textContent = '✎ Edit';
+    editBtn.title = 'Edit markdown';
+    
+    // Render the original content (with any session edits)
+    const content = MarkdownEditor.getSavedContent(winElement._filePath) || winElement._originalContent;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'markdown-content';
+    wrapper.innerHTML = markdownToHTML(content, winElement._filePath);
+    container.innerHTML = '';
+    container.appendChild(wrapper);
+    setTimeout(() => initMarkdownFeatures(wrapper), 0);
+    
+    showStatus('✓ View mode');
+  } else {
+    // Switch to edit mode
+    winElement._editMode = true;
+    editBtn.textContent = '👁️ View';
+    editBtn.title = 'Return to view mode';
+    
+    // Create the editor UI
+    const onClose = (editedContent) => {
+      // User clicked "Done Editing" — show updated preview
+      const wrapper = document.createElement('div');
+      wrapper.className = 'markdown-content';
+      wrapper.innerHTML = markdownToHTML(editedContent, winElement._filePath);
+      container.innerHTML = '';
+      container.appendChild(wrapper);
+      setTimeout(() => initMarkdownFeatures(wrapper), 0);
+      
+      // Switch back to view mode
+      winElement._editMode = false;
+      editBtn.textContent = '✎ Edit';
+      editBtn.title = 'Edit markdown';
+      
+      showStatus('✓ Changes applied (session-only)');
+    };
+    
+    MarkdownEditor.createEditorUI(
+      container, 
+      winElement._filePath, 
+      winElement._originalContent, 
+      onClose
+    );
+    
+    showStatus('📝 Edit mode — changes are temporary (session storage)');
   }
 }
 
