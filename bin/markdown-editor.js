@@ -1,633 +1,328 @@
 // Markdown Editor Module
-// Enables in-browser temporary editing of markdown files with live preview
-// All edits are stored in sessionStorage and can be reverted
+// Provides an in-browser editor pane for markdown files.
+// Edits are stored in sessionStorage and survive page navigation within the session.
+// The split-view wiring (left preview ↔ right editor) is handled by app.js;
+// this module is responsible only for the editor pane itself.
 
 const MarkdownEditor = (() => {
   const EDITOR_STORAGE_PREFIX = 'md-editor-';
 
-  // ─── Format Actions (moved out of inline onclick to avoid template-literal escaping issues) ───
-
+  // ─── Format action table ──────────────────────────────────────────────────
   const FORMAT_ACTIONS = {
-    bold:    { before: '**', after: '**' },
-    italic:  { before: '*',  after: '*'  },
-    heading: { before: '# ', after: ''   },
-    code:    { before: '`',  after: '`'  },
-    strike:  { before: '~~', after: '~~' },
-    quote:   { before: '> ', after: ''   },
-    ul:      { before: '- ', after: ''   },
-    ol:      { before: '1. ', after: ''  },
+    bold:    { before: '**',  after: '**'  },
+    italic:  { before: '*',   after: '*'   },
+    strike:  { before: '~~',  after: '~~'  },
+    heading: { before: '# ',  after: ''    },
+    code:    { before: '`',   after: '`'   },
+    quote:   { before: '> ',  after: ''    },
+    ul:      { before: '- ',  after: ''    },
+    ol:      { before: '1. ', after: ''    },
   };
 
-  // ─── Helpers ───────────────────────────────────────────────────────────────
+  // ─── Internal helpers ─────────────────────────────────────────────────────
 
-  function getActiveTextarea() {
-    return document.querySelector('.mde-textarea');
-  }
-
-  function getEditorWrapper(el) {
-    return el.closest('.mde-wrapper');
-  }
-
-  function showStatus(message, type = 'success') {
-    let bar = document.querySelector('.mde-status-bar');
+  function showToast(wrapper, message, type) {
+    type = type || 'success';
+    const bar = wrapper && wrapper.querySelector('.mde-status-bar');
     if (!bar) return;
     bar.textContent = message;
-    bar.className = `mde-status-bar mde-status-${type} mde-status-visible`;
-    clearTimeout(bar._hideTimer);
-    bar._hideTimer = setTimeout(() => {
-      bar.className = 'mde-status-bar';
-    }, 2500);
+    bar.className = 'mde-status-bar mde-status-' + type + ' mde-status-visible';
+    clearTimeout(bar._hide);
+    bar._hide = setTimeout(function() { bar.className = 'mde-status-bar'; }, 2500);
   }
 
-  // ─── Core: insert text formatting at cursor ────────────────────────────────
+  // ─── Text insertion helpers ───────────────────────────────────────────────
 
-  function insertFormat(before, after, textarea) {
-    const ta = textarea || getActiveTextarea();
+  function insertFormat(before, after, ta) {
     if (!ta) return;
-
-    const start  = ta.selectionStart;
-    const end    = ta.selectionEnd;
-    const text   = ta.value;
-    const sel    = text.substring(start, end) || 'text';
-    const prefix = before.endsWith(' ') && sel.startsWith(' ') ? before.trimEnd() : before;
-
-    ta.value = text.substring(0, start) + prefix + sel + after + text.substring(end);
-    ta.selectionStart = start + prefix.length;
-    ta.selectionEnd   = start + prefix.length + sel.length;
-
+    var start = ta.selectionStart;
+    var end   = ta.selectionEnd;
+    var text  = ta.value;
+    var sel   = text.substring(start, end) || 'text';
+    ta.value = text.substring(0, start) + before + sel + after + text.substring(end);
+    ta.selectionStart = start + before.length;
+    ta.selectionEnd   = start + before.length + sel.length;
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     ta.focus();
   }
 
-  function insertLink(textarea) {
-    const ta = textarea || getActiveTextarea();
+  function insertLink(ta) {
     if (!ta) return;
-
-    const url = prompt('Enter URL:', 'https://');
+    var url = prompt('Enter URL:', 'https://');
     if (!url) return;
-    const linkText = prompt('Enter link text:', ta.value.substring(ta.selectionStart, ta.selectionEnd) || 'link');
+    var linkText = prompt('Enter link text:', ta.value.substring(ta.selectionStart, ta.selectionEnd) || 'link');
     if (linkText == null) return;
-
-    const start = ta.selectionStart;
-    const md    = `[${linkText}](${url})`;
-    ta.value    = ta.value.substring(0, start) + md + ta.value.substring(ta.selectionEnd);
+    var start = ta.selectionStart;
+    var md    = '[' + linkText + '](' + url + ')';
+    ta.value  = ta.value.substring(0, start) + md + ta.value.substring(ta.selectionEnd);
     ta.selectionStart = ta.selectionEnd = start + md.length;
-
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     ta.focus();
   }
 
-  function insertTable(textarea) {
-    const ta = textarea || getActiveTextarea();
+  function insertTable(ta) {
     if (!ta) return;
-
-    const cols = parseInt(prompt('Number of columns:', '3'), 10);
-    const rows = parseInt(prompt('Number of data rows:', '2'), 10);
+    var cols = parseInt(prompt('Number of columns:', '3'), 10);
+    var rows = parseInt(prompt('Number of data rows:', '2'), 10);
     if (!cols || !rows || cols < 1 || rows < 1) return;
-
-    const header = '| ' + Array.from({ length: cols }, (_, i) => `Header ${i + 1}`).join(' | ') + ' |';
-    const divider = '| ' + Array(cols).fill('---').join(' | ') + ' |';
-    const dataRow = '| ' + Array(cols).fill('Cell').join(' | ') + ' |';
-    const table = [header, divider, ...Array(rows).fill(dataRow)].join('\n');
-
-    const start = ta.selectionStart;
+    var header  = '| ' + Array.from({ length: cols }, function(_, i) { return 'Header ' + (i + 1); }).join(' | ') + ' |';
+    var divider = '| ' + Array(cols).fill('---').join(' | ') + ' |';
+    var dataRow = '| ' + Array(cols).fill('Cell').join(' | ') + ' |';
+    var table   = [header, divider].concat(Array(rows).fill(dataRow)).join('\n');
+    var start   = ta.selectionStart;
     ta.value = ta.value.substring(0, start) + '\n' + table + '\n' + ta.value.substring(ta.selectionEnd);
     ta.selectionStart = ta.selectionEnd = start + table.length + 2;
-
     ta.dispatchEvent(new Event('input', { bubbles: true }));
     ta.focus();
   }
 
-  // ─── Word / character count ────────────────────────────────────────────────
+  // ─── Stats ────────────────────────────────────────────────────────────────
 
-  function getStats(text) {
-    const words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
-    const chars  = text.length;
-    const lines  = text === '' ? 0 : text.split('\n').length;
-    return { words, chars, lines };
-  }
-
-  function updateStats(textarea, statsEl) {
+  function updateStats(ta, statsEl) {
     if (!statsEl) return;
-    const { words, chars, lines } = getStats(textarea.value);
-    statsEl.textContent = `${words} words · ${chars} chars · ${lines} lines`;
+    var text  = ta.value;
+    var words = text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+    var lines = text === '' ? 0 : text.split('\n').length;
+    statsEl.textContent = words + ' words \u00b7 ' + text.length + ' chars \u00b7 ' + lines + ' lines';
   }
 
-  // ─── Keyboard shortcuts ────────────────────────────────────────────────────
+  // ─── Keyboard shortcuts ───────────────────────────────────────────────────
 
-  function attachShortcuts(textarea) {
-    textarea.addEventListener('keydown', (e) => {
+  function attachShortcuts(ta, wrapper, storageKey, onClose) {
+    ta.addEventListener('keydown', function(e) {
       if (!e.ctrlKey && !e.metaKey) return;
-
-      const map = {
-        b: 'bold', i: 'italic', k: 'link',
-      };
-
-      const key = e.key.toLowerCase();
-      if (key === 'k') {
+      var k = e.key.toLowerCase();
+      if (k === 'b') { e.preventDefault(); insertFormat('**', '**', ta); return; }
+      if (k === 'i') { e.preventDefault(); insertFormat('*',  '*',  ta); return; }
+      if (k === 'k') { e.preventDefault(); insertLink(ta); return; }
+      if (k === 's') {
         e.preventDefault();
-        insertLink(textarea);
+        sessionStorage.setItem(storageKey, ta.value);
+        if (onClose) onClose(ta.value);
+        showToast(wrapper, '\u2713 Saved');
         return;
       }
-      if (map[key]) {
-        e.preventDefault();
-        const { before, after } = FORMAT_ACTIONS[map[key]];
-        insertFormat(before, after, textarea);
-      }
-      // Ctrl+Z handled natively; Ctrl+S triggers save
-      if (key === 's') {
-        e.preventDefault();
-        const wrapper = getEditorWrapper(textarea);
-        if (wrapper && wrapper._onClose) {
-          wrapper._onClose(textarea.value);
-          showStatus('✓ Saved');
-        }
-      }
     });
 
-    // Tab key → insert 2 spaces instead of losing focus
-    textarea.addEventListener('keydown', (e) => {
+    // Tab → 2 spaces
+    ta.addEventListener('keydown', function(e) {
       if (e.key !== 'Tab') return;
       e.preventDefault();
-      const start = textarea.selectionStart;
-      const end   = textarea.selectionEnd;
-      textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
-      textarea.selectionStart = textarea.selectionEnd = start + 2;
-      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      var s = ta.selectionStart;
+      ta.value = ta.value.substring(0, s) + '  ' + ta.value.substring(ta.selectionEnd);
+      ta.selectionStart = ta.selectionEnd = s + 2;
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
     });
   }
 
-  // ─── Live preview ──────────────────────────────────────────────────────────
-
-  function updatePreview(content, previewEl) {
-    try {
-      if (typeof markdownToHTML === 'function') {
-        previewEl.innerHTML = markdownToHTML(content);
-        if (typeof initMarkdownFeatures === 'function') {
-          initMarkdownFeatures(previewEl);
-        }
-      } else {
-        // Basic fallback renderer
-        previewEl.innerHTML = basicMarkdownFallback(content);
-      }
-    } catch (e) {
-      previewEl.innerHTML = `<p style="color:#ef4444;font-size:13px">Preview error: ${e.message}</p>`;
-    }
-  }
-
-  /** Minimal fallback if markdownToHTML isn't available */
-  function basicMarkdownFallback(md) {
-    return md
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-      .replace(/^#{6}\s(.+)/gm, '<h6>$1</h6>')
-      .replace(/^#{5}\s(.+)/gm, '<h5>$1</h5>')
-      .replace(/^#{4}\s(.+)/gm, '<h4>$1</h4>')
-      .replace(/^#{3}\s(.+)/gm, '<h3>$1</h3>')
-      .replace(/^#{2}\s(.+)/gm, '<h2>$1</h2>')
-      .replace(/^#{1}\s(.+)/gm, '<h1>$1</h1>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>')
-      .replace(/~~(.+?)~~/g, '<del>$1</del>')
-      .replace(/`(.+?)`/g, '<code>$1</code>')
-      .replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2" target="_blank" rel="noreferrer">$1</a>')
-      .replace(/^---$/gm, '<hr>')
-      .replace(/^- (.+)/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)/gs, '<ul>$1</ul>')
-      .replace(/\n\n+/g, '</p><p>')
-      .replace(/^(?!<[a-z])/gm, '')
-      .replace(/(.+)/s, '<p>$1</p>');
-  }
-
-  // ─── UI Builder ────────────────────────────────────────────────────────────
+  // ─── CSS injection (once) ─────────────────────────────────────────────────
 
   function buildStyles() {
     if (document.getElementById('mde-styles')) return;
-    const style = document.createElement('style');
+    var style = document.createElement('style');
     style.id = 'mde-styles';
-    style.textContent = `
-      .mde-wrapper {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        font-family: system-ui, sans-serif;
-        background: #0f1117;
-        color: #e2e8f0;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 32px rgba(0,0,0,0.4);
-      }
-
-      /* ── Toolbar ── */
-      .mde-toolbar {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        padding: 8px 12px;
-        background: #1a1d27;
-        border-bottom: 1px solid #2d3148;
-        flex-wrap: wrap;
-      }
-      .mde-toolbar-sep {
-        width: 1px;
-        height: 20px;
-        background: #2d3148;
-        margin: 0 4px;
-      }
-      .mde-toolbar-right {
-        margin-left: auto;
-        display: flex;
-        gap: 6px;
-        align-items: center;
-      }
-      .mde-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 5px;
-        padding: 4px 10px;
-        border: 1px solid transparent;
-        border-radius: 5px;
-        font-size: 13px;
-        cursor: pointer;
-        transition: background 0.15s, border-color 0.15s, color 0.15s;
-        background: transparent;
-        color: #94a3b8;
-        line-height: 1;
-        font-family: inherit;
-        min-width: 28px;
-        height: 28px;
-      }
-      .mde-btn:hover {
-        background: #2d3148;
-        color: #e2e8f0;
-        border-color: #3d4268;
-      }
-      .mde-btn:active { transform: scale(0.95); }
-      .mde-btn.active { background: #2d3148; color: #60a5fa; border-color: #3d4268; }
-      .mde-btn-icon { font-weight: 700; font-size: 12px; }
-      .mde-btn-primary {
-        background: #2563eb;
-        color: #fff;
-        border-color: #1d4ed8;
-        padding: 4px 14px;
-      }
-      .mde-btn-primary:hover { background: #1d4ed8; color: #fff; border-color: #1e40af; }
-      .mde-btn-danger {
-        background: transparent;
-        color: #f87171;
-        border-color: #7f1d1d44;
-      }
-      .mde-btn-danger:hover { background: #7f1d1d55; border-color: #f87171; color: #fca5a5; }
-
-      /* ── Toggle bar (edit / preview / split) ── */
-      .mde-view-toggle {
-        display: flex;
-        gap: 2px;
-        background: #0f1117;
-        border: 1px solid #2d3148;
-        border-radius: 6px;
-        padding: 2px;
-      }
-      .mde-view-toggle .mde-btn {
-        border-radius: 4px;
-        font-size: 11px;
-        padding: 3px 9px;
-        height: 24px;
-      }
-      .mde-view-toggle .mde-btn.active {
-        background: #2563eb;
-        color: #fff;
-        border-color: transparent;
-      }
-
-      /* ── Split / single pane ── */
-      .mde-split {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-        position: relative;
-      }
-      .mde-split[data-view="edit"]    .mde-preview-pane  { display: none; }
-      .mde-split[data-view="preview"] .mde-editor-pane   { display: none; }
-      .mde-split[data-view="preview"] .mde-preview-pane  { border-left: none; }
-
-      .mde-editor-pane, .mde-preview-pane {
-        flex: 1;
-        overflow-y: auto;
-        min-width: 0;
-      }
-      .mde-preview-pane {
-        border-left: 1px solid #2d3148;
-        padding: 20px 24px;
-      }
-
-      .mde-textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-        border: none;
-        outline: none;
-        background: #0f1117;
-        color: #cbd5e1;
-        font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-        font-size: 13.5px;
-        line-height: 1.7;
-        padding: 20px 24px;
-        box-sizing: border-box;
-        tab-size: 2;
-        caret-color: #60a5fa;
-      }
-      .mde-textarea::selection { background: #2563eb44; }
-      .mde-textarea::placeholder { color: #334155; }
-
-      /* ── Preview pane content ── */
-      .mde-preview-pane h1, .mde-preview-pane h2,
-      .mde-preview-pane h3, .mde-preview-pane h4 { color: #f1f5f9; margin: 1.1em 0 0.4em; }
-      .mde-preview-pane h1 { font-size: 1.7em; border-bottom: 1px solid #2d3148; padding-bottom: 0.3em; }
-      .mde-preview-pane h2 { font-size: 1.3em; }
-      .mde-preview-pane p  { line-height: 1.75; color: #94a3b8; margin: 0.6em 0; }
-      .mde-preview-pane a  { color: #60a5fa; }
-      .mde-preview-pane code {
-        background: #1e2235; padding: 2px 6px; border-radius: 4px;
-        font-size: 0.88em; color: #a5b4fc; font-family: monospace;
-      }
-      .mde-preview-pane pre code {
-        display: block; padding: 16px; overflow-x: auto;
-        background: #1a1d27; border-radius: 6px; border: 1px solid #2d3148;
-      }
-      .mde-preview-pane blockquote {
-        border-left: 3px solid #2563eb; margin: 0; padding: 8px 16px;
-        background: #1a1d27; border-radius: 0 6px 6px 0; color: #64748b;
-      }
-      .mde-preview-pane hr { border: none; border-top: 1px solid #2d3148; margin: 1.5em 0; }
-      .mde-preview-pane ul, .mde-preview-pane ol { padding-left: 1.5em; color: #94a3b8; }
-      .mde-preview-pane li { margin: 0.25em 0; }
-      .mde-preview-pane table {
-        border-collapse: collapse; width: 100%; font-size: 13px;
-      }
-      .mde-preview-pane th, .mde-preview-pane td {
-        border: 1px solid #2d3148; padding: 6px 12px; text-align: left;
-      }
-      .mde-preview-pane th { background: #1a1d27; color: #e2e8f0; }
-      .mde-preview-pane img { max-width: 100%; border-radius: 6px; }
-
-      /* ── Status / footer bar ── */
-      .mde-footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 5px 14px;
-        background: #1a1d27;
-        border-top: 1px solid #2d3148;
-        font-size: 11.5px;
-        color: #475569;
-        gap: 12px;
-      }
-      .mde-stats { flex: 1; }
-      .mde-shortcut-hint { color: #334155; font-size: 11px; }
-
-      .mde-status-bar {
-        position: absolute;
-        bottom: 36px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #1e293b;
-        border: 1px solid #2d3148;
-        color: #94a3b8;
-        font-size: 12px;
-        padding: 6px 16px;
-        border-radius: 999px;
-        opacity: 0;
-        transition: opacity 0.2s;
-        pointer-events: none;
-        white-space: nowrap;
-        z-index: 10;
-      }
-      .mde-status-bar.mde-status-visible { opacity: 1; }
-      .mde-status-success { color: #4ade80; border-color: #14532d55; background: #052e1655; }
-      .mde-status-error   { color: #f87171; border-color: #7f1d1d55; background: #450a0a55; }
-
-      /* ── Unsaved indicator ── */
-      .mde-unsaved-dot {
-        width: 7px; height: 7px;
-        border-radius: 50%;
-        background: #facc15;
-        display: inline-block;
-        margin-left: 5px;
-        vertical-align: middle;
-        opacity: 0;
-        transition: opacity 0.2s;
-      }
-      .mde-unsaved-dot.visible { opacity: 1; }
-    `;
+    style.textContent = [
+      '.mde-wrapper{display:flex;flex-direction:column;height:100%;font-family:system-ui,sans-serif;',
+        'background:#0a0e1a;color:#e2e8f0;overflow:hidden;position:relative;}',
+      '.mde-toolbar{display:flex;align-items:center;gap:3px;padding:6px 10px;background:#0f1525;',
+        'border-bottom:1px solid #1e293b;flex-shrink:0;flex-wrap:wrap;row-gap:4px;}',
+      '.mde-toolbar-sep{width:1px;height:18px;background:#1e293b;margin:0 3px;flex-shrink:0;}',
+      '.mde-toolbar-right{margin-left:auto;display:flex;gap:5px;align-items:center;}',
+      '.mde-btn{display:inline-flex;align-items:center;justify-content:center;gap:4px;',
+        'padding:3px 8px;border:1px solid transparent;border-radius:4px;font-size:12px;',
+        'cursor:pointer;background:transparent;color:#64748b;line-height:1;font-family:inherit;',
+        'min-width:26px;height:26px;transition:background .12s,color .12s,border-color .12s;',
+        'white-space:nowrap;flex-shrink:0;}',
+      '.mde-btn:hover{background:#1e293b;color:#e2e8f0;border-color:#334155;}',
+      '.mde-btn:active{transform:scale(0.95);}',
+      '.mde-btn-primary{background:#1d4ed8;color:#fff;border-color:#2563eb;padding:3px 12px;}',
+      '.mde-btn-primary:hover{background:#1e40af;color:#fff;border-color:#1d4ed8;}',
+      '.mde-btn-danger{color:#f87171;border-color:transparent;}',
+      '.mde-btn-danger:hover{background:#450a0a55;border-color:#f87171;color:#fca5a5;}',
+      '.mde-textarea{width:100%;flex:1;resize:none;border:none;outline:none;background:#0a0e1a;',
+        'color:#cbd5e1;font-family:"JetBrains Mono","Cascadia Code","Fira Code",monospace;',
+        'font-size:13px;line-height:1.75;padding:16px 20px;box-sizing:border-box;',
+        'tab-size:2;caret-color:#3b82f6;}',
+      '.mde-textarea::selection{background:#1d4ed844;}',
+      '.mde-footer{display:flex;align-items:center;justify-content:space-between;padding:4px 12px;',
+        'background:#0f1525;border-top:1px solid #1e293b;font-size:11px;color:#334155;',
+        'flex-shrink:0;gap:10px;}',
+      '.mde-stats{flex:1;}',
+      '.mde-hint{font-size:10.5px;color:#1e293b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+      '.mde-unsaved-dot{width:6px;height:6px;border-radius:50%;background:#facc15;',
+        'display:inline-block;margin-left:4px;vertical-align:middle;opacity:0;transition:opacity .2s;}',
+      '.mde-unsaved-dot.visible{opacity:1;}',
+      '.mde-status-bar{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);',
+        'background:#0f172a;border:1px solid #1e293b;color:#94a3b8;font-size:11.5px;',
+        'padding:5px 14px;border-radius:999px;opacity:0;transition:opacity .18s;',
+        'pointer-events:none;white-space:nowrap;z-index:20;}',
+      '.mde-status-bar.mde-status-visible{opacity:1;}',
+      '.mde-status-success{color:#4ade80;border-color:#14532d55;background:#052e1655;}',
+      '.mde-status-error{color:#f87171;border-color:#7f1d1d55;background:#450a0a55;}',
+    ].join('');
     document.head.appendChild(style);
   }
 
-  // ─── Main: createEditorUI ──────────────────────────────────────────────────
+  // ─── Public: createEditorUI ───────────────────────────────────────────────
 
-  /**
-   * Create an editor UI for markdown content.
-   * @param {HTMLElement} container       - Container to render editor in
-   * @param {string}      filePath        - Path of the file being edited
-   * @param {string}      originalContent - Original markdown content
-   * @param {function}    onClose         - Callback(newContent) when editor is closed
-   */
   function createEditorUI(container, filePath, originalContent, onClose) {
     buildStyles();
 
-    const storageKey   = EDITOR_STORAGE_PREFIX + btoa(filePath);
-    const savedContent = sessionStorage.getItem(storageKey) ?? originalContent;
+    var storageKey   = EDITOR_STORAGE_PREFIX + btoa(unescape(encodeURIComponent(filePath)));
+    var savedContent = sessionStorage.getItem(storageKey);
+    if (savedContent === null) savedContent = originalContent || '';
 
-    // ── Wrapper ──────────────────────────────────────────────────────────────
-    const wrapper = document.createElement('div');
+    // Wrapper
+    var wrapper = document.createElement('div');
     wrapper.className = 'mde-wrapper';
 
-    // ── Toolbar ──────────────────────────────────────────────────────────────
-    const toolbar = document.createElement('div');
+    // Toolbar
+    var toolbar = document.createElement('div');
     toolbar.className = 'mde-toolbar';
 
-    function makeBtn(label, title, cls, onClick) {
-      const btn = document.createElement('button');
-      btn.type      = 'button';
-      btn.className = `mde-btn ${cls || ''}`.trim();
-      btn.title     = title || label;
-      btn.innerHTML = label;
+    function makeBtn(html, title, cls, onClick) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = ('mde-btn ' + (cls || '')).trim();
+      btn.title = title || '';
+      btn.innerHTML = html;
       btn.addEventListener('click', onClick);
       return btn;
     }
 
-    const formatBtns = [
-      { label: '<strong>B</strong>',  title: 'Bold (Ctrl+B)',           key: 'bold'    },
-      { label: '<em>I</em>',          title: 'Italic (Ctrl+I)',         key: 'italic'  },
-      { label: '<del>S</del>',        title: 'Strikethrough',            key: 'strike'  },
-      { label: 'H',                   title: 'Heading',                  key: 'heading' },
-      { label: '&lt;/&gt;',           title: 'Inline code',              key: 'code'    },
-      { label: '❝',                   title: 'Blockquote',               key: 'quote'   },
-      { label: '• List',              title: 'Unordered list',           key: 'ul'      },
-      { label: '1. List',             title: 'Ordered list',             key: 'ol'      },
+    var fmtButtons = [
+      { html: '<strong>B</strong>', title: 'Bold (Ctrl+B)',  key: 'bold'    },
+      { html: '<em>I</em>',         title: 'Italic (Ctrl+I)',key: 'italic'  },
+      { html: '<del>S</del>',       title: 'Strikethrough',  key: 'strike'  },
+      { html: 'H',                  title: 'Heading',        key: 'heading' },
+      { html: '&lt;/&gt;',          title: 'Inline code',    key: 'code'    },
+      { html: '&#10078;',           title: 'Blockquote',     key: 'quote'   },
+      { html: '&bull; List',        title: 'Unordered list', key: 'ul'      },
+      { html: '1. List',            title: 'Ordered list',   key: 'ol'      },
     ];
 
-    formatBtns.forEach(({ label, title, key }) => {
-      const { before, after } = FORMAT_ACTIONS[key];
-      toolbar.appendChild(makeBtn(label, title, 'mde-btn-icon', () => {
+    // textarea is declared here so closures below can reference it
+    var textarea = document.createElement('textarea');
+
+    fmtButtons.forEach(function(item) {
+      var before = FORMAT_ACTIONS[item.key].before;
+      var after  = FORMAT_ACTIONS[item.key].after;
+      toolbar.appendChild(makeBtn(item.html, item.title, '', function() {
         insertFormat(before, after, textarea);
       }));
     });
 
-    const sep1 = document.createElement('div');
-    sep1.className = 'mde-toolbar-sep';
-    toolbar.appendChild(sep1);
+    var sep = document.createElement('div');
+    sep.className = 'mde-toolbar-sep';
+    toolbar.appendChild(sep);
 
-    toolbar.appendChild(makeBtn('🔗 Link', 'Insert link (Ctrl+K)', '', () => insertLink(textarea)));
-    toolbar.appendChild(makeBtn('⊞ Table', 'Insert table', '', () => insertTable(textarea)));
+    toolbar.appendChild(makeBtn('&#128279; Link',  'Insert link (Ctrl+K)', '', function() { insertLink(textarea); }));
+    toolbar.appendChild(makeBtn('&#8862; Table',   'Insert table',          '', function() { insertTable(textarea); }));
 
-    // View-toggle group
-    const viewToggle = document.createElement('div');
-    viewToggle.className = 'mde-view-toggle';
+    var right = document.createElement('div');
+    right.className = 'mde-toolbar-right';
 
-    const views = [
-      { label: '✏️ Edit',    value: 'edit'    },
-      { label: '⚡ Split',   value: 'split'   },
-      { label: '👁 Preview', value: 'preview' },
-    ];
-
-    views.forEach(({ label, value }) => {
-      const btn = makeBtn(label, '', '', () => {
-        splitEl.dataset.view = value;
-        viewToggle.querySelectorAll('.mde-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        if (value !== 'edit') updatePreview(textarea.value, previewContent);
-      });
-      if (value === 'split') btn.classList.add('active');
-      viewToggle.appendChild(btn);
-    });
-
-    const rightGroup = document.createElement('div');
-    rightGroup.className = 'mde-toolbar-right';
-
-    const unsavedDot = document.createElement('span');
-    unsavedDot.className = 'mde-unsaved-dot';
+    var unsavedDot = document.createElement('span');
+    unsavedDot.className = 'mde-unsaved-dot' + (savedContent !== (originalContent || '') ? ' visible' : '');
     unsavedDot.title = 'Unsaved changes';
 
-    const saveBtn   = makeBtn('✓ Done', 'Save & close (Ctrl+S)', 'mde-btn-primary', () => {
+    var doneBtn = makeBtn('\u2713 Done', 'Save & close (Ctrl+S)', 'mde-btn-primary', function() {
       sessionStorage.setItem(storageKey, textarea.value);
       if (onClose) onClose(textarea.value);
-      showStatus('✓ Saved');
+      showToast(wrapper, '\u2713 Applied');
       unsavedDot.classList.remove('visible');
     });
 
-    const revertBtn = makeBtn('↻ Revert', 'Revert to original', 'mde-btn-danger', () => {
-      if (!confirm('Revert all changes and restore original content?')) return;
-      textarea.value = originalContent;
+    var revertBtn = makeBtn('\u21bb Revert', 'Revert to original', 'mde-btn-danger', function() {
+      if (!confirm('Revert all edits and restore original content?')) return;
+      textarea.value = originalContent || '';
       sessionStorage.removeItem(storageKey);
       textarea.dispatchEvent(new Event('input', { bubbles: true }));
-      showStatus('↻ Reverted to original');
+      showToast(wrapper, '\u21bb Reverted');
       unsavedDot.classList.remove('visible');
     });
 
-    rightGroup.append(unsavedDot, viewToggle, saveBtn, revertBtn);
-    toolbar.appendChild(rightGroup);
+    right.appendChild(unsavedDot);
+    right.appendChild(doneBtn);
+    right.appendChild(revertBtn);
+    toolbar.appendChild(right);
 
-    // ── Split pane ───────────────────────────────────────────────────────────
-    const splitEl = document.createElement('div');
-    splitEl.className = 'mde-split';
-    splitEl.dataset.view = 'split';
-
-    const editorPane = document.createElement('div');
-    editorPane.className = 'mde-editor-pane';
-
-    const textarea = document.createElement('textarea');
+    // Textarea
     textarea.className   = 'mde-textarea';
     textarea.value       = savedContent;
     textarea.spellcheck  = true;
-    textarea.placeholder = 'Start writing markdown…';
+    textarea.placeholder = 'Start writing markdown\u2026';
 
-    editorPane.appendChild(textarea);
-
-    const previewPane = document.createElement('div');
-    previewPane.className = 'mde-preview-pane';
-
-    const previewContent = document.createElement('div');
-    previewPane.appendChild(previewContent);
-
-    splitEl.append(editorPane, previewPane);
-
-    // ── Footer / status ──────────────────────────────────────────────────────
-    const footer = document.createElement('div');
+    // Footer
+    var footer = document.createElement('div');
     footer.className = 'mde-footer';
 
-    const statsEl = document.createElement('span');
+    var statsEl = document.createElement('span');
     statsEl.className = 'mde-stats';
 
-    const hint = document.createElement('span');
-    hint.className = 'mde-shortcut-hint';
-    hint.textContent = 'Ctrl+B Bold · Ctrl+I Italic · Ctrl+K Link · Ctrl+S Save · Tab → 2 spaces';
+    var hint = document.createElement('span');
+    hint.className = 'mde-hint';
+    hint.textContent = 'Ctrl+B Bold \u00b7 Ctrl+I Italic \u00b7 Ctrl+K Link \u00b7 Ctrl+S Save \u00b7 Tab \u2192 2 spaces';
 
-    footer.append(statsEl, hint);
+    footer.appendChild(statsEl);
+    footer.appendChild(hint);
 
-    // Status toast (absolute inside wrapper)
-    const statusBar = document.createElement('div');
-    statusBar.className = 'mde-status-bar';
+    // Toast
+    var toast = document.createElement('div');
+    toast.className = 'mde-status-bar';
 
-    wrapper.append(toolbar, splitEl, footer, statusBar);
+    // Assemble
+    wrapper.appendChild(toolbar);
+    wrapper.appendChild(textarea);
+    wrapper.appendChild(footer);
+    wrapper.appendChild(toast);
 
-    // ── Wire up textarea events ──────────────────────────────────────────────
-    textarea.addEventListener('input', (e) => {
-      const val = e.target.value;
-      sessionStorage.setItem(storageKey, val);
-      updatePreview(val, previewContent);
+    // Events
+    textarea.addEventListener('input', function() {
+      sessionStorage.setItem(storageKey, textarea.value);
       updateStats(textarea, statsEl);
       unsavedDot.classList.add('visible');
     });
 
-    attachShortcuts(textarea);
+    attachShortcuts(textarea, wrapper, storageKey, onClose);
 
-    // ── Store references ─────────────────────────────────────────────────────
+    // Mount
+    container.innerHTML = '';
+    container.appendChild(wrapper);
+
+    // Initial render
+    updateStats(textarea, statsEl);
+    requestAnimationFrame(function() { textarea.focus(); });
+
+    // External references
     wrapper._textarea        = textarea;
     wrapper._originalContent = originalContent;
     wrapper._filePath        = filePath;
     wrapper._storageKey      = storageKey;
     wrapper._onClose         = onClose;
 
-    // ── Mount ────────────────────────────────────────────────────────────────
-    container.innerHTML = '';
-    container.appendChild(wrapper);
-
-    // Initial render
-    updatePreview(savedContent, previewContent);
-    updateStats(textarea, statsEl);
-    if (savedContent !== originalContent) unsavedDot.classList.add('visible');
-
-    textarea.focus();
-
     return wrapper;
   }
 
-  // ─── Session helpers ───────────────────────────────────────────────────────
+  // ─── Session helpers ──────────────────────────────────────────────────────
 
-  function clearSession(filePath) {
-    sessionStorage.removeItem(EDITOR_STORAGE_PREFIX + btoa(filePath));
+  function _key(filePath) {
+    return EDITOR_STORAGE_PREFIX + btoa(unescape(encodeURIComponent(filePath)));
   }
 
-  function hasUnsavedEdits(filePath) {
-    return sessionStorage.getItem(EDITOR_STORAGE_PREFIX + btoa(filePath)) !== null;
-  }
-
-  function getSavedContent(filePath) {
-    return sessionStorage.getItem(EDITOR_STORAGE_PREFIX + btoa(filePath));
-  }
+  function clearSession(filePath)     { sessionStorage.removeItem(_key(filePath)); }
+  function hasUnsavedEdits(filePath)  { return sessionStorage.getItem(_key(filePath)) !== null; }
+  function getSavedContent(filePath)  { return sessionStorage.getItem(_key(filePath)); }
 
   // ─── Public API ───────────────────────────────────────────────────────────
 
   return {
     createEditorUI,
-    // Exposed for any external callers that still use the old API
-    insertFormat: (before, after) => insertFormat(before, after),
-    insertLink:   ()              => insertLink(),
-    insertTable:  ()              => insertTable(),
     clearSession,
     hasUnsavedEdits,
     getSavedContent,
-    showStatus,
+    insertFormat: function(before, after, ta) { insertFormat(before, after, ta); },
+    insertLink:   function(ta) { insertLink(ta); },
+    insertTable:  function(ta) { insertTable(ta); },
   };
 })();

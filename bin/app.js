@@ -95,18 +95,11 @@ function showStatus(message, isLoading = false) {
   }, 3000);
 }
 
-// Function to automatically fetch and generate the file tree
 async function generateFileTree() {
   showStatus("Generating file tree...", true);
-  
   try {
-    // This would be a server-side operation in reality
-    // For this example, we'll just add a timestamp to show the concept
     const timestamp = new Date().toISOString();
     showStatus(`Tree generated at: ${timestamp}`);
-    
-    // In a real implementation, you would call your backend API to regenerate files.json
-    // For now, we'll just refresh what we have
     await fetchTree();
   } catch (error) {
     showStatus("Failed to generate tree: " + error.message);
@@ -123,9 +116,7 @@ async function fetchTree() {
 
   try {
     const res = await fetch("files.json?" + new Date().getTime());
-    if (!res.ok) {
-      throw new Error(`Failed to fetch: ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Failed to fetch: ${res.status}`);
 
     const tree = await res.json();
     const raw = JSON.stringify(tree, Object.keys(tree).sort());
@@ -146,105 +137,63 @@ async function fetchTree() {
     updatePathNav();
 
     const fontPromise = new Promise((resolve) => {
-  const testSpan = document.createElement("span");
-  testSpan.textContent = "A quick brown fox jumps";
-  testSpan.style.position = "absolute";
-  testSpan.style.visibility = "hidden";
-  testSpan.style.fontSize = "32px";
-  testSpan.style.fontFamily = "sans-serif";
+      const testSpan = document.createElement("span");
+      testSpan.textContent = "A quick brown fox jumps";
+      testSpan.style.cssText = "position:absolute;visibility:hidden;fontSize:32px;fontFamily:sans-serif";
+      document.body.appendChild(testSpan);
+      const baseWidth = testSpan.offsetWidth;
+      testSpan.style.fontFamily = '"Roboto", sans-serif';
+      requestAnimationFrame(() => {
+        document.body.removeChild(testSpan);
+        resolve();
+      });
+    });
 
-  document.body.appendChild(testSpan);
-  const baseWidth = testSpan.offsetWidth;
-
-  testSpan.style.fontFamily = '"Roboto", sans-serif';
-
-  requestAnimationFrame(() => {
-    const testWidth = testSpan.offsetWidth;
-    document.body.removeChild(testSpan);
-
-    if (testWidth !== baseWidth) {
-      console.log("Roboto is present.");
-    } else {
-      console.warn("Roboto not rendered. Falling back.");
-      showStatus("Roboto font not available. Falling back to system font.");
-    }
-
-    resolve(); // Always resolve — don't block the splash or file loading
-  });
-});
-
-
-    Promise.all([
-      fontPromise,
-      new Promise(res => setTimeout(res, 500))
-    ]).then(() => {
+    Promise.all([fontPromise, new Promise(res => setTimeout(res, 500))]).then(() => {
       splash.style.opacity = 0;
-      setTimeout(() => {
-        splash.style.display = 'none';
-      }, 600);
+      setTimeout(() => { splash.style.display = 'none'; }, 600);
 
       if (!window.updateCheckStarted) {
         window.updateCheckStarted = true;
         setTimeout(() => setInterval(checkForUpdate, 20000), 5000);
       }
-
       showStatus("Files loaded successfully!");
-    }).catch(error => {
-      showStatus("Error loading files: " + error.message);
-      console.error("Error fetching tree:", error);
     });
 
   } catch (error) {
     showStatus("Failed to generate tree: " + error.message);
     console.error(error);
-    // Ensure splash is always dismissed even on fatal error
     splash.style.opacity = 0;
     setTimeout(() => { splash.style.display = 'none'; }, 600);
   }
 }
 
-
-	
-
 function getFileIcon(file) {
   if (file.type === "folder") return FILE_ICONS.folder;
-  
   const ext = file.name.split('.').pop().toLowerCase();
   return FILE_ICONS[ext] || FILE_ICONS.default;
 }
 
 function getFileTypeClass(file) {
   if (file.type === "folder") return "folder";
-
   const ext = file.name.split('.').pop().toLowerCase();
-
-  if (["jpg", "jpeg", "png", "gif", "svg", "webp"].includes(ext)) {
-    return "image";
-  }
-
-  return ext; // returns 'py', 'html', 'css', etc.
+  if (["jpg", "jpeg", "png", "gif", "svg", "webp"].includes(ext)) return "image";
+  return ext;
 }
-
 
 function renderFolder(node) {
   listView.innerHTML = "";
   selected = null;
-  
+
   const children = (node.children || []).filter(item => {
-    // Exclude .github/ folder
     if (item.type === "folder" && item.name === ".github") return false;
-    // Exclude internal waiting-list folder from public browser
     if (pathHistory.length === 0 && item.type === "folder" && item.name === "waiting-list") return false;
-    // Fix #6: exclude system files only at root level (pathHistory empty = we are at root)
     if (pathHistory.length === 0 && item.type === "file" && EXCLUDED_ROOT_FILES.includes(item.name)) return false;
     return true;
   });
-  
-  // Sort folders first, then files alphabetically
+
   children.sort((a, b) => {
-    if (a.type === b.type) {
-      return a.name.localeCompare(b.name);
-    }
+    if (a.type === b.type) return a.name.localeCompare(b.name);
     return a.type === "folder" ? -1 : 1;
   });
 
@@ -264,12 +213,11 @@ function renderFolder(node) {
     const item = document.createElement("div");
     item.className = "file-item";
     item.setAttribute("data-index", i);
-    // Fix #4 prep: store child reference so downloadFile can access it directly
     item._childData = child;
-    
+
     const fileIcon = getFileIcon(child);
     const fileTypeClass = getFileTypeClass(child);
-    
+
     item.innerHTML = `
       <div class="file-icon" data-type="${fileTypeClass}">${fileIcon}</div>
       <div class="file-name">${child.name}</div>
@@ -284,45 +232,28 @@ function renderFolder(node) {
     `;
 
     item.onclick = (e) => {
-      // Clear previous selection
-      document.querySelectorAll('.file-item.selected').forEach(el => 
-        el.classList.remove('selected')
-      );
-      
-      // Set new selection
+      document.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
       item.classList.add('selected');
       selected = child;
-      
-      // Handle single click to open
       if (child.type === "folder") {
         pathHistory.push(currentNode);
         currentNode = child;
         renderFolder(child);
         updatePathNav();
       } else {
-        // For files, open preview immediately (single click behavior)
-        if (!e.target.closest('.file-action')) {
-          handlePreview();
-        }
+        if (!e.target.closest('.file-action')) handlePreview();
       }
     };
-    
+
     item.oncontextmenu = e => {
       e.preventDefault();
-      // Clear previous selection
-      document.querySelectorAll('.file-item.selected').forEach(el => 
-        el.classList.remove('selected')
-      );
-      
-      // Set new selection
+      document.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
       item.classList.add('selected');
       selected = child;
       showContextMenu(e.pageX, e.pageY);
     };
 
     listView.appendChild(item);
-    
-    // Add a small delay between each item animation
     item.style.animationDelay = `${i * 30}ms`;
   }
 }
@@ -340,49 +271,39 @@ function startDrag(e, id) {
     el.style.left = startLeft + (ev.clientX - startX) + "px";
     el.style.top = startTop + (ev.clientY - startY) + "px";
   }
-
   function onMouseUp() {
     document.removeEventListener("mousemove", onMouseMove);
     document.removeEventListener("mouseup", onMouseUp);
   }
-
   document.addEventListener("mousemove", onMouseMove);
   document.addEventListener("mouseup", onMouseUp);
 }
 
 function updatePathNav() {
-  const allSegments = []; // build full list first
-
-  // Build full path segment list
+  const allSegments = [];
   for (let i = 0; i < pathHistory.length; i++) {
     allSegments.push({ name: pathHistory[i].name, action: `goToPath(${i})` });
   }
   if (currentNode && currentNode !== pathHistory[pathHistory.length - 1]) {
-    allSegments.push({ name: currentNode.name, action: null }); // current — not clickable
+    allSegments.push({ name: currentNode.name, action: null });
   }
 
-  // On mobile truncate to last 2 segments with a … prefix
   const maxVisible = isMobile ? 2 : Infinity;
   const truncated = allSegments.length > maxVisible;
   const visible = truncated ? allSegments.slice(-maxVisible) : allSegments;
 
   let html = `<span class="path-segment" onclick="goToRoot()">☁️</span>`;
-  if (truncated) {
-    html += `<span class="path-separator">/</span><span class="path-crumb-ellipsis">…</span>`;
-  }
+  if (truncated) html += `<span class="path-separator">/</span><span class="path-crumb-ellipsis">…</span>`;
   visible.forEach(seg => {
     html += `<span class="path-separator">/</span>`;
     html += seg.action
       ? `<span class="path-segment" onclick="${seg.action}">${seg.name}</span>`
       : `<span class="path-segment">${seg.name}</span>`;
   });
-
   pathNav.innerHTML = html;
 }
 
-function goToRoot() {
-  fetchTree(); // Refresh and go to root
-}
+function goToRoot() { fetchTree(); }
 
 function goToPath(index) {
   currentNode = pathHistory[index];
@@ -402,17 +323,13 @@ function goUp() {
 function previewFile(e, index) {
   e.stopPropagation();
   const items = document.querySelectorAll('.file-item');
-  if (index >= 0 && index < items.length) {
-    // item.click() sets selected AND opens preview via its own onclick handler
-    items[index].click();
-  }
+  if (index >= 0 && index < items.length) items[index].click();
 }
 
 function downloadFile(e, index) {
   e.stopPropagation();
   const items = document.querySelectorAll('.file-item');
   if (index >= 0 && index < items.length) {
-    // Fix #4: set selection directly using stored _childData — no click() to avoid opening a preview
     document.querySelectorAll('.file-item.selected').forEach(el => el.classList.remove('selected'));
     items[index].classList.add('selected');
     selected = items[index]._childData;
@@ -490,6 +407,7 @@ function minimizeWindow(id) {
     updateTaskbar();
   }
 }
+
 function showTaskbarContextMenu(x, y, id) {
   const menu = document.getElementById("taskbarContextMenu");
   menu.innerHTML = `
@@ -516,7 +434,7 @@ function restoreFromTaskbar(id) {
 
 function updateTaskbar() {
   const minimized = Object.entries(windows).filter(([_, el]) => el.style.display === "none");
-  
+
   if (minimized.length === 0) {
     taskbar.style.display = "none";
     taskbar.innerHTML = "";
@@ -527,45 +445,27 @@ function updateTaskbar() {
   taskbar.innerHTML = "";
 
   for (const [id, el] of Object.entries(windows)) {
-  if (el.style.display === "none") {
-    const icon = document.createElement("div");
-    icon.className = "task-icon";
-    icon.dataset.name = el.querySelector(".title")?.textContent || "File";
-    icon.textContent = "📄";
-
-    icon.onclick = () => {
-      el.style.display = "block";
-      updateTaskbar();
-    };
-
-    icon.oncontextmenu = (e) => {
-      e.preventDefault();
-      showTaskbarContextMenu(e.pageX, e.pageY, id);
-    };
-
-    taskbar.appendChild(icon);
+    if (el.style.display === "none") {
+      const icon = document.createElement("div");
+      icon.className = "task-icon";
+      icon.dataset.name = el.querySelector(".title")?.textContent || "File";
+      icon.textContent = "📄";
+      icon.onclick = () => { el.style.display = "block"; updateTaskbar(); };
+      icon.oncontextmenu = (e) => { e.preventDefault(); showTaskbarContextMenu(e.pageX, e.pageY, id); };
+      taskbar.appendChild(icon);
+    }
   }
 }
-	}
+
 function toggleFullscreen(id, forceFull = false) {
   const w = windows[id];
   if (!w) return;
-
   const isFullscreen = w.classList.contains("fullscreen");
-
-  if (forceFull && !isFullscreen) {
-    w.classList.add("fullscreen");
-    return;
-  }
-
+  if (forceFull && !isFullscreen) { w.classList.add("fullscreen"); return; }
   if (isFullscreen) {
     w.classList.remove("fullscreen");
-
-    // ✅ Remove mobile override styles
     w.style.removeProperty("top");
     w.style.removeProperty("left");
-
-    // ✅ Then set fallback desktop positions
     w.style.top = "100px";
     w.style.left = "100px";
     w.style.width = "80vw";
@@ -578,7 +478,6 @@ function toggleFullscreen(id, forceFull = false) {
     w.style.height = "100vh";
   }
 }
-
 
 function showContextMenu(x, y) {
   contextMenu.style.top = y + 'px';
@@ -617,28 +516,134 @@ function closeMobilePreview() {
   mobilePreviewContent.innerHTML = "";
 }
 
+// ─── Split-view editor styles (injected once) ────────────────────────────────
+
+function injectSplitViewStyles() {
+  if (document.getElementById('sv-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'sv-styles';
+  style.textContent = `
+    /* The preview body becomes a flex column when split-view is active */
+    .preview-body.sv-active {
+      display: flex !important;
+      flex-direction: row !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      gap: 0;
+    }
+
+    /* Left pane: rendered markdown */
+    .sv-preview-pane {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      min-width: 0;
+      background: var(--bg, #0f172a);
+    }
+
+    /* Drag handle between panes */
+    .sv-divider {
+      width: 5px;
+      background: #1e293b;
+      cursor: col-resize;
+      flex-shrink: 0;
+      position: relative;
+      transition: background 0.15s;
+      border-left: 1px solid #2d3148;
+      border-right: 1px solid #2d3148;
+    }
+    .sv-divider:hover, .sv-divider.dragging { background: #3b82f6; }
+    .sv-divider::after {
+      content: '⋮';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #475569;
+      font-size: 14px;
+      pointer-events: none;
+      letter-spacing: -2px;
+    }
+
+    /* Right pane: markdown editor */
+    .sv-editor-pane {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: #0a0e1a;
+      border-left: 1px solid #1e293b;
+    }
+
+    /* Edit toggle button in the title bar */
+    .title-bar .btn-edit-split {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 12px;
+      border: 1px solid #2d3148;
+      background: transparent;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      height: 24px;
+    }
+    .title-bar .btn-edit-split:hover {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-color: #3b82f6;
+    }
+    .title-bar .btn-edit-split.active {
+      background: #1d4ed8;
+      color: #fff;
+      border-color: #2563eb;
+    }
+    .title-bar .btn-edit-split .sv-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #facc15;
+      display: none;
+    }
+    .title-bar .btn-edit-split.has-edits .sv-dot { display: inline-block; }
+  `;
+  document.head.appendChild(style);
+}
+
+// ─── openPreview ─────────────────────────────────────────────────────────────
+
 function openPreview(path, filename) {
+  injectSplitViewStyles();
+
   const id = 'preview-' + (++previewId);
   const win = document.createElement("div");
   win.className = "floating-window";
   win.style.top = `${100 + previewId * 10}px`;
   win.style.left = `${100 + previewId * 10}px`;
   win.dataset.id = id;
-  
+
   const ext = filename.split('.').pop().toLowerCase();
   const isMarkdown = ext === 'md' || ext === 'markdown';
   const isFullScreen = isMarkdown || ext === 'pdf' || ext === 'html' || ext === 'htm'
-    || ext === 'doc' || ext === 'docx' || ext === 'xls' || ext === 'xlsx' || ext === 'ppt' || ext === 'pptx';
+    || ext === 'doc' || ext === 'docx' || ext === 'xls' || ext === 'xlsx'
+    || ext === 'ppt' || ext === 'pptx';
 
-  const editButtonHTML = isMarkdown 
-    ? `<button onclick="toggleMarkdownEditMode('${id}')" title="Edit markdown">✎ Edit</button>`
+  // Edit button — only for markdown files
+  const editBtnHTML = isMarkdown
+    ? `<button class="btn-edit-split" id="${id}-editbtn" title="Toggle split editor" onclick="toggleSplitEditor('${id}')">
+         <span>✎ Edit</span><span class="sv-dot"></span>
+       </button>`
     : '';
 
   win.innerHTML = `
     <div class="title-bar" onmousedown="startDrag(event, '${id}')">
       <div class="title">${filename}</div>
       <div class="buttons">
-        ${editButtonHTML}
+        ${editBtnHTML}
         <button onclick="minimizeWindow('${id}')">🗕</button>
         <button onclick="toggleFullscreen('${id}')">🗖</button>
         <button onclick="closeWindow('${id}')">✖</button>
@@ -646,33 +651,32 @@ function openPreview(path, filename) {
     </div>
     <div class="preview-body" id="${id}-body">Loading...</div>
   `;
+
   previewContainer.appendChild(win);
   windows[id] = win;
 
-  // Store metadata on the window for editor mode
-  win._filePath = path;
-  win._filename = filename;
-  win._isMarkdown = isMarkdown;
-  win._originalContent = null;
-  win._editMode = false;
+  // Metadata stored on the element
+  win._filePath        = path;
+  win._filename        = filename;
+  win._isMarkdown      = isMarkdown;
+  win._originalContent = null;   // populated by fetchFileContent
+  win._splitActive     = false;
 
+  // ✅ Pass win directly so _originalContent is set correctly after the await
   const container = document.getElementById(id + "-body");
-  fetchFileContent(path, filename, container);
+  fetchFileContent(path, filename, container, win);
   updateTaskbar();
-  
-  // Auto fullscreen for markdown and PDF
-  if (isFullScreen) {
-    setTimeout(() => toggleFullscreen(id, true), 100);
-  }
+
+  if (isFullScreen) setTimeout(() => toggleFullscreen(id, true), 100);
 }
 
-async function fetchFileContent(path, filename, container) {
+// ─── fetchFileContent ─────────────────────────────────────────────────────────
+
+async function fetchFileContent(path, filename, container, winElement = null) {
   const ext = (filename.includes('.') ? filename : path).split('.').pop().toLowerCase();
 
   container.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;"><span class="loader"></span> Loading...</div>';
 
-  // On Vercel, static repo files are not served directly — route through /api/raw (GitHub PAT proxy).
-  // On GitHub Pages, files are served as static assets so fetch(path) works directly.
   const isGitHubPages = window.location.hostname.endsWith('github.io');
   const fetchUrl = (p) => isGitHubPages
     ? `https://raw.githubusercontent.com/${appConfig.GITHUB_REPO}/${appConfig.GITHUB_BRANCH}/${p}`
@@ -690,7 +694,6 @@ async function fetchFileContent(path, filename, container) {
       container.innerHTML = `<video controls src="${fetchUrl(path)}" style="max-width:100%;max-height:100%;display:block;margin:auto"></video>`;
 
     } else if (/\.(docx?|xlsx?|pptx?)$/i.test(filename.includes('.') ? filename : path)) {
-      // Google Docs viewer — works with any publicly accessible URL, no domain whitelist
       const viewerUrl = `https://docs.google.com/gviewer?embedded=true&url=${encodeURIComponent(rawUrl)}`;
       container.style.cssText = 'padding:0;overflow:hidden;display:flex;flex-direction:column;flex-grow:1;min-height:0;';
       container.innerHTML = `<iframe src="${viewerUrl}" style="flex:1;min-height:0;width:100%;border:none;display:block;" allowfullscreen></iframe>`;
@@ -707,22 +710,24 @@ async function fetchFileContent(path, filename, container) {
       const response = await fetch(fetchUrl(path));
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const text = await response.text();
-      
-      // Store original content on the window for editor mode
-      const winElement = document.querySelector(`[data-id="preview-${previewId}"]`);
+
+      // ✅ Fixed: use the directly-passed winElement reference, not stale previewId
       if (winElement) {
         winElement._originalContent = text;
+        // If there are session edits, show the unsaved dot
+        if (MarkdownEditor.hasUnsavedEdits(path)) {
+          const editBtn = document.getElementById(winElement.dataset.id + '-editbtn');
+          if (editBtn) editBtn.classList.add('has-edits');
+        }
       }
-      
-      const wrapper = document.createElement('div');
-      wrapper.className = 'markdown-content';
-      wrapper.innerHTML = markdownToHTML(text, path);
-      container.innerHTML = '';
-      container.appendChild(wrapper);
-      setTimeout(function () { initMarkdownFeatures(wrapper); }, 0);
+
+      renderMarkdownIntoContainer(
+        MarkdownEditor.getSavedContent(path) || text,
+        path,
+        container
+      );
 
     } else {
-      // All other file types: display as plain text
       try {
         const response = await fetch(fetchUrl(path));
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -735,6 +740,160 @@ async function fetchFileContent(path, filename, container) {
   } catch (error) {
     container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
   }
+}
+
+// ─── Markdown render helper ───────────────────────────────────────────────────
+
+function renderMarkdownIntoContainer(text, filePath, container) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'markdown-content';
+  wrapper.innerHTML = markdownToHTML(text, filePath);
+  container.innerHTML = '';
+  container.appendChild(wrapper);
+  setTimeout(() => initMarkdownFeatures(wrapper), 0);
+}
+
+// ─── Split-view editor ────────────────────────────────────────────────────────
+
+/**
+ * Toggle the split-view editor panel for a markdown floating window.
+ * Left pane = live rendered preview. Right pane = MarkdownEditor.
+ */
+function toggleSplitEditor(windowId) {
+  const win = windows[windowId];
+  if (!win || !win._isMarkdown) return;
+
+  const body    = document.getElementById(windowId + '-body');
+  const editBtn = document.getElementById(windowId + '-editbtn');
+
+  if (win._splitActive) {
+    // ── Close split view ─────────────────────────────────────────────────────
+    win._splitActive = false;
+    if (editBtn) { editBtn.classList.remove('active'); editBtn.querySelector('span').textContent = '✎ Edit'; }
+
+    // Re-render plain preview into body
+    body.className = 'preview-body';
+    body.removeAttribute('style');
+
+    const content = MarkdownEditor.getSavedContent(win._filePath) || win._originalContent || '';
+    renderMarkdownIntoContainer(content, win._filePath, body);
+
+    // Update unsaved dot
+    if (editBtn) editBtn.classList.toggle('has-edits', MarkdownEditor.hasUnsavedEdits(win._filePath));
+
+  } else {
+    // ── Open split view ──────────────────────────────────────────────────────
+    if (!win._originalContent) {
+      showStatus('⏳ File still loading, please wait…');
+      return;
+    }
+
+    win._splitActive = true;
+    if (editBtn) { editBtn.classList.add('active'); editBtn.querySelector('span').textContent = '✕ Close editor'; }
+
+    // Build split layout
+    body.innerHTML = '';
+    body.className = 'preview-body sv-active';
+
+    // Left: preview pane
+    const previewPane = document.createElement('div');
+    previewPane.className = 'sv-preview-pane';
+    previewPane.id = windowId + '-sv-preview';
+
+    const previewWrapper = document.createElement('div');
+    previewWrapper.className = 'markdown-content';
+    const initialContent = MarkdownEditor.getSavedContent(win._filePath) || win._originalContent;
+    previewWrapper.innerHTML = markdownToHTML(initialContent, win._filePath);
+    previewPane.appendChild(previewWrapper);
+    setTimeout(() => initMarkdownFeatures(previewWrapper), 0);
+
+    // Divider (draggable)
+    const divider = document.createElement('div');
+    divider.className = 'sv-divider';
+    attachDividerDrag(divider, previewPane, body);
+
+    // Right: editor pane
+    const editorPane = document.createElement('div');
+    editorPane.className = 'sv-editor-pane';
+    editorPane.id = windowId + '-sv-editor';
+
+    body.appendChild(previewPane);
+    body.appendChild(divider);
+    body.appendChild(editorPane);
+
+    // Mount the MarkdownEditor into the editor pane
+    // onClose = "Done Editing" button inside the editor
+    const onEditorClose = (editedContent) => {
+      // Update the left preview pane live
+      const pw = document.getElementById(windowId + '-sv-preview');
+      if (pw) {
+        pw.innerHTML = '';
+        const w = document.createElement('div');
+        w.className = 'markdown-content';
+        w.innerHTML = markdownToHTML(editedContent, win._filePath);
+        pw.appendChild(w);
+        setTimeout(() => initMarkdownFeatures(w), 0);
+      }
+      if (editBtn) editBtn.classList.toggle('has-edits', MarkdownEditor.hasUnsavedEdits(win._filePath));
+      showStatus('✓ Changes saved to session');
+    };
+
+    MarkdownEditor.createEditorUI(editorPane, win._filePath, win._originalContent, onEditorClose);
+
+    // Wire the editor's textarea so typing also live-updates the preview pane
+    // We do this after createEditorUI mounts, so the textarea exists
+    requestAnimationFrame(() => {
+      const textarea = editorPane.querySelector('.mde-textarea');
+      if (!textarea) return;
+
+      textarea.addEventListener('input', () => {
+        const pw = document.getElementById(windowId + '-sv-preview');
+        if (!pw) return;
+        // Debounce: only re-render every 300ms to avoid layout thrashing
+        clearTimeout(textarea._previewTimer);
+        textarea._previewTimer = setTimeout(() => {
+          pw.innerHTML = '';
+          const w = document.createElement('div');
+          w.className = 'markdown-content';
+          w.innerHTML = markdownToHTML(textarea.value, win._filePath);
+          pw.appendChild(w);
+          setTimeout(() => initMarkdownFeatures(w), 0);
+        }, 300);
+      });
+    });
+  }
+}
+
+/**
+ * Make the divider bar draggable to resize the two panes.
+ */
+function attachDividerDrag(divider, leftPane, container) {
+  let dragging = false;
+
+  divider.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    dragging = true;
+    divider.classList.add('dragging');
+
+    const onMove = (ev) => {
+      if (!dragging) return;
+      const rect = container.getBoundingClientRect();
+      const pct  = ((ev.clientX - rect.left) / rect.width) * 100;
+      const clamped = Math.min(Math.max(pct, 20), 80); // 20%–80% range
+      leftPane.style.flex = 'none';
+      leftPane.style.width = clamped + '%';
+    };
+
+    const onUp = () => {
+      dragging = false;
+      divider.classList.remove('dragging');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
 }
 
 function escapeHTML(s) {
@@ -758,17 +917,8 @@ const manifest = {
   display: "standalone",
   background_color: "#1e1e1e",
   theme_color: "#1e1e1e",
-  icons: [
-    {
-      src: "favicon.png",
-      sizes: "192x192",
-      type: "image/png"
-    }
-  ]
+  icons: [{ src: "favicon.png", sizes: "192x192", type: "image/png" }]
 };
-
-// Fix #8: manifest.json is already declared in <head> via static <link rel="manifest">.
-// The dynamic blob manifest below was a duplicate and has been removed.
 
 // --- GitHub Pages → Vercel popup ---
 function hasVercelDismissCookie() {
@@ -790,9 +940,7 @@ function dismissVercelPopup() {
 function maybeShowVercelPopup() {
   if (hasVercelDismissCookie()) return;
   if (appConfig.GITPAGE_URL && window.location.hostname === new URL(appConfig.GITPAGE_URL).hostname) {
-    setTimeout(() => {
-      document.getElementById('vercelPopup').classList.add('visible');
-    }, 1800);
+    setTimeout(() => { document.getElementById('vercelPopup').classList.add('visible'); }, 1800);
   }
 }
 
@@ -806,73 +954,39 @@ function openCommunity() {
   }
 }
 
-/**
- * Toggle between view and edit modes for markdown files
- */
-function toggleMarkdownEditMode(windowId) {
-  const winElement = document.querySelector(`[data-id="${windowId}"]`);
-  if (!winElement || !winElement._isMarkdown) return;
-
-  const container = document.getElementById(windowId + "-body");
-  const editBtn = winElement.querySelector('.title-bar button[title="Edit markdown"]');
-  
-  if (winElement._editMode) {
-    // Switch back to view mode
-    winElement._editMode = false;
-    editBtn.textContent = '✎ Edit';
-    editBtn.title = 'Edit markdown';
-    
-    // Render the original content (with any session edits)
-    const content = MarkdownEditor.getSavedContent(winElement._filePath) || winElement._originalContent;
-    const wrapper = document.createElement('div');
-    wrapper.className = 'markdown-content';
-    wrapper.innerHTML = markdownToHTML(content, winElement._filePath);
-    container.innerHTML = '';
-    container.appendChild(wrapper);
-    setTimeout(() => initMarkdownFeatures(wrapper), 0);
-    
-    showStatus('✓ View mode');
-  } else {
-    // Switch to edit mode
-    winElement._editMode = true;
-    editBtn.textContent = '👁️ View';
-    editBtn.title = 'Return to view mode';
-    
-    // Create the editor UI
-    const onClose = (editedContent) => {
-      // User clicked "Done Editing" — show updated preview
-      const wrapper = document.createElement('div');
-      wrapper.className = 'markdown-content';
-      wrapper.innerHTML = markdownToHTML(editedContent, winElement._filePath);
-      container.innerHTML = '';
-      container.appendChild(wrapper);
-      setTimeout(() => initMarkdownFeatures(wrapper), 0);
-      
-      // Switch back to view mode
-      winElement._editMode = false;
-      editBtn.textContent = '✎ Edit';
-      editBtn.title = 'Edit markdown';
-      
-      showStatus('✓ Changes applied (session-only)');
-    };
-    
-    MarkdownEditor.createEditorUI(
-      container, 
-      winElement._filePath, 
-      winElement._originalContent, 
-      onClose
-    );
-    
-    showStatus('📝 Edit mode — changes are temporary (session storage)');
-  }
-}
-
 window.addEventListener("DOMContentLoaded", async () => {
   await fetchConfig();
   fetchTree();
   maybeShowVercelPopup();
 });
 
+// --- Update check ---
+let lastCommit = null;
+let lastHash = null;
+let initialLoadComplete = false;
 
-// --- API proxy for fetching raw file contents with GitHub PAT authentication on Vercel ---
-// This is used in production to securely fetch files from private repos, since GitHub Pages cannot use a PAT and can only serve public assets directly.
+async function fetchLatestCommit() {
+  try {
+    const response = await fetch('/api/gh.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'latestCommit' })
+    });
+    const data = await response.json();
+    if (!response.ok || !data.sha) throw new Error(data.error || 'Failed to fetch latest commit');
+    return data.sha;
+  } catch (err) {
+    console.warn("[fetchLatestCommit] Could not fetch latest commit:", err.message);
+    return null;
+  }
+}
+
+async function checkForUpdate() {
+  if (!initialLoadComplete) return;
+  const newCommit = await fetchLatestCommit();
+  if (!newCommit) return;
+  if (lastCommit && newCommit !== lastCommit) {
+    const notice = document.getElementById("updateNotice");
+    if (notice && notice.style.display !== "flex") notice.style.display = "flex";
+  }
+}
