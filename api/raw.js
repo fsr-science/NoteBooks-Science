@@ -6,7 +6,7 @@
 // The Office viewer calls:
 //   https://view.officeapps.live.com/op/embed.aspx?src=https://your-app.vercel.app/api/raw?path=...
 
-const REPO = process.env.GITHUB_REPO;
+const REPO = 'fsr-science/NoteBooks-Science';
 
 const MIME_TYPES = {
   doc:  'application/msword',
@@ -41,13 +41,6 @@ function authHeader(pat) {
 }
 
 export default async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    return res.status(204).end();
-  }
-
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -112,10 +105,6 @@ export default async function handler(req, res) {
   // Cache for 5 minutes — short enough to stay fresh, long enough for the viewer to load
   res.setHeader('Content-Type', contentType);
   res.setHeader('Cache-Control', 'public, max-age=300');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
 
   const buffer = Buffer.from(await rawRes.arrayBuffer());
   return res.status(200).send(buffer);
