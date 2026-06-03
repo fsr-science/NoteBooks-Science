@@ -3,6 +3,1784 @@
   "name": "NoteBooks-Science",
   "children": [
     {
+      "type": "folder",
+      "name": "AI-NOTES",
+      "children": [
+        {
+          "type": "folder",
+          "name": "BIOLOGY",
+          "children": [
+            {
+              "type": "folder",
+              "name": "BIOLOGY01-THE_LIVING_WORLD",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY01-THE_LIVING_WORLD-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY01-THE_LIVING_WORLD/BIOLOGY01-THE_LIVING_WORLD-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY01-THE_LIVING_WORLD-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY01-THE_LIVING_WORLD/BIOLOGY01-THE_LIVING_WORLD-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY01-THE_LIVING_WORLD-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY01-THE_LIVING_WORLD/BIOLOGY01-THE_LIVING_WORLD-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY01-THE_LIVING_WORLD-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY01-THE_LIVING_WORLD/BIOLOGY01-THE_LIVING_WORLD-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY02-BIOLOGICAL_CLASSIFICATION/BIOLOGY02-BIOLOGICAL_CLASSIFICATION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY02-BIOLOGICAL_CLASSIFICATION/BIOLOGY02-BIOLOGICAL_CLASSIFICATION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY02-BIOLOGICAL_CLASSIFICATION/BIOLOGY02-BIOLOGICAL_CLASSIFICATION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY02-BIOLOGICAL_CLASSIFICATION/BIOLOGY02-BIOLOGICAL_CLASSIFICATION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY03-PLANT_KINGDOM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY03-PLANT_KINGDOM-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY03-PLANT_KINGDOM/BIOLOGY03-PLANT_KINGDOM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY03-PLANT_KINGDOM-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY03-PLANT_KINGDOM/BIOLOGY03-PLANT_KINGDOM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY03-PLANT_KINGDOM-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY03-PLANT_KINGDOM/BIOLOGY03-PLANT_KINGDOM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY03-PLANT_KINGDOM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY03-PLANT_KINGDOM/BIOLOGY03-PLANT_KINGDOM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY04-ANIMAL_KINGDOM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY04-ANIMAL_KINGDOM-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY04-ANIMAL_KINGDOM/BIOLOGY04-ANIMAL_KINGDOM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY04-ANIMAL_KINGDOM-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY04-ANIMAL_KINGDOM/BIOLOGY04-ANIMAL_KINGDOM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY04-ANIMAL_KINGDOM-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY04-ANIMAL_KINGDOM/BIOLOGY04-ANIMAL_KINGDOM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY04-ANIMAL_KINGDOM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY04-ANIMAL_KINGDOM/BIOLOGY04-ANIMAL_KINGDOM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY08-CELL_THE_UNIT_OF_LIFE/BIOLOGY08-CELL_THE_UNIT_OF_LIFE-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY08-CELL_THE_UNIT_OF_LIFE/BIOLOGY08-CELL_THE_UNIT_OF_LIFE-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY08-CELL_THE_UNIT_OF_LIFE/BIOLOGY08-CELL_THE_UNIT_OF_LIFE-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY08-CELL_THE_UNIT_OF_LIFE/BIOLOGY08-CELL_THE_UNIT_OF_LIFE-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY09-BIOMOLECULES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY09-BIOMOLECULES-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY09-BIOMOLECULES/BIOLOGY09-BIOMOLECULES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY09-BIOMOLECULES-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY09-BIOMOLECULES/BIOLOGY09-BIOMOLECULES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY09-BIOMOLECULES-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY09-BIOMOLECULES/BIOLOGY09-BIOMOLECULES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY09-BIOMOLECULES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY09-BIOMOLECULES/BIOLOGY09-BIOMOLECULES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY11-TRANSPORT_IN_PLANTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY11-TRANSPORT_IN_PLANTS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY11-TRANSPORT_IN_PLANTS/BIOLOGY11-TRANSPORT_IN_PLANTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY11-TRANSPORT_IN_PLANTS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY11-TRANSPORT_IN_PLANTS/BIOLOGY11-TRANSPORT_IN_PLANTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY11-TRANSPORT_IN_PLANTS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY11-TRANSPORT_IN_PLANTS/BIOLOGY11-TRANSPORT_IN_PLANTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY11-TRANSPORT_IN_PLANTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY11-TRANSPORT_IN_PLANTS/BIOLOGY11-TRANSPORT_IN_PLANTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY12-MINERAL_NUTRITION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY12-MINERAL_NUTRITION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY12-MINERAL_NUTRITION/BIOLOGY12-MINERAL_NUTRITION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY12-MINERAL_NUTRITION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY12-MINERAL_NUTRITION/BIOLOGY12-MINERAL_NUTRITION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY12-MINERAL_NUTRITION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY12-MINERAL_NUTRITION/BIOLOGY12-MINERAL_NUTRITION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY12-MINERAL_NUTRITION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY12-MINERAL_NUTRITION/BIOLOGY12-MINERAL_NUTRITION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY14-RESPIRATION_IN_PLANTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY14-RESPIRATION_IN_PLANTS-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY14-RESPIRATION_IN_PLANTS/BIOLOGY14-RESPIRATION_IN_PLANTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY14-RESPIRATION_IN_PLANTS-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY14-RESPIRATION_IN_PLANTS/BIOLOGY14-RESPIRATION_IN_PLANTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY14-RESPIRATION_IN_PLANTS-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY14-RESPIRATION_IN_PLANTS/BIOLOGY14-RESPIRATION_IN_PLANTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY14-RESPIRATION_IN_PLANTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY14-RESPIRATION_IN_PLANTS/BIOLOGY14-RESPIRATION_IN_PLANTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY16-DIGESTION_AND_ABSORPTION/BIOLOGY16-DIGESTION_AND_ABSORPTION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY16-DIGESTION_AND_ABSORPTION/BIOLOGY16-DIGESTION_AND_ABSORPTION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY16-DIGESTION_AND_ABSORPTION/BIOLOGY16-DIGESTION_AND_ABSORPTION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY16-DIGESTION_AND_ABSORPTION/BIOLOGY16-DIGESTION_AND_ABSORPTION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-GLOSSARY.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-NOTES.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-PQs.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/BIOLOGY/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION-REVISION_MINDMAPS.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "CHEMISTRY",
+          "children": [
+            {
+              "type": "folder",
+              "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY02-STRUCTURE_OF_ATOM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY02-STRUCTURE_OF_ATOM-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY02-STRUCTURE_OF_ATOM/CHEMISTRY02-STRUCTURE_OF_ATOM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY02-STRUCTURE_OF_ATOM-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY02-STRUCTURE_OF_ATOM/CHEMISTRY02-STRUCTURE_OF_ATOM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY02-STRUCTURE_OF_ATOM-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY02-STRUCTURE_OF_ATOM/CHEMISTRY02-STRUCTURE_OF_ATOM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY02-STRUCTURE_OF_ATOM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY02-STRUCTURE_OF_ATOM/CHEMISTRY02-STRUCTURE_OF_ATOM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY05-THERMODYNAMICS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY05-THERMODYNAMICS-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY05-THERMODYNAMICS/CHEMISTRY05-THERMODYNAMICS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY05-THERMODYNAMICS-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY05-THERMODYNAMICS/CHEMISTRY05-THERMODYNAMICS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY05-THERMODYNAMICS-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY05-THERMODYNAMICS/CHEMISTRY05-THERMODYNAMICS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY05-THERMODYNAMICS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY05-THERMODYNAMICS/CHEMISTRY05-THERMODYNAMICS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY06-EQUILIBRIUM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY06-EQUILIBRIUM-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY06-EQUILIBRIUM/CHEMISTRY06-EQUILIBRIUM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY06-EQUILIBRIUM-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY06-EQUILIBRIUM/CHEMISTRY06-EQUILIBRIUM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY06-EQUILIBRIUM-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY06-EQUILIBRIUM/CHEMISTRY06-EQUILIBRIUM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY06-EQUILIBRIUM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY06-EQUILIBRIUM/CHEMISTRY06-EQUILIBRIUM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY07-REDOX_REACTIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY07-REDOX_REACTIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY07-REDOX_REACTIONS/CHEMISTRY07-REDOX_REACTIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY07-REDOX_REACTIONS-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY07-REDOX_REACTIONS/CHEMISTRY07-REDOX_REACTIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY07-REDOX_REACTIONS-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY07-REDOX_REACTIONS/CHEMISTRY07-REDOX_REACTIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY07-REDOX_REACTIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY07-REDOX_REACTIONS/CHEMISTRY07-REDOX_REACTIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CHEMISTRY09-HYDROCARBONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY09-HYDROCARBONS-GLOSSARY.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY09-HYDROCARBONS/CHEMISTRY09-HYDROCARBONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY09-HYDROCARBONS-NOTES.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY09-HYDROCARBONS/CHEMISTRY09-HYDROCARBONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY09-HYDROCARBONS-PQs.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY09-HYDROCARBONS/CHEMISTRY09-HYDROCARBONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CHEMISTRY09-HYDROCARBONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/CHEMISTRY/CHEMISTRY09-HYDROCARBONS/CHEMISTRY09-HYDROCARBONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "COMPUTER-SCIENCE",
+          "children": [
+            {
+              "type": "folder",
+              "name": "CS01-COMPUTER_SYSTEM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS01-COMPUTER_SYSTEM-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS01-COMPUTER_SYSTEM/CS01-COMPUTER_SYSTEM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS01-COMPUTER_SYSTEM-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS01-COMPUTER_SYSTEM/CS01-COMPUTER_SYSTEM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS01-COMPUTER_SYSTEM-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS01-COMPUTER_SYSTEM/CS01-COMPUTER_SYSTEM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS01-COMPUTER_SYSTEM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS01-COMPUTER_SYSTEM/CS01-COMPUTER_SYSTEM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS03-EMERGING_TRENDS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS03-EMERGING_TRENDS-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS03-EMERGING_TRENDS/CS03-EMERGING_TRENDS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS03-EMERGING_TRENDS-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS03-EMERGING_TRENDS/CS03-EMERGING_TRENDS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS03-EMERGING_TRENDS-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS03-EMERGING_TRENDS/CS03-EMERGING_TRENDS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS03-EMERGING_TRENDS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS03-EMERGING_TRENDS/CS03-EMERGING_TRENDS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS04-PROBLEM_SOLVING",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS04-PROBLEM_SOLVING-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS04-PROBLEM_SOLVING/CS04-PROBLEM_SOLVING-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS04-PROBLEM_SOLVING-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS04-PROBLEM_SOLVING/CS04-PROBLEM_SOLVING-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS04-PROBLEM_SOLVING-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS04-PROBLEM_SOLVING/CS04-PROBLEM_SOLVING-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS04-PROBLEM_SOLVING-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS04-PROBLEM_SOLVING/CS04-PROBLEM_SOLVING-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS05-GETTING_STARTED_WITH_PYTHON",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS05-GETTING_STARTED_WITH_PYTHON-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS05-GETTING_STARTED_WITH_PYTHON/CS05-GETTING_STARTED_WITH_PYTHON-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS05-GETTING_STARTED_WITH_PYTHON-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS05-GETTING_STARTED_WITH_PYTHON/CS05-GETTING_STARTED_WITH_PYTHON-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS05-GETTING_STARTED_WITH_PYTHON-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS05-GETTING_STARTED_WITH_PYTHON/CS05-GETTING_STARTED_WITH_PYTHON-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS05-GETTING_STARTED_WITH_PYTHON-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS05-GETTING_STARTED_WITH_PYTHON/CS05-GETTING_STARTED_WITH_PYTHON-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS06-FLOW_OF_CONTROL",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS06-FLOW_OF_CONTROL-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS06-FLOW_OF_CONTROL/CS06-FLOW_OF_CONTROL-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS06-FLOW_OF_CONTROL-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS06-FLOW_OF_CONTROL/CS06-FLOW_OF_CONTROL-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS06-FLOW_OF_CONTROL-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS06-FLOW_OF_CONTROL/CS06-FLOW_OF_CONTROL-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS06-FLOW_OF_CONTROL-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS06-FLOW_OF_CONTROL/CS06-FLOW_OF_CONTROL-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS07-FUNCTIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS07-FUNCTIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS07-FUNCTIONS/CS07-FUNCTIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS07-FUNCTIONS-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS07-FUNCTIONS/CS07-FUNCTIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS07-FUNCTIONS-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS07-FUNCTIONS/CS07-FUNCTIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS07-FUNCTIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS07-FUNCTIONS/CS07-FUNCTIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS08-STRINGS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS08-STRINGS-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS08-STRINGS/CS08-STRINGS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS08-STRINGS-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS08-STRINGS/CS08-STRINGS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS08-STRINGS-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS08-STRINGS/CS08-STRINGS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS08-STRINGS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS08-STRINGS/CS08-STRINGS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS09-LISTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS09-LISTS-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS09-LISTS/CS09-LISTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS09-LISTS-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS09-LISTS/CS09-LISTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS09-LISTS-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS09-LISTS/CS09-LISTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS09-LISTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS09-LISTS/CS09-LISTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS10-TUPLES_AND_DICTIONARIES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS10-TUPLES_AND_DICTIONARIES-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS10-TUPLES_AND_DICTIONARIES/CS10-TUPLES_AND_DICTIONARIES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS10-TUPLES_AND_DICTIONARIES-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS10-TUPLES_AND_DICTIONARIES/CS10-TUPLES_AND_DICTIONARIES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS10-TUPLES_AND_DICTIONARIES-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS10-TUPLES_AND_DICTIONARIES/CS10-TUPLES_AND_DICTIONARIES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS10-TUPLES_AND_DICTIONARIES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS10-TUPLES_AND_DICTIONARIES/CS10-TUPLES_AND_DICTIONARIES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "CS11-SOCIETAL_IMPACTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "CS11-SOCIETAL_IMPACTS-GLOSSARY.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS11-SOCIETAL_IMPACTS/CS11-SOCIETAL_IMPACTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS11-SOCIETAL_IMPACTS-NOTES.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS11-SOCIETAL_IMPACTS/CS11-SOCIETAL_IMPACTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS11-SOCIETAL_IMPACTS-PQs.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS11-SOCIETAL_IMPACTS/CS11-SOCIETAL_IMPACTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "CS11-SOCIETAL_IMPACTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/COMPUTER-SCIENCE/CS11-SOCIETAL_IMPACTS/CS11-SOCIETAL_IMPACTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "MATHEMATICS",
+          "children": [
+            {
+              "type": "folder",
+              "name": "MATHEMATICS01-SETS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS01-SETS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS01-SETS/MATHEMATICS01-SETS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS01-SETS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS01-SETS/MATHEMATICS01-SETS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS01-SETS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS01-SETS/MATHEMATICS01-SETS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS01-SETS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS01-SETS/MATHEMATICS01-SETS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS05-LINEAR_INEQUALITIES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS05-LINEAR_INEQUALITIES-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS05-LINEAR_INEQUALITIES/MATHEMATICS05-LINEAR_INEQUALITIES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS05-LINEAR_INEQUALITIES-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS05-LINEAR_INEQUALITIES/MATHEMATICS05-LINEAR_INEQUALITIES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS05-LINEAR_INEQUALITIES-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS05-LINEAR_INEQUALITIES/MATHEMATICS05-LINEAR_INEQUALITIES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS05-LINEAR_INEQUALITIES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS05-LINEAR_INEQUALITIES/MATHEMATICS05-LINEAR_INEQUALITIES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS07-BINOMIAL_THEOREM",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS07-BINOMIAL_THEOREM-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS07-BINOMIAL_THEOREM/MATHEMATICS07-BINOMIAL_THEOREM-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS07-BINOMIAL_THEOREM-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS07-BINOMIAL_THEOREM/MATHEMATICS07-BINOMIAL_THEOREM-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS07-BINOMIAL_THEOREM-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS07-BINOMIAL_THEOREM/MATHEMATICS07-BINOMIAL_THEOREM-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS07-BINOMIAL_THEOREM-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS07-BINOMIAL_THEOREM/MATHEMATICS07-BINOMIAL_THEOREM-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS08-SEQUENCES_AND_SERIES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS08-SEQUENCES_AND_SERIES-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS08-SEQUENCES_AND_SERIES/MATHEMATICS08-SEQUENCES_AND_SERIES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS08-SEQUENCES_AND_SERIES-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS08-SEQUENCES_AND_SERIES/MATHEMATICS08-SEQUENCES_AND_SERIES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS08-SEQUENCES_AND_SERIES-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS08-SEQUENCES_AND_SERIES/MATHEMATICS08-SEQUENCES_AND_SERIES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS08-SEQUENCES_AND_SERIES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS08-SEQUENCES_AND_SERIES/MATHEMATICS08-SEQUENCES_AND_SERIES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS09-STRAIGHT_LINES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS09-STRAIGHT_LINES-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS09-STRAIGHT_LINES/MATHEMATICS09-STRAIGHT_LINES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS09-STRAIGHT_LINES-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS09-STRAIGHT_LINES/MATHEMATICS09-STRAIGHT_LINES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS09-STRAIGHT_LINES-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS09-STRAIGHT_LINES/MATHEMATICS09-STRAIGHT_LINES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS09-STRAIGHT_LINES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS09-STRAIGHT_LINES/MATHEMATICS09-STRAIGHT_LINES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS10-CONIC_SECTIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS10-CONIC_SECTIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS10-CONIC_SECTIONS/MATHEMATICS10-CONIC_SECTIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS10-CONIC_SECTIONS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS10-CONIC_SECTIONS/MATHEMATICS10-CONIC_SECTIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS10-CONIC_SECTIONS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS10-CONIC_SECTIONS/MATHEMATICS10-CONIC_SECTIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS10-CONIC_SECTIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS10-CONIC_SECTIONS/MATHEMATICS10-CONIC_SECTIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS12-LIMITS_AND_DERIVATIVES/MATHEMATICS12-LIMITS_AND_DERIVATIVES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS12-LIMITS_AND_DERIVATIVES/MATHEMATICS12-LIMITS_AND_DERIVATIVES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS12-LIMITS_AND_DERIVATIVES/MATHEMATICS12-LIMITS_AND_DERIVATIVES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS12-LIMITS_AND_DERIVATIVES/MATHEMATICS12-LIMITS_AND_DERIVATIVES-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS13-STATISTICS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS13-STATISTICS-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS13-STATISTICS/MATHEMATICS13-STATISTICS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS13-STATISTICS-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS13-STATISTICS/MATHEMATICS13-STATISTICS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS13-STATISTICS-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS13-STATISTICS/MATHEMATICS13-STATISTICS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS13-STATISTICS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS13-STATISTICS/MATHEMATICS13-STATISTICS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "MATHEMATICS14-PROBABILITY",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS14-PROBABILITY-GLOSSARY.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS14-PROBABILITY/MATHEMATICS14-PROBABILITY-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS14-PROBABILITY-NOTES.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS14-PROBABILITY/MATHEMATICS14-PROBABILITY-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS14-PROBABILITY-PQs.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS14-PROBABILITY/MATHEMATICS14-PROBABILITY-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "MATHEMATICS14-PROBABILITY-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/MATHEMATICS/MATHEMATICS14-PROBABILITY/MATHEMATICS14-PROBABILITY-REVISION_MINDMAPS.md"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "PHYSICS",
+          "children": [
+            {
+              "type": "folder",
+              "name": "PHYSICS01-UNITS_AND_MEASUREMENTS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS01-UNITS_AND_MEASUREMENTS-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS01-UNITS_AND_MEASUREMENTS/PHYSICS01-UNITS_AND_MEASUREMENTS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS01-UNITS_AND_MEASUREMENTS-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS01-UNITS_AND_MEASUREMENTS/PHYSICS01-UNITS_AND_MEASUREMENTS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS01-UNITS_AND_MEASUREMENTS-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS01-UNITS_AND_MEASUREMENTS/PHYSICS01-UNITS_AND_MEASUREMENTS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS01-UNITS_AND_MEASUREMENTS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS01-UNITS_AND_MEASUREMENTS/PHYSICS01-UNITS_AND_MEASUREMENTS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS03-MOTION_IN_A_PLANE",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS03-MOTION_IN_A_PLANE-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS03-MOTION_IN_A_PLANE/PHYSICS03-MOTION_IN_A_PLANE-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS03-MOTION_IN_A_PLANE-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS03-MOTION_IN_A_PLANE/PHYSICS03-MOTION_IN_A_PLANE-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS03-MOTION_IN_A_PLANE-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS03-MOTION_IN_A_PLANE/PHYSICS03-MOTION_IN_A_PLANE-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS03-MOTION_IN_A_PLANE-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS03-MOTION_IN_A_PLANE/PHYSICS03-MOTION_IN_A_PLANE-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS04-LAWS_OF_MOTION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS04-LAWS_OF_MOTION-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS04-LAWS_OF_MOTION/PHYSICS04-LAWS_OF_MOTION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS04-LAWS_OF_MOTION-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS04-LAWS_OF_MOTION/PHYSICS04-LAWS_OF_MOTION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS04-LAWS_OF_MOTION-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS04-LAWS_OF_MOTION/PHYSICS04-LAWS_OF_MOTION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS04-LAWS_OF_MOTION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS04-LAWS_OF_MOTION/PHYSICS04-LAWS_OF_MOTION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS05-WORK_ENERGY_AND_POWER",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS05-WORK_ENERGY_AND_POWER-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS05-WORK_ENERGY_AND_POWER/PHYSICS05-WORK_ENERGY_AND_POWER-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS05-WORK_ENERGY_AND_POWER-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS05-WORK_ENERGY_AND_POWER/PHYSICS05-WORK_ENERGY_AND_POWER-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS05-WORK_ENERGY_AND_POWER-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS05-WORK_ENERGY_AND_POWER/PHYSICS05-WORK_ENERGY_AND_POWER-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS05-WORK_ENERGY_AND_POWER-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS05-WORK_ENERGY_AND_POWER/PHYSICS05-WORK_ENERGY_AND_POWER-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS07-GRAVITATION",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS07-GRAVITATION-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS07-GRAVITATION/PHYSICS07-GRAVITATION-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS07-GRAVITATION-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS07-GRAVITATION/PHYSICS07-GRAVITATION-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS07-GRAVITATION-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS07-GRAVITATION/PHYSICS07-GRAVITATION-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS07-GRAVITATION-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS07-GRAVITATION/PHYSICS07-GRAVITATION-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS11-THERMODYNAMICS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS11-THERMODYNAMICS-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS11-THERMODYNAMICS/PHYSICS11-THERMODYNAMICS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS11-THERMODYNAMICS-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS11-THERMODYNAMICS/PHYSICS11-THERMODYNAMICS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS11-THERMODYNAMICS-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS11-THERMODYNAMICS/PHYSICS11-THERMODYNAMICS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS11-THERMODYNAMICS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS11-THERMODYNAMICS/PHYSICS11-THERMODYNAMICS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS12-KINETIC_THEORY",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS12-KINETIC_THEORY-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS12-KINETIC_THEORY/PHYSICS12-KINETIC_THEORY-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS12-KINETIC_THEORY-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS12-KINETIC_THEORY/PHYSICS12-KINETIC_THEORY-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS12-KINETIC_THEORY-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS12-KINETIC_THEORY/PHYSICS12-KINETIC_THEORY-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS12-KINETIC_THEORY-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS12-KINETIC_THEORY/PHYSICS12-KINETIC_THEORY-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS13-OSCILLATIONS",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS13-OSCILLATIONS-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS13-OSCILLATIONS/PHYSICS13-OSCILLATIONS-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS13-OSCILLATIONS-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS13-OSCILLATIONS/PHYSICS13-OSCILLATIONS-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS13-OSCILLATIONS-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS13-OSCILLATIONS/PHYSICS13-OSCILLATIONS-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS13-OSCILLATIONS-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS13-OSCILLATIONS/PHYSICS13-OSCILLATIONS-REVISION_MINDMAPS.md"
+                }
+              ]
+            },
+            {
+              "type": "folder",
+              "name": "PHYSICS14-WAVES",
+              "children": [
+                {
+                  "type": "file",
+                  "name": "PHYSICS14-WAVES-GLOSSARY.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS14-WAVES/PHYSICS14-WAVES-GLOSSARY.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS14-WAVES-NOTES.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS14-WAVES/PHYSICS14-WAVES-NOTES.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS14-WAVES-PQs.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS14-WAVES/PHYSICS14-WAVES-PQs.md"
+                },
+                {
+                  "type": "file",
+                  "name": "PHYSICS14-WAVES-REVISION_MINDMAPS.md",
+                  "path": "AI-NOTES/PHYSICS/PHYSICS14-WAVES/PHYSICS14-WAVES-REVISION_MINDMAPS.md"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
       "type": "file",
       "name": "LICENSE",
       "path": "LICENSE"
