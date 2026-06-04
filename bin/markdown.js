@@ -45,10 +45,6 @@
     }
   }
   
-let lastCommit = null;	
-let lastHash = null;
-let initialLoadComplete = false;
-
 async function fetchLatestCommit() {
   try {
     // Call the secure server-side API (PAT stored in Vercel env vars)

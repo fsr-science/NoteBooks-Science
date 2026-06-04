@@ -17,7 +17,7 @@
 //   { action: "deleteFile", path, sha, message }
 //     → { ok: true }
 
-const REPO = 'fsr-science/NoteBooks-Science';
+const REPO = process.env.GITHUB_REPO;
 
 function authHeader(pat) {
   return pat.startsWith('github_pat_') ? `Bearer ${pat}` : `token ${pat}`;
