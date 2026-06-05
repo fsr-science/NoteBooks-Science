@@ -1786,6 +1786,837 @@
       "path": "LICENSE"
     },
     {
+      "type": "folder",
+      "name": "NCERT-EXAMPLER",
+      "children": [
+        {
+          "type": "folder",
+          "name": "BIOLOGY",
+          "children": [
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR-ANSWERS_TO_MCQ.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR-ANSWERS_TO_MCQ.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR-MODEL_ANSWERS_DESCRIPTIVE.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR-MODEL_ANSWERS_DESCRIPTIVE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR-MODEL_QUESTION_PAPER.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR-MODEL_QUESTION_PAPER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR01-THE_LIVING_WORLD.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR01-THE_LIVING_WORLD.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR02-BIOLOGICAL_CLASSIFICATION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR02-BIOLOGICAL_CLASSIFICATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR03-PLANT_KINGDOM.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR03-PLANT_KINGDOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR04-ANIMAL_KINGDOM.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR04-ANIMAL_KINGDOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR05-MORPHOLOGY_OF_FLOWERING_PLANTS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR05-MORPHOLOGY_OF_FLOWERING_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR06-ANATOMY_OF_FLOWERING_PLANTS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR06-ANATOMY_OF_FLOWERING_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR07-STRUCTURAL_ORGANISATION_IN_ANIMALS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR07-STRUCTURAL_ORGANISATION_IN_ANIMALS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR08-CELL_THE_UNIT_OF_LIFE.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR08-CELL_THE_UNIT_OF_LIFE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR09-BIOMOLECULES.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR09-BIOMOLECULES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR10-CELL_CYCLE_AND_CELL_DIVISION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR10-CELL_CYCLE_AND_CELL_DIVISION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR11-TRANSPORT_IN_PLANTS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR11-TRANSPORT_IN_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR12-MINERAL_NUTRITION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR12-MINERAL_NUTRITION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR14-RESPIRATION_IN_PLANTS.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR14-RESPIRATION_IN_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR15-PLANT_GROWTH_AND_DEVELOPMENT.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR15-PLANT_GROWTH_AND_DEVELOPMENT.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR16-DIGESTION_AND_ABSORPTION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR16-DIGESTION_AND_ABSORPTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR17-BREATHING_AND_EXCHANGE_OF_GASES.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR17-BREATHING_AND_EXCHANGE_OF_GASES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR18-BODY_FLUIDS_AND_CIRCULATION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR18-BODY_FLUIDS_AND_CIRCULATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR20-LOCOMOTION_AND_MOVEMENT.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR20-LOCOMOTION_AND_MOVEMENT.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR21-NEURAL_CONTROL_AND_COORDINATION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR21-NEURAL_CONTROL_AND_COORDINATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY-EXEMPLAR22-CHEMICAL_COORDINATION_AND_INTEGRATION.pdf",
+              "path": "NCERT-EXAMPLER/BIOLOGY/BIOLOGY-EXEMPLAR22-CHEMICAL_COORDINATION_AND_INTEGRATION.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "CHEMISTRY",
+          "children": [
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR-ANSWERS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR-ANSWERS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR02-STRUCTURE_OF_ATOM.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR02-STRUCTURE_OF_ATOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR05-STATES_OF_MATTER.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR05-STATES_OF_MATTER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR06-THERMODYNAMICS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR06-THERMODYNAMICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR07-EQUILIBRIUM.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR07-EQUILIBRIUM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR08-REDOX_REACTIONS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR08-REDOX_REACTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR09-HYDROGEN.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR09-HYDROGEN.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR10-S_BLOCK_ELEMENTS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR10-S_BLOCK_ELEMENTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR11-P_BLOCK_ELEMENTS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR11-P_BLOCK_ELEMENTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR12-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR12-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR13-HYDROCARBONS.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR13-HYDROCARBONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-EXEMPLAR14-ENVIRONMENTAL_CHEMISTRY.pdf",
+              "path": "NCERT-EXAMPLER/CHEMISTRY/CHEMISTRY-EXEMPLAR14-ENVIRONMENTAL_CHEMISTRY.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "MATHEMATICS",
+          "children": [
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR-ANSWERS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR-ANSWERS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR01-SETS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR01-SETS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR02-RELATIONS_AND_FUNCTIONS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR02-RELATIONS_AND_FUNCTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR03-TRIGONOMETRIC_FUNCTIONS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR03-TRIGONOMETRIC_FUNCTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR04-PRINCIPLE_OF_MATHEMATICAL_INDUCTION.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR04-PRINCIPLE_OF_MATHEMATICAL_INDUCTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR05-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR05-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR06-LINEAR_INEQUALITIES.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR06-LINEAR_INEQUALITIES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR07-PERMUTATIONS_AND_COMBINATIONS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR07-PERMUTATIONS_AND_COMBINATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR08-BINOMIAL_THEOREM.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR08-BINOMIAL_THEOREM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR09-SEQUENCES_AND_SERIES.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR09-SEQUENCES_AND_SERIES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR10-STRAIGHT_LINES.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR10-STRAIGHT_LINES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR11-CONIC_SECTIONS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR11-CONIC_SECTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR12-INTRODUCTION_TO_3D_GEOMETRY.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR12-INTRODUCTION_TO_3D_GEOMETRY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR13-LIMITS_AND_DERIVATIVES.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR13-LIMITS_AND_DERIVATIVES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR14-MATHEMATICAL_REASONING.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR14-MATHEMATICAL_REASONING.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR15-STATISTICS.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR15-STATISTICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-EXEMPLAR16-PROBABILITY.pdf",
+              "path": "NCERT-EXAMPLER/MATHEMATICS/MATHEMATICS-EXEMPLAR16-PROBABILITY.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "PHYSICS",
+          "children": [
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR-ANSWERS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR-ANSWERS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR-DESIGN_OF_QUESTION_PAPER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR01-PHYSICAL_WORLD.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR01-PHYSICAL_WORLD.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR02-UNITS_AND_MEASUREMENTS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR02-UNITS_AND_MEASUREMENTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR03-MOTION_IN_A_STRAIGHT_LINE.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR03-MOTION_IN_A_STRAIGHT_LINE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR04-MOTION_IN_A_PLANE.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR04-MOTION_IN_A_PLANE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR05-LAWS_OF_MOTION.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR05-LAWS_OF_MOTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR06-WORK_ENERGY_AND_POWER.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR06-WORK_ENERGY_AND_POWER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR07-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR07-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR08-GRAVITATION.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR08-GRAVITATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR09-MECHANICAL_PROPERTIES_OF_SOLIDS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR09-MECHANICAL_PROPERTIES_OF_SOLIDS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR10-MECHANICAL_PROPERTIES_OF_FLUIDS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR10-MECHANICAL_PROPERTIES_OF_FLUIDS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR11-THERMAL_PROPERTIES_OF_MATTER.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR11-THERMAL_PROPERTIES_OF_MATTER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR12-THERMODYNAMICS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR12-THERMODYNAMICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR13-KINETIC_THEORY.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR13-KINETIC_THEORY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR14-OSCILLATIONS.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR14-OSCILLATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-EXEMPLAR15-WAVES.pdf",
+              "path": "NCERT-EXAMPLER/PHYSICS/PHYSICS-EXEMPLAR15-WAVES.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "folder",
+      "name": "NCERT-PDF",
+      "children": [
+        {
+          "type": "folder",
+          "name": "BIOLOGY",
+          "children": [
+            {
+              "type": "file",
+              "name": "BIOLOGY01-THE_LIVING_WORLD.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY01-THE_LIVING_WORLD.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY02-BIOLOGICAL_CLASSIFICATION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY02-BIOLOGICAL_CLASSIFICATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY03-PLANT_KINGDOM.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY03-PLANT_KINGDOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY04-ANIMAL_KINGDOM.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY04-ANIMAL_KINGDOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY05-MORPHOLOGY_OF_FLOWERING_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY06-ANATOMY_OF_FLOWERING_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY07-STRUCTURAL_ORGANISATION_IN_ANIMALS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY08-CELL_THE_UNIT_OF_LIFE.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY08-CELL_THE_UNIT_OF_LIFE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY09-BIOMOLECULES.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY09-BIOMOLECULES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY10-CELL_CYCLE_AND_CELL_DIVISION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY11-TRANSPORT_IN_PLANTS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY11-TRANSPORT_IN_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY12-MINERAL_NUTRITION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY12-MINERAL_NUTRITION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY13-PHOTOSYNTHESIS_IN_HIGHER_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY14-RESPIRATION_IN_PLANTS.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY14-RESPIRATION_IN_PLANTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY15-PLANT_GROWTH_AND_DEVELOPMENT.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY16-DIGESTION_AND_ABSORPTION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY16-DIGESTION_AND_ABSORPTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY17-BREATHING_AND_EXCHANGE_OF_GASES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY18-BODY_FLUIDS_AND_CIRCULATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION.pdf",
+              "path": "NCERT-PDF/BIOLOGY/BIOLOGY19-EXCRETORY_PRODUCTS_AND_THEIR_ELIMINATION.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "CHEMISTRY",
+          "children": [
+            {
+              "type": "file",
+              "name": "CHEMISTRY-ANSWERS-UI.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY-ANSWERS-UI.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-ANSWERS-UII.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY-ANSWERS-UII.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY-APPENDIX.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY-APPENDIX.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY01-SOME_BASIC_CONCEPTS_OF_CHEMISTRY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY02-STRUCTURE_OF_ATOM.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY02-STRUCTURE_OF_ATOM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY03-CLASSIFICATION_OF_ELEMENTS_AND_PERIODICITY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY04-CHEMICAL_BONDING_AND_MOLECULAR_STRUCTURE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY05-THERMODYNAMICS.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY05-THERMODYNAMICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY06-EQUILIBRIUM.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY06-EQUILIBRIUM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY07-REDOX_REACTIONS.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY07-REDOX_REACTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY08-ORGANIC_CHEMISTRY_BASIC_PRINCIPLES_AND_TECHNIQUES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CHEMISTRY09-HYDROCARBONS.pdf",
+              "path": "NCERT-PDF/CHEMISTRY/CHEMISTRY09-HYDROCARBONS.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "COMPUTER-SCIENCE",
+          "children": [
+            {
+              "type": "file",
+              "name": "CS01-COMPUTER_SYSTEM.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS01-COMPUTER_SYSTEM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS02-ENCODING_SCHEMES_AND_NUMBER_SYSTEM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS03-EMERGING_TRENDS.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS03-EMERGING_TRENDS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS04-PROBLEM_SOLVING.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS04-PROBLEM_SOLVING.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS05-GETTING_STARTED_WITH_PYTHON.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS05-GETTING_STARTED_WITH_PYTHON.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS06-FLOW_OF_CONTROL.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS06-FLOW_OF_CONTROL.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS07-FUNCTIONS.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS07-FUNCTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS08-STRINGS.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS08-STRINGS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS09-LISTS.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS09-LISTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS10-TUPLES_AND_DICTIONARIES.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS10-TUPLES_AND_DICTIONARIES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "CS11-SOCIETAL_IMPACTS.pdf",
+              "path": "NCERT-PDF/COMPUTER-SCIENCE/CS11-SOCIETAL_IMPACTS.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "MATHEMATICS",
+          "children": [
+            {
+              "type": "file",
+              "name": "MATHEMATICS-ANSWERS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS-ANSWERS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-APPENDIX1.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS-APPENDIX1.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-APPENDIX2.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS-APPENDIX2.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS-SUPPLEMENTARY.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS-SUPPLEMENTARY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS01-SETS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS01-SETS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS02-RELATIONS_AND_FUNCTIONS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS02-RELATIONS_AND_FUNCTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS03-TRIGONOMETRIC_FUNCTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS04-COMPLEX_NUMBERS_AND_QUADRATIC_EQUATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS05-LINEAR_INEQUALITIES.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS05-LINEAR_INEQUALITIES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS06-PERMUTATIONS_AND_COMBINATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS07-BINOMIAL_THEOREM.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS07-BINOMIAL_THEOREM.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS08-SEQUENCES_AND_SERIES.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS08-SEQUENCES_AND_SERIES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS09-STRAIGHT_LINES.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS09-STRAIGHT_LINES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS10-CONIC_SECTIONS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS10-CONIC_SECTIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS11-INTRODUCTION_TO_3D_GEOMETRY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS12-LIMITS_AND_DERIVATIVES.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS12-LIMITS_AND_DERIVATIVES.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS13-STATISTICS.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS13-STATISTICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "MATHEMATICS14-PROBABILITY.pdf",
+              "path": "NCERT-PDF/MATHEMATICS/MATHEMATICS14-PROBABILITY.pdf"
+            }
+          ]
+        },
+        {
+          "type": "folder",
+          "name": "PHYSICS",
+          "children": [
+            {
+              "type": "file",
+              "name": "PHYSICS-ANSWERS-UI.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS-ANSWERS-UI.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-ANSWERS-UII.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS-ANSWERS-UII.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS-APPENDIX.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS-APPENDIX.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS01-UNITS_AND_MEASUREMENTS.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS01-UNITS_AND_MEASUREMENTS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS02-MOTION_IN_A_STRAIGHT_LINE.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS02-MOTION_IN_A_STRAIGHT_LINE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS03-MOTION_IN_A_PLANE.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS03-MOTION_IN_A_PLANE.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS04-LAWS_OF_MOTION.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS04-LAWS_OF_MOTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS05-WORK_ENERGY_AND_POWER.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS05-WORK_ENERGY_AND_POWER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS06-SYSTEM_OF_PARTICLES_AND_ROTATIONAL_MOTION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS07-GRAVITATION.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS07-GRAVITATION.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS08-MECHANICAL_PROPERTIES_OF_SOLIDS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS09-MECHANICAL_PROPERTIES_OF_FLUIDS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS10-THERMAL_PROPERTIES_OF_MATTER.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS10-THERMAL_PROPERTIES_OF_MATTER.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS11-THERMODYNAMICS.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS11-THERMODYNAMICS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS12-KINETIC_THEORY.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS12-KINETIC_THEORY.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS13-OSCILLATIONS.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS13-OSCILLATIONS.pdf"
+            },
+            {
+              "type": "file",
+              "name": "PHYSICS14-WAVES.pdf",
+              "path": "NCERT-PDF/PHYSICS/PHYSICS14-WAVES.pdf"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "type": "file",
       "name": "README.md",
       "path": "README.md"
